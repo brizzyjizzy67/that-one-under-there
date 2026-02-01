@@ -4183,7 +4183,7 @@ else
 
 	task.spawn(function()
 		while true do
-			if ATPTM
+			if ATPTM then
 				local hrp = nil
 				if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
 					hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
