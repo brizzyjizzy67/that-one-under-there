@@ -4167,50 +4167,62 @@ else
 		end
 	})
 
+	local ATPTM = true
+
+	TS:AddToggle({
+		Name = "Activate TP to mouse",
+		Default = true,
+		Callback = function(Value)
+			ATPTM = Value
+		end
+	})
+
 	local mpoint = Vector3.new(0,0,0)
 	local mobject = nil
 	local diddyplr = nil
 
 	task.spawn(function()
 		while true do
-			local hrp = nil
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
-			end
-			if lookforplrs and not lockedplr then
-				mpoint = game.Players.LocalPlayer:GetMouse().Hit.Position
-				mobject = game.Players.LocalPlayer:GetMouse().Target
-				if mobject then
-					diddyplr = game.Players:GetPlayerFromCharacter(mobject:FindFirstAncestorWhichIsA("Model"))
-				end
-				if diddyplr then
-					lockedplr = diddyplr
-					lookforplrs = false
-				end
-			else
-				mpoint = Vector3.new(0,0,0)
-				mobject = nil
-				diddyplr = nil
-			end
-			if hrp then
-				if mobject then
-					if holdingthatschlong then
-						hrp.AssemblyLinearVelocity = mobject.AssemblyLinearVelocity
-					end
-				end
+			if ATPTM
+				local hrp = nil
 				if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-					if holdingthatschlong then
-						local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
-						hrp.CFrame = (hrp.CFrame - hrp.CFrame.Position) + game.Players.LocalPlayer:GetMouse().Hit.Position + Vector3.new(0,3,0)
-						holdingthatschlong = false
+					hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+				end
+				if lookforplrs and not lockedplr then
+					mpoint = game.Players.LocalPlayer:GetMouse().Hit.Position
+					mobject = game.Players.LocalPlayer:GetMouse().Target
+					if mobject then
+						diddyplr = game.Players:GetPlayerFromCharacter(mobject:FindFirstAncestorWhichIsA("Model"))
+					end
+					if diddyplr then
+						lockedplr = diddyplr
+						lookforplrs = false
+					end
+				else
+					mpoint = Vector3.new(0,0,0)
+					mobject = nil
+					diddyplr = nil
+				end
+				if hrp then
+					if mobject then
+						if holdingthatschlong then
+							hrp.AssemblyLinearVelocity = mobject.AssemblyLinearVelocity
+						end
+						if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+							if holdingthatschlong then
+								local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+								hrp.CFrame = (hrp.CFrame - hrp.CFrame.Position) + game.Players.LocalPlayer:GetMouse().Hit.Position + Vector3.new(0,3,0)
+								holdingthatschlong = false
+							end
+						end
 					end
 				end
-			end
-			if lockedplr and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and lockedplr.Character and lockedplr.Character:FindFirstChild("HumanoidRootPart") then
-				local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
-				local hrpp = lockedplr.Character.HumanoidRootPart
-				hrp.CFrame = (hrp.CFrame - hrp.CFrame.Position) + hrpp.CFrame.Position
-				hrp.AssemblyLinearVelocity = hrpp.AssemblyLinearVelocity
+				if lockedplr and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and lockedplr.Character and lockedplr.Character:FindFirstChild("HumanoidRootPart") then
+					local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+					local hrpp = lockedplr.Character.HumanoidRootPart
+					hrp.CFrame = (hrp.CFrame - hrp.CFrame.Position) + hrpp.CFrame.Position
+					hrp.AssemblyLinearVelocity = hrpp.AssemblyLinearVelocity
+				end
 			end
 			task.wait()
 		end
