@@ -4164,8 +4164,9 @@ else
 		Default = false,
 		Callback = function(Value)
 			bpb = Value
-			if Value then
+			while bpb do
 				if broken then
+					bpb = false
 					OrionLib:MakeNotification({
 						Name = "Plot Barrier Shit",
 						Content = "It's broken fatass",
@@ -4174,31 +4175,33 @@ else
 					})
 					bpbtog:Set(false)
 				else
-					while bpb do
-						while not game.Players.LocalPlayer.CanSpawnToy.Value do task.wait() end
-						task.spawn(function()
-							game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("Boombox",CFrame.new(355.048615, -5.63270235, 553.709595, -0.995227516, -0.000525230716, 0.0975805596, 0, 0.999985576, 0.00538245682, -0.0975819677, 0.00535676908, -0.995213151),Vector3.new(0,0,0))
-						end)
-						local st = tick()
-						while tick() - st < .5 and workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild("Boombox") do task.wait() end
-						if workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild("Boombox") then
-							game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild("Boombox"))
-							broken = true
-							OrionLib:MakeNotification({
-								Name = "Plot Barrier Shit",
-								Content = "Plot Barrier broken bris",
-								Image = "rbxassetid://4483345998",
-								Time = 2
-							})
-							bpbtog:Set(false)
-						end
-						while not game.Players.LocalPlayer.CanSpawnToy.Value do task.wait() end
-						task.spawn(function()
+					while not (game.Players.LocalPlayer.Character and game.Players.LocalPlayer.CanSpawnToy.Value) do task.wait() end
+					local _
+					task.spawn(function()
+						if game.Players.LocalPlayer.Character.Parent == workspace then
 							game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("BallSnowball",CFrame.new(355.048615, -5.63270235, 553.709595, -0.995227516, -0.000525230716, 0.0975805596, 0, 0.999985576, 0.00538245682, -0.0975819677, 0.00535676908, -0.995213151),Vector3.new(0,0,0))
-						end)
-						task.wait()
+						else
+							game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("BallSnowball",CFrame.new(262.23056, 28.7192783, 322.344788, -0.941351771, -0.0306104273, -0.33603549, 0, 0.995876729, -0.0907172337, 0.337426811, -0.0853968263, -0.937470317),Vector3.new(0,0,0))
+						end
+					end)
+					if game.Players.LocalPlayer.Character.Parent == workspace then
+						_ = workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:WaitForChild("BallSnowball",1)
+					else
+						_ = workspace.PlotItems[plot]:WaitForChild("BallSnowball",1)
+					end
+					if _ then
+						broken = true
+						bpb = false
+						OrionLib:MakeNotification({
+							Name = "Plot Barrier Shit",
+							Content = "Plot Barrier broken bris",
+							Image = "rbxassetid://4483345998",
+							Time = 2
+						})
+						bpbtog:Set(false)
 					end
 				end
+				task.wait()
 			end
 		end,
 	})
