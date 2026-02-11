@@ -3068,7 +3068,11 @@ else
 									game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = prt.AssemblyLinearVelocity
 								end
 								if prt then
-									game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prt,prt.CFrame)
+									for _,prt in pairs(itm:GetChildren()) do
+										if prt.Name == "SoundPart" or prt.Name == "HumanoidRootPart" or prt.Name == "1" or prt.Name == "Wedge" then
+											game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prt,prt.CFrame)
+										end
+									end
 								end
 							end
 							task.wait()
@@ -3974,6 +3978,36 @@ else
 		Default = true,
 		Callback = function(Value)
 			acno = Value
+		end
+	})
+
+	BS:AddButton({
+		Name = "Release all frozen",
+		Callback = function()
+			for prt,_ in pairs(frozenlist) do
+				frozenlist[prt] = nil
+				if prt:FindFirstChild("somebodyshotaloadintomyburger2") then
+					prt.somebodyshotaloadintomyburger2:Destroy()
+					for _,prrt in pairs(prt:GetChildren()) do
+						if prrt:FindFirstChild("somebodyshotaloadintomyburger") then
+							prrt.somebodyshotaloadintomyburger:Destroy()
+						end
+					end
+				end
+			end
+			frozenlist = {}
+			for prt,_ in pairs(GrabItemsList) do
+				GrabItemsList[prt] = nil
+				if prt:FindFirstChild("somebodyshotaloadintomyburger2") then
+					prt.somebodyshotaloadintomyburger2:Destroy()
+					for _,prrt in pairs(prt:GetChildren()) do
+						if prrt:FindFirstChild("somebodyshotaloadintomyburger") then
+							prrt.somebodyshotaloadintomyburger:Destroy()
+						end
+					end
+				end
+			end
+			GrabItemsList = {}
 		end
 	})
 
