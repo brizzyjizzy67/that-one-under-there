@@ -3076,6 +3076,8 @@ else
 								game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = j
 								game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = p
 							end
+						else
+							task.wait()
 						end
 					end
 				end
