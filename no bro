@@ -1,7 +1,10 @@
 if workspace:FindFirstChild("Boiyoubuiltlikeanigger") and workspace.Boiyoubuiltlikeanigger.Value then
 	game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">BinisJ Already Started Nigga</font>")
 else
-	local bjjjj = Instance.new("BoolValue")
+	getgenv().gethui = function() return game.CoreGui end
+	local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/brizzyjizzy67/that-one-under-there/refs/heads/NOT-main/bloodykimp')))()
+	
+    local bjjjj = Instance.new("BoolValue")
 	bjjjj.Name = "Boiyoubuiltlikeanigger"
 	bjjjj.Parent = workspace
 	bjjjj.Value = true
@@ -12,91 +15,206 @@ else
 	local joinland = {}
 	local currantplrlist = {}
 
+	local pOTP
+	local pLK
+	local pOL
+	local pFATASS
+	local coord
+	local pBK
+	local pBLK
+	local pESP
+	local pPenis
+	local pAK
+	local pSK
+	local pBLH
+	local pOK
+	local Changing = false
+	local sellplr
+	local LS
+	local pPCS
+	local MiSPCS
+
+	local OTPList = {}
+	local BlobkickList = {"BarnoDDino","ay3vx"}
+	local BlobKillList = {}
+	local HoldableList = {}
+	local GrabItemsList = {}
+	local BuildItemsList = {}
+    local ESPList = {}
+	local badboyfriendslist = {8790892084,9584241219,3478752556,2949841304,3478752556}
+	local badboylist = {
+		{8790892084,"IQ over 50 required"},
+		{8514316442,"retarded"},
+		{9584241219,"IQ below 50 required"},
+		{4747895524,"Bum ass"},
+		{2331338191,"have you ever played blox fruits with your life on the line? (referencing the edits)"},
+		{3478752556,"hes a baaaad boy!!"},
+		{2949841304,"fat shit lose some weight, and grow a little midget"},
+		{2975941060,"no FAT accounts"},
+		{3252968165,"bit of a slag honestly"},
+		{440734350,"fix your fuckass playstyle big 'bease"},
+		{9904680669,"has a weird script that makes her eat a lot"},
+		{10386060656,"pea brain"},
+		{501121956,"weird guy"},
+		{7546484255,"get this cheeky bugger out of town"},
+		{2434958706,"bris hes a weirdo bris"},
+		{10418034183,"cheeky loopys alt"},
+		{10325532344,"his scripts are buns"},
+		{2483594046,"get this guy out of the server hes so cringe and just sits in purple"},
+		{10346300231,"jenny is not ok"},
+		{7805935078,"friends with a bunch of weirdos"},
+		{10340953217,"nice chin mate"},
+		{10318260179,"big person"},
+		{10335658081,"cheater cheater carbohydrate eater"},
+		{1562458632,"look its fagloo, weight limit exceeded"},
+		{9711228307,"cheater cheater carbohydrate eater"},
+		{7474624570,"friggin aza brahh"},
+		{4481785988,"its praise bris hes an odd one"},
+		{1679335714,"weird guy pls bully him away"},
+		{6056562599,"its just water weight!!"},
+		{2780607294,"azas alt"},
+		{8458061687,"azas alt"},
+		{4519790581,"azas alt"},
+		{4176940323,"azas alt"},
+		{4783917869,"azas alt"},
+		{963044051,"lil' snowflake!!!!"},
+		{9345859623,"cheeky location"},
+		{9126911790,"cheeky yaoi"},
+		{8610874987,"show me your bane"},
+		{444041229,"yikes not that one"},
+		{5474657315,"he!!"},
+		{8985403372,"dont let him hop the border"},
+		{7409764191,"abrascaxs"},
+		{9276866772,"clitlicka!! its nav hes ass"},
+		{120518925,"abraxas' bum account"},
+		{8543250542,"smelly alt account loop them"},
+		{7243555120,"dont show emotion 🥷😶"},
+		{4397245423,"i dont know stupid fat fuck you uhhm get on your main youve got to add the uhm in there yeah heheh, youve got to add the laugh in there heheh.... hehehe"},
+		{651512593,"willy wanka!! big biceps!"},
+		{7461173814,"theyve got a galactic dick"},
+		{8591319823,"ohhh shes giving it now"},
+		{8618243481,"whys she watching 👀"},
+		{6083098569,"thats nitrozz"},
+		{3526820612,"cheeky thermal!! ciz used to get nice and warm with him in bed and such you know"},
+		{1012712525,"BUMSTA HAHAHAHA"},
+		{7138072144,"that is NOT the real tech brooo get him out"},
+		{7736821031,"fartcyde lol whys he hot garbage"},
+		{1112870704,"fartcyde lol whys he hot garbage"},
+		{579831809,"nav's bummy ass main"},
+		{14413761,"is this fae? idk loop them for me like the good boy you are bris"},
+		{1276463110,"his lil' nesia is very micro"},
+		{10287152810,"fartcyde lol whys he hot garbage"},
+		{3258799639,"hes very full of time to be quite frank"},
+		{8842590569,"thats phrcyde broo whys he gay"},
+		{5209659026,"wingding"},
+		{626502592,"bad boy"},
+		{561878584,"i bet boons there too"},
+		{1762306425,"got slammed by loopy lol"},
+		{1768138569,"got slammed by loopy lol"},
+		{2511298323,"got slammed by loopy lol"},
+		{3606734034,"got slammed by loopy lol"},
+		{401304786,"dont know who this is hes just got a lot of BAD GUYS added"},
+		{5533600189,"such a weird cunt bro hide your children he might just send them nudes"},
+		{3020071071,"ew cunt get rid of him"},
+		{635576153,"friggin navvgr brah hes a big bum"},
+		{10234143951,"big cheater cheater pumpkin eater get him out the server"},
+		{5069961687,"honestly not much of a problem himself just watch out for morored"},
+		{1881057647,"really i mean this, watch out with this guy hes got some weird ass shit"},
+		{3096351771,"this guys kinda buns at cheating"},
+		{8089834774,"cheater cheater pumpkin eater"},
+		{10353040209,"hes cheating bro just look at his name"},
+		{9073424914,"suspected cheaters main"},
+		{3796494548,"friends with a few good cheaters"},
+		{3687061074,"has blitz premium"},
+		{2334245032,"cheater cheater pumpkin eater"},
+		{2763995918,"thats blitz"},
+		{8125089627,"thats blitz"},
+		{9492246804,"thats blitz"},
+		{10416893483,"cheeky oats, hes a cheater"},
+		{3796494548,"no clue if he cheats just be weary"},
+		{2636495757,"bobs kinda BUNS"},
+		{5096830050,"hes a cheater!!!"},
+		{5095159939,"hes a cheater!!!"},
+		{5097961324,"hes a cheater!!!"},
+		{9535225511,"bit weird hes posing as a roblox admin, hes a cheater"},
+		{335291430,"taro!!! watch out if youre a kid"}
+	}
+
+	local LocList = {}
+	local Freelist = {}
+	local LoopKillList = {}
+	local AKList = {}
+	local ShurList = {}
+	local OKList = {}
+	local PenisList = {}
+	local whitelist = {}
+
+	local OKA = false
+	local OWF = true
+	local OKLA = false
+	local OKLWF = true
+	local BKA = false
+	local BKAWL = true
+	local BKLAWL = true
+	local acno = true
+
+	local plrlist
+	local plrlistsel
+	local WLL
+	local WLlistsel
+
 	local dick3 = Instance.new("Folder")
 	dick3.Parent = game.workspace
 	dick3.Name = "BinisCreations"
 
-	for _,plr in pairs(game.Players:GetChildren()) do
-		if plr ~= game.Players.LocalPlayer then
-			if not plr:FindFirstChild("BinisJ") then
-				local b = Instance.new("Folder")
-				b.Name = "BinisJ"
-				b.Parent = plr
-
-				local ba = Instance.new("BoolValue")
-				ba.Name = "OwnershipTP"
-				ba.Parent = b
-
-				local bb = Instance.new("Vector3Value")
-				bb.Name = "OwnershipLocation"
-				bb.Parent = b
-
-				local bc = Instance.new("BoolValue")
-				bc.Name = "ESP"
-				bc.Parent = b
-
-				local bd = Instance.new("BoolValue")
-				bd.Name = "Blobkick"
-				bd.Parent = b
-
-				local be = Instance.new("BoolValue")
-				be.Name = "LoopKill"
-				be.Parent = b
-
-				local bf = Instance.new("BoolValue")
-				bf.Name = "Penis"
-				bf.Parent = b
-
-				local bg = Instance.new("BoolValue")
-				bg.Name = "AntiKick"
-				bg.Parent = b
-
-				local bh = Instance.new("BoolValue")
-				bh.Name = "OwnershipKick"
-				bh.Parent = b
-
-				local bi = Instance.new("BoolValue")
-				bi.Name = "BJValue"
-				bi.Parent = b
-				bi.Value = false
-			end
-
-			table.insert(joinland,plr.UserId)
-			table.insert(joinland,plr.Name)
-			table.insert(joinland,plr.DisplayName)
-			table.insert(currantplrlist,plr.Name)
-		end
-	end
-
+    
 	local BS
 	local buildnum = 1
 	local frozenlist = {}
 
-	function addanchitm(list,model,jizzybrizzy)
-		local pp1 = model:FindFirstChild("pp1")
-		for itm in list do
-			local prt = itm
-			if jizzybrizzy == 0 then
-				prt = prt[1]
-			end
-			if prt and prt.Parent then
-				model:FindFirstChildWhichIsA("IntValue").Value += 1
-				if prt:FindFirstChild("somebodyshotaloadintomyburger2") then
-					prt.somebodyshotaloadintomyburger2:Destroy()
+	local niggalog = nil
+	local uid = 0
+	local selname = nil
+
+	function findobject(folder,num)
+		for _,prt in pairs(workspace[folder]:GetChildren()) do
+			if prt:FindFirstChild("ThisToysNumber") then
+				if prt.ThisToysNumber.Value == num then
+					return prt
 				end
-				for _,prrt in pairs(prt:GetChildren()) do
+			end
+		end
+	end
+
+	function addanchitm(list,model,jizzybrizzy)
+		local returnlist = {}
+		local pp1 = model:FindFirstChild("pp1")
+		local scal = model:GetScale()
+		model:ScaleTo(1)
+		pp1.CFrame = list[1]
+        for i, info in ipairs(list[2]) do
+			local inst = findobject(info[1][1],info[1][2])
+			if inst then
+				table.insert(returnlist,info)
+				model:FindFirstChildWhichIsA("IntValue").Value += 1
+				local offset
+				local size
+				offset = info[2]
+				size = info[3]
+				if offset then
+					inst.SoundPart.CFrame = list[1] * offset
+				end
+				if inst:FindFirstChild("somebodyshotaloadintomyburger2") then
+					inst.somebodyshotaloadintomyburger2:Destroy()
+				end
+				for _,prrt in pairs(inst:GetChildren()) do
 					if prrt:FindFirstChild("somebodyshotaloadintomyburger") then
 						prrt.somebodyshotaloadintomyburger:Destroy()
 					end
 				end
-				local bool
-				if prt:FindFirstChildWhichIsA("Humanoid") then
-					bool = false
-				else
-					bool = true
-				end
-				prt.Archivable = true
-				local dbcooper = prt:Clone()
+				inst.Archivable = true
+				local dbcooper = inst:Clone()
+				dbcooper:ScaleTo(size)
 				local gottheblicky = Instance.new("Highlight")
 				gottheblicky.Name = "somebodyshotaloadintomyburger"
 				gottheblicky.FillTransparency = 1
@@ -107,100 +225,42 @@ else
 				gottheblicky2.FillTransparency = 1
 				gottheblicky2.OutlineTransparency = 1
 				gottheblicky2.FillColor = Color3.fromRGB(125,125,125)
-				print(type(dbcooper))
-				print(type(dbcooper.Parent))
-				print(type(model))
-				print(model.ClassName)
 				dbcooper.Parent = model
 				local wc = Instance.new("WeldConstraint")
 				wc.Name = 'diddyconstraint'
 				wc.Parent = dbcooper
-				wc.Part0 = dbcooper.PrimaryPart
+				wc.Part0 = dbcooper.SoundPart
 				wc.Part1 = pp1
 				local a1 = Instance.new("Attachment")
 				local a2 = Instance.new("Attachment")
 				local pp = Instance.new("AlignPosition")
 				local pp2 = Instance.new("AlignOrientation")
-				pp.Parent = prt.PrimaryPart
-				pp2.Parent = prt.PrimaryPart
-				a1.Parent = prt.PrimaryPart
-				a2.Parent = dbcooper.PrimaryPart
-					if bool then
-					pp.Attachment0 = a1
-					pp2.Attachment0 = a1
-					pp.Attachment1 = a2
-					pp2.Attachment1 = a2
-				else
-					pp.Attachment0 = a2
-					pp2.Attachment0 = a2
-					pp.Attachment1 = a1
-					pp2.Attachment1 = a1
-				end
+				pp.Parent = inst.SoundPart
+				pp2.Parent = inst.SoundPart
+				a1.Parent = inst.SoundPart
+				a2.Parent = dbcooper.SoundPart
+				pp.Attachment0 = a1
+				pp2.Attachment0 = a1
+				pp.Attachment1 = a2
+				pp2.Attachment1 = a2
 				pp.Responsiveness = 100
 				pp.MaxForce = 10^39
 				pp2.Responsiveness = 20
 				pp2.MaxTorque = 10^39
 				pp.MaxVelocity = 1000
-				if dbcooper:FindFirstChildWhichIsA("VehicleSeat") then
-					dbcooper.VehicleSeat:Destroy()
-				end
-				if bool then
-					for _,ting in pairs(prt:GetDescendants()) do
-						if ting:IsA("BasePart") then
-							ting.CanCollide = false
-							ting:SetAttribute("CanQuery",ting.CanQuery)
-							ting.CanQuery = false
-							local ph = ting.Transparency
-							ting:SetAttribute("Transparency",ph)
-							ting.Transparency = 1
-						end
+				for _,ting in pairs(inst:GetDescendants()) do
+					if ting:IsA("BasePart") then
+						ting.CanCollide = false
+						ting:SetAttribute("CanQuery",ting.CanQuery)
+						ting.CanQuery = false
+						local ph = ting.Transparency
+						ting:SetAttribute("Transparency",ph)
+						ting.Transparency = 1
 					end
-				else
-					for _,ting in pairs(dbcooper:GetDescendants()) do
-						if ting:IsA("BasePart") then
-							ting.CanCollide = false
-							ting.CanQuery = false
-							ting.Transparency = 1
-						end
-					end
-				end
-				if bool then
-					task.spawn(function()
-						while prt and dbcooper and dbcooper.PrimaryPart and prt.PrimaryPart do
-							local biddy = (dbcooper.PrimaryPart.CFrame.Position - prt.PrimaryPart.CFrame.Position).Magnitude
-							local trans = 0
-							if biddy - 20 > 0 then
-								trans = (biddy - 20) / 10
-							end
-							if trans > 1 then trans = 1 end
-							if trans == 0 then
-								gottheblicky.Parent = nil
-								gottheblicky2.Parent = nil
-							else
-								gottheblicky.Parent = dbcooper
-								gottheblicky2.Parent = prt
-								gottheblicky.FillTransparency = 1 - (trans * 0.5)
-								gottheblicky.OutlineTransparency = 1 - trans
-								gottheblicky2.FillTransparency = 1 - (trans * 0.5)
-								gottheblicky2.OutlineTransparency = 1 - trans
-							end
-							for _,prt in pairs(prt:GetChildren()) do
-								if prt:IsA("BasePart") then
-									prt.Transparency = 1 - ((1 - prt:GetAttribute("Transparency")) * trans)
-									if trans ~= 0 then
-										prt.CanQuery = prt:GetAttribute("CanQuery")
-									else
-										prt.CanQuery = false
-									end
-								end
-							end
-							task.wait()
-						end
-					end)
 				end
 				local p = false
-				prt:GetPropertyChangedSignal("Parent"):Connect(function()
-					if not prt or prt and not prt.Parent then
+				inst:GetPropertyChangedSignal("Parent"):Connect(function()
+					if not inst or inst and not inst.Parent then
 						dbcooper:Destroy()
 						if not p then
 							p = true
@@ -214,39 +274,51 @@ else
 							p = true
 							model:FindFirstChildWhichIsA("IntValue").Value -= 1
 						end
-						for _,prrt in pairs(prt:GetDescendants()) do
+						for _,prrt in pairs(inst:GetDescendants()) do
 							if prrt:IsA("BasePart") then
 								prrt.Transparency = prrt:GetAttribute("Transparency") or 0
 								prrt.CanCollide = true
+								prrt.CanQuery = prrt:GetAttribute("CanQuery")
 							end
 						end
 					end
 				end)
-				local avgpos = Vector3.new(0,0,0)
-				local count = 0
-				for _,prt in pairs(model:GetChildren()) do
-					if prt.ClassName == "Model" and prt.PrimaryPart then
-						avgpos += prt.PrimaryPart.CFrame.Position
-						count += 1
-					end
-				end
-				for _,lprt in pairs(model:GetChildren()) do
-					if lprt.ClassName == "Model" then
-						if lprt:FindFirstChild("diddyconstraint") then
-							lprt.diddyconstraint.Part1 = nil
+				task.spawn(function()
+					while inst and dbcooper and dbcooper.SoundPart and inst.SoundPart do
+						local biddy = (dbcooper.SoundPart.CFrame.Position - inst.SoundPart.CFrame.Position).Magnitude
+						local trans = 0
+						if biddy - 20 > 0 then
+							trans = (biddy - 20) / 10
 						end
-					end
-				end
-				pp1.CFrame = CFrame.new(avgpos / Vector3.new(count,count,count))
-				for _,lprt in pairs(model:GetChildren()) do
-					if lprt.ClassName == "Model" then
-						if lprt:FindFirstChild("diddyconstraint") then
-							lprt.diddyconstraint.Part1 = pp1
+						if trans > 1 then trans = 1 end
+						if trans == 0 then
+							gottheblicky.Parent = nil
+							gottheblicky2.Parent = nil
+						else
+							gottheblicky.Parent = dbcooper
+							gottheblicky2.Parent = inst
+							gottheblicky.FillTransparency = 1 - (trans * 0.5)
+							gottheblicky.OutlineTransparency = 1 - trans
+							gottheblicky2.FillTransparency = 1 - (trans * 0.5)
+							gottheblicky2.OutlineTransparency = 1 - trans
 						end
+						for _,inst in pairs(inst:GetChildren()) do
+							if inst:IsA("BasePart") then
+								inst.Transparency = 1 - ((1 - inst:GetAttribute("Transparency")) * trans)
+								if trans ~= 0 then
+									inst.CanQuery = inst:GetAttribute("CanQuery")
+								else
+									inst.CanQuery = false
+								end
+							end
+						end
+						task.wait()
 					end
-				end
+				end)
 			end
-		end
+        end
+		model:ScaleTo(scal)
+		return returnlist
 	end
 
 	local alag
@@ -257,244 +329,9 @@ else
 
 	local timesincelast = 0
 	local timesincelastlist = {}
-
-	for _,plrr in pairs(game.Players:GetPlayers()) do
-		currantlagpeoplelist[plrr.Name] = 0
-	end
-
-	getgenv().gethui = function() return game.CoreGui end
-	local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/brizzyjizzy67/that-one-under-there/refs/heads/NOT-main/bloodykimp')))()
-
-	game.ReplicatedStorage.GrabEvents.CreateGrabLine.OnClientEvent:Connect(function(plr,arg1,arg2)
-		if not currantlagpeoplelist[plr.Name] then
-			currantlagpeoplelist[plr.Name] = 0
-		end
-		if arg1 and plr ~= game.Players.LocalPlayer then
-			currantlagpeoplelist[plr.Name] += 1
-			if currantlagpeoplelist[plr.Name] > 50 then
-				if not ALAGE then
-					alag:Set(true)
-				end
-				local timeval = timesincelastlist[plr.Name]
-				if not timeval or tick() - timeval > 10 then
-					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(150, 0, 0)\">[BinisJ] "..plr.DisplayName.." (@"..plr.Name..") is lagging the server</font>")
-					OrionLib:MakeNotification({
-						Name = "Anti-Lag",
-						Content = plr.DisplayName.." (@"..plr.Name..") is lagging the server",
-						Image = "rbxassetid://4483345998",
-						Time = 2
-					})
-					timesincelastlist[plr.Name] = tick()
-				end
-				timesincelast = tick()
-				task.wait(2.5)
-				if tick() - timesincelast > 2.25 and ALAGE then
-					alag:Set(false)
-				end
-			end
-		end
-	end)
-
-	task.spawn(function()
-		while true do
-			currantlagpeoplelist = {}
-			timeeeee = tick()
-			task.wait()
-		end
-	end)
 	
 	local BJList = {}
-
-	game.ReplicatedStorage.GrabEvents.ExtendGrabLine.OnClientEvent:Connect(function(plr,arg1)
-		if type(arg1) == "table" and arg1[1] == "BinisJ" then
-			if plr ~= game.Players.LocalPlayer then
-				if arg1[2] == "Starting" then
-					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">[BinisJ] "..plr.DisplayName.." (@"..plr.Name..") is using poor mans binisj</font>")
-					plr.BinisJ.BJValue.Value = true
-				end
-				if arg1[2] == "BigBjChat" then
-					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">[BinisJ] "..arg1[3].."</font>")
-					plr.BinisJ.BJValue.Value = true
-				end
-				if arg1[2] == "BigBjStarting" then
-					game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","BigBjNotStarting"})
-					if not plr.BinisJ.BJValue.Value then
-						game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">[BinisJ] "..plr.DisplayName.." (@"..plr.Name..") is a good boy</font>")
-						BJList[plr.UserId] = true
-						plr.BinisJ.BJValue.Value = true
-					end
-				end
-				if arg1[2] == "NotStarting" then
-					if not plr.BinisJ.BJValue.Value then
-						game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">[BinisJ] "..plr.DisplayName.." (@"..plr.Name..") is using poor mans binisj</font>")
-						plr.BinisJ.BJValue.Value = true
-					end
-				end
-				if arg1[2] == "BigBjNotStarting" then
-					if not plr.BinisJ.BJValue.Value then
-						game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">[BinisJ] "..plr.DisplayName.." (@"..plr.Name..") is a good boy</font>")
-						BJList[plr.UserId] = true
-						plr.BinisJ.BJValue.Value = true
-					end
-				end
-			end
-			if arg1[2] == "Print" then
-				game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(arg1[3])
-			end
-			if arg1[2] == "New Build" then
-				BS:AddSection({
-					Name = "Binisj Creation"
-				})
-				local owner = plr
-				local dibbly = BS:AddLabel("Total Items In Build: 0")
-				local buildtotal = 0
-				local bn = buildnum
-				local model = Instance.new("Model")
-				model.Parent = dick3
-				model.Name = "BinisJModel"..bn
-				local pp1 = Instance.new("Part")
-				pp1.Parent = model
-				model.PrimaryPart = pp1
-				pp1.Name = "pp1"
-				pp1.CFrame = CFrame.new(0,0,0)
-				pp1.Transparency = 1
-				pp1.CanCollide = false
-				pp1.CanQuery = false
-				pp1.Massless = true
-				local aura = Instance.new("IntValue")
-				aura.Value = 0
-				aura.Parent = model
-				aura:GetPropertyChangedSignal("Value"):Connect(function()
-					dibbly:Set("Total Items In Build: "..aura.Value)
-				end)
-				local aa1 = BS:AddButton({
-					Name = "Add Anchored Items To Build",
-					Callback = function()
-						addanchitm(frozenlist,model,1)
-						local boobyjr = {}
-						for itm in frozenlist do
-							local itmprt = itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("SoundPart")
-							table.insert(boobyjr,{itm,pp1.CFrame:Inverse() * itmprt.CFrame})
-						end
-						game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","Set "..bn,boobyjr})
-						frozenlist = {}
-					end
-				})
-				local jeetard = BS:AddLabel("Build Owner: "..plr.DisplayName.." (@"..plr.Name..")")
-				local sizer = 1
-				local agentJEW = BS:AddSlider({
-					Name = "Set Build Size",
-					Min = 0.1,
-					Max = 50,
-					Default = 1,
-					Color = Color3.fromRGB(255,255,255),
-					Increment = 0.1,
-					ValueName = "Sped Shed",
-					Callback = function(Value)
-						model:ScaleTo(Value)
-					end
-				})
-				BS:AddButton({
-					Name = "Set size to 1",
-					Callback = function()
-						agentJEW:Set(1)
-					end
-				})
-				local aa2 = BS:AddToggle({
-					Name = "Highlight Build",
-					Default = false,
-					Callback = function(Value)
-						if Value then
-							local randall = Instance.new("Highlight")
-							randall.Parent = model
-							randall.Name = "somebodyshotaloadintomyburger2"
-							randall.FillTransparency = 0.4
-							randall.FillColor = Color3.fromRGB(27,126,208)
-							randall.OutlineColor = Color3.fromRGB(21,97,161)
-							
-							local bbg = Instance.new("BillboardGui")
-							bbg.Name = "somebodyshotaloadintomyburger"
-							bbg.Parent = pp1
-							bbg.Size = UDim2.new(0, 100, 0, 100)
-							bbg.SizeOffset = Vector2.new(0,0.25)
-							bbg.StudsOffset = Vector3.new(0,3,0)
-							bbg.Adornee = pp1
-
-							local bbt = Instance.new("TextLabel")
-							bbt.Parent = bbg
-							bbt.Size = UDim2.new(0, 100, 0, 100)
-							bbt.BackgroundTransparency = 1
-							bbt.TextColor3 = Color3.new(1,1,1)
-							bbt.TextSize = 20
-							bbt.Text = "BinisJ Model "..bn
-							bbt.TextStrokeColor3 = Color3.new(1,1,1)
-							bbt.TextStrokeTransparency = 0.75
-						else
-							if model:FindFirstChild("somebodyshotaloadintomyburger2") then
-								model.somebodyshotaloadintomyburger2:Destroy()
-							end
-							if pp1:FindFirstChild("somebodyshotaloadintomyburger") then
-								pp1.somebodyshotaloadintomyburger:Destroy()
-							end
-						end
-					end,
-				})
-				local ClaimNetworkOwner = BS:AddToggle({
-					Name = "Auto-claim network owner",
-					Default = false,
-					Callback = function(Value)
-						if Value then
-							if owner ~= game.Players.LocalPlayer then
-								ClaimNetworkOwner:Set(false)
-								OrionLib:MakeNotification({
-									Name = "Bris lick in",
-									Content = "you are NOT sigma 😹😹\n(you're not the owner of this one)",
-									Image = "rbxassetid://4483345998",
-									Time = 2
-								})
-							end
-						end
-					end,
-				})
-				local aa3 = BS:AddButton({
-					Name = "Dismantle Build",
-					Callback = function()
-						for _,prt in pairs(model:GetChildren()) do
-							if prt.ClassName == "Model" then
-								prt:Destroy()
-							end
-						end
-					end,
-				})
-				game.ReplicatedStorage.GrabEvents.ExtendGrabLine.OnClientEvent:Connect(function(plr,arg1)
-					if type(arg1) == "table" and arg1[1] == "BinisJ" and plr ~= game.Players.LocalPlayer then
-						print(arg1[2])
-						if arg1[2] == "Set "..bn then
-							print('yo')
-							for line,itm in pairs(arg1[3]) do
-								local idontflippingknowbro = itm[1]:FindFirstChild("HumanoidRootPart") or itm[1]:FindFirstChild("SoundPart")
-								idontflippingknowbro.CFrame = pp1.CFrame * itm[2]
-							end
-							print('hi')
-							addanchitm(arg1[3],model,0) 
-						elseif arg1[2] == "Resize "..bn then
-							agentJEW:Set(arg1[3])
-						elseif arg1[2] == "Dismantle "..bn then
-							for _,prt in pairs(model:GetChildren()) do
-								if prt.ClassName == "Model" then
-									prt:Destroy()
-								end
-							end
-						end
-					end
-				end)
-				buildnum += 1
-			end
-		end
-	end)
-
-	game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","BjWho?"})
-	game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","BigBjStarting"})
+	local PoorBJList = {}
 
 	lodaded = false
 
@@ -581,12 +418,6 @@ else
 
 	game.Players.LocalPlayer.CameraMaxZoomDistance = 100000
 
-	for _,prt in pairs(game.workspace:GetChildren()) do
-		if prt.Name == "GrabParts" then
-			prt.Name = "OfflineGrabParts"
-		end
-	end
-
 	function Boner(itm)
 		if not itm:FindFirstChild("BonerPart") then
 			itm:WaitForChild("Center").Transparency = 1
@@ -658,26 +489,7 @@ else
 			itm.SoundPart.Shape = "Block"
 			itm.BonerPart:Destroy()
 		end
-	end
-
-	for _,prt in pairs(game:GetService("Workspace").Map.AlwaysHereTweenedObjects.Ocean.Object.ObjectModel:GetChildren()) do 
-		if prt:IsA("Part") and prt.Name == "Ocean" then 
-			prt.Color = Color3.fromRGB(2,65,98)
-			prt.CollisionGroup = "Items"
-			prt.CanCollide = true
-			prt.CanQuery = false
-		end
-	end
-
-	for _,prt in pairs(game:GetService("Workspace").Plots:GetDescendants()) do
-		if prt.Name == "PlotArea" or prt.Name == "PlotBarrier" then
-			prt.CanQuery = false
-			prt.CanCollide = false
-		elseif prt.Name == "FalseBorder" then
-			prt.CanQuery = true
-			prt.CanCollide = true
-		end 
-	end
+    end
 
 	local kickland = {}
 	local dplist = {}
@@ -768,6 +580,399 @@ else
 	local AXE = false
 
 	local AGE = false
+
+	local penis
+	local penis2
+
+	local DSL = true
+
+	if game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+		penis = game.Players.LocalPlayer.Character.Humanoid:GetPropertyChangedSignal("Sit"):Connect(function()
+			if not game.Players.LocalPlayer.Character.Humanoid.SeatPart and AXE then
+				game.Players.LocalPlayer.Character.Humanoid.Sit = false
+			end
+		end)
+		penis2 = game.Players.LocalPlayer.Character.Humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
+			local nigger = 1
+			if flying then nigger = 10 end
+			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS * 16 * nigger
+		end)
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS
+	end
+
+	game.Players.LocalPlayer.CharacterAdded:Connect(function()
+		local b = game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
+		penis = b:GetPropertyChangedSignal("Sit"):Connect(function()
+			if not game.Players.LocalPlayer.Character.Humanoid.SeatPart and AXE then
+				game.Players.LocalPlayer.Character.Humanoid.Sit = false
+			end
+		end)
+		penis2 = b:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
+			local nigger = 1
+			if flying then nigger = 10 end
+			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS * 16 * nigger
+		end)
+		b.WalkSpeed = WS
+		if DSL then
+			game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(SL)
+		end
+	end)
+
+	game.Players.ChildRemoved:Connect(function(plr)
+		currantplrlist = {}
+		local masterplr = game.Players.LocalPlayer
+		for _,plr in pairs(game.Players:GetChildren()) do
+			if plr ~= game.Players.LocalPlayer then
+				table.insert(currantplrlist,plr.Name)
+			end
+			if BJList[plr.UserId] then
+				local msplr = game.Players.LocalPlayer
+				local msnum = 0
+				for _,plr in pairs(game.Players:GetPlayers()) do
+					if plr ~= game.Players.LocalPlayer and BJList[plr.UserId] and plr.AccountAge > msnum then
+						msplr = plr
+						msnum = plr.AccountAge
+					end
+				end
+                game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(200,200,200)\">"..plr.DisplayName.." (@"..plr.Name..") is the muscle tustler</font>")
+                MasterPlayer = msplr
+			end
+		end
+		if loaded then
+			plrlist:Refresh(currantplrlist,true)
+			plrlist:Set(plrlistsel)
+		end
+		local alrflagged = false
+		for _,plrr in pairs(gettingkicked) do
+			if plrr == plr.UserId then
+				alrflagged = true
+			end
+		end
+		if not alrflagged then
+			game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(150,150,150)\">"..plr.DisplayName.." (@"..plr.Name..") has left the game</font>")
+			OrionLib:MakeNotification({
+				Name = "Join Logger",
+				Content = plr.DisplayName.." (@"..plr.Name..") has left the game",
+				Image = "rbxassetid://4483345998",
+				Time = 2
+			})
+		end
+	end)
+
+	locations = {"Spawn","Prison","ChineseRoof","SpawnCave","TheWedge","TheCompartment","GreenHouse","PinkHouse","Barn","BlueHouse","ChineseHouse","PurpleHouse","Factory","OtherGreenHouse","BigCave","GoodPrison","RuhubsDogAhhPrison","ExtremelyGoodPrison","TrainCave","IslandCave","UfoCave","BlueHouseSlot","SpawnSlot","HauntedSlot","RandomSlot","BeachSlot"}
+	newlocations = {}
+
+	game.ReplicatedStorage.GrabEvents.ExtendGrabLine.OnClientEvent:Connect(function(plr,arg1,arg2)
+		if type(arg1) == "table" and arg1[1] == "BinisJ" then
+			if plr ~= game.Players.LocalPlayer then
+				if arg1[2] == "Starting" then
+					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">[BinisJ] "..plr.DisplayName.." (@"..plr.Name..") is using poor mans binisj</font>")
+					PoorBJList[plr.UserId] = "lmao pooron"
+				end
+				if arg1[2] == "BigBjChat" then
+					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">[BinisJ] </font>"..arg1[3])
+				end
+				if arg1[2] == "BigBjStarting" then
+					game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","BigBjNotStarting"})
+					if not BJList[plr.UserId] then
+						game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">[BinisJ] "..plr.DisplayName.." (@"..plr.Name..") is a good boy</font>")
+						BJList[plr.UserId] = true
+						HoldableList[plr.UserId] = nil
+					end
+				end
+				if arg1[2] == "NotStarting" then
+					if not PoorBJList[plr.UserId] then
+						game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">[BinisJ] "..plr.DisplayName.." (@"..plr.Name..") is using poor mans binisj</font>")
+						PoorBJList[plr.UserId] = "lmao pooron"
+					end
+				end
+				if arg1[2] == "BigBjNotStarting" then
+					if not BJList[plr.UserId] then
+						game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">[BinisJ] "..plr.DisplayName.." (@"..plr.Name..") is a good boy</font>")
+						BJList[plr.UserId] = true
+						HoldableList[plr.UserId] = nil
+					end
+				end
+			end
+			if arg1[2] == "Print" then
+				game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(arg1[3])
+			end
+			if arg1[2] == "New Build" then
+				local bn = buildnum
+				BS:AddSection({
+					Name = plr.Name.."'s Creation "..bn
+				})
+				local partslist = {}
+				local owner = plr
+				local dibbly = BS:AddLabel("Total Items In Build: 0")
+				local buildtotal = 0
+				local model = Instance.new("Model")
+				model.Parent = dick3
+				model.Name = "BinisJModel"..bn
+				local pp1 = Instance.new("Part")
+				pp1.Parent = model
+				model.PrimaryPart = pp1
+				pp1.Name = "pp1"
+				pp1.CFrame = CFrame.new(0,0,0)
+				pp1.Transparency = 1
+				pp1.CanCollide = false
+				pp1.CanQuery = false
+				pp1.Massless = true
+				local aura = Instance.new("IntValue")
+				aura.Value = 0
+				aura.Parent = model
+				aura:GetPropertyChangedSignal("Value"):Connect(function()
+					dibbly:Set("Total Items In Build: "..aura.Value)
+				end)
+				local aa1 = BS:AddButton({
+					Name = "Add Anchored Items To Build",
+					Callback = function()
+						if plr == game.Players.LocalPlayer then
+							local niglist = {}
+							local avgpos = Vector3.new(0,0,0)
+							local count = 0
+							local combinedlist = {}
+							for prt,_ in pairs(frozenlist) do
+								GrabItemsList[prt] = nil
+								if prt and prt:FindFirstChild("SoundPart") then
+									table.insert(combinedlist,prt)
+									avgpos += prt.SoundPart.CFrame.Position
+									count += 1
+								end
+							end
+							for _,prt in pairs(partslist) do
+								prt = findobject(prt[1][1],prt[1][2])
+								if prt then
+									avgpos += prt.SoundPart.CFrame.Position
+									count += 1
+								end
+							end
+							avgpos = CFrame.new(avgpos / Vector3.new(count,count,count))
+							for _,prt in pairs(combinedlist) do
+								table.insert(niglist,{{prt.Parent.Name,prt.ThisToysNumber.Value},avgpos:Inverse() * prt.SoundPart.CFrame,1})
+							end
+							game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({plr.Name.."'s Creation "..bn,"Set",{avgpos,niglist}})
+						end
+					end
+				})
+				local jeetard = BS:AddLabel("Build Owner: "..plr.DisplayName.." (@"..plr.Name..")")
+				local agentJEWchaning = false
+				local lastval = 1
+				local agentJEW = BS:AddSlider({
+					Name = "Set Build Size",
+					Min = 0.1,
+					Max = 50,
+					Default = 1,
+					Color = Color3.fromRGB(255,255,255),
+					Increment = 0.1,
+					ValueName = "Sped Shed",
+					Callback = function(Value)
+						if not agentJEWchaning then
+							if plr == game.Players.LocalPlayer then
+								game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({plr.Name.."'s Creation "..bn,"Resize",Value})
+							else
+								agentJEW:Set(lastval)
+								OrionLib:MakeNotification({
+									Name = "Bris lick in",
+									Content = "you are NOT sigma 😹😹\n(you're not the owner of this one)",
+									Image = "rbxassetid://4483345998",
+									Time = 2
+								})
+							end
+						else
+							model:ScaleTo(Value)
+						end
+						lastval = Value
+					end
+				})
+				BS:AddButton({
+					Name = "Set size to 1",
+					Callback = function()
+						if plr == game.Players.LocalPlayer then
+							game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({plr.Name.."'s Creation "..bn,"Resize",1})
+						else
+							OrionLib:MakeNotification({
+								Name = "Bris lick in",
+								Content = "you are NOT sigma 😹😹\n(you're not the owner of this one)",
+								Image = "rbxassetid://4483345998",
+								Time = 2
+							})
+						end
+					end
+				})
+				local aa2changing = false
+				local aa2 = BS:AddToggle({
+					Name = "Highlight Build",
+					Default = false,
+					Callback = function(Value)
+						if not aa2changing then
+							if plr == game.Players.LocalPlayer then
+								game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({plr.Name.."'s Creation "..bn,"Highlight",Value})
+							else
+								aa2:Set(false)
+								OrionLib:MakeNotification({
+									Name = "Bris lick in",
+									Content = "you are NOT sigma 😹😹\n(you're not the owner of this one)",
+									Image = "rbxassetid://4483345998",
+									Time = 2
+								})
+							end
+						else
+							if Value then
+								local randall = Instance.new("Highlight")
+								randall.Parent = model
+								randall.Name = "somebodyshotaloadintomyburger2"
+								randall.FillTransparency = 0.4
+								randall.FillColor = Color3.fromRGB(27,126,208)
+								randall.OutlineColor = Color3.fromRGB(21,97,161)
+								
+								local bbg = Instance.new("BillboardGui")
+								bbg.Name = "somebodyshotaloadintomyburger"
+								bbg.Parent = pp1
+								bbg.Size = UDim2.new(0, 100, 0, 100)
+								bbg.SizeOffset = Vector2.new(0,0.25)
+								bbg.StudsOffset = Vector3.new(0,3,0)
+								bbg.Adornee = pp1
+
+								local bbt = Instance.new("TextLabel")
+								bbt.Parent = bbg
+								bbt.Size = UDim2.new(0, 100, 0, 100)
+								bbt.BackgroundTransparency = 1
+								bbt.TextColor3 = Color3.new(1,1,1)
+								bbt.TextSize = 20
+								bbt.Text = plr.Name.."'s Creation "..bn
+								bbt.TextStrokeColor3 = Color3.new(1,1,1)
+								bbt.TextStrokeTransparency = 0.75
+							else
+								if model:FindFirstChild("somebodyshotaloadintomyburger2") then
+									model.somebodyshotaloadintomyburger2:Destroy()
+								end
+								if pp1:FindFirstChild("somebodyshotaloadintomyburger") then
+									pp1.somebodyshotaloadintomyburger:Destroy()
+								end
+							end
+						end
+					end,
+				})
+				local ownerchanging = false
+				local ClaimNetworkOwner = BS:AddToggle({
+					Name = "Auto-claim network owner",
+					Default = true,
+					Callback = function(Value)
+						if not ownerchanging then
+							if plr == game.Players.LocalPlayer then
+								game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({plr.Name.."'s Creation "..bn,"SetNetwork",Value})
+							else
+								ClaimNetworkOwner:Set(false)
+								OrionLib:MakeNotification({
+									Name = "Bris lick in",
+									Content = "you are NOT sigma 😹😹\n(you're not the owner of this one)",
+									Image = "rbxassetid://4483345998",
+									Time = 2
+								})
+							end
+						else
+							if plr == game.Players.LocalPlayer then
+								for i,v in pairs(partslist) do
+									local prt = findobject(v[1][1],v[1][2])
+									if prt then
+										BuildItemsList[prt] = Value and true or nil
+									end
+								end
+							end
+						end
+					end,
+				})
+				local aa3 = BS:AddButton({
+					Name = "Dismantle Build",
+					Callback = function()
+						if plr == game.Players.LocalPlayer then
+							game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({plr.Name.."'s Creation "..bn,"Dismantle"})
+						else
+							OrionLib:MakeNotification({
+								Name = "Bris lick in",
+								Content = "you are NOT sigma 😹😹\n(you're not the owner of this one)",
+								Image = "rbxassetid://4483345998",
+								Time = 2
+							})
+						end
+					end,
+				})
+				game.ReplicatedStorage.GrabEvents.ExtendGrabLine.OnClientEvent:Connect(function(plr,arg1)
+					if type(arg1) == "table" and arg1[1] == plr.Name.."'s Creation "..bn then
+						if arg1[2] == "Set" then
+							partslist = addanchitm(arg1[3],model)
+						elseif arg1[2] == "Resize" then
+							agentJEWchaning = true
+							agentJEW:Set(arg1[3])
+							agentJEWchaning = false
+						elseif arg1[2] == "Dismantle" then
+							for _,prt in pairs(model:GetChildren()) do
+								if prt.ClassName == "Model" then
+									prt:Destroy()
+								end
+							end
+							for i,v in pairs(partslist) do
+								local prt = findobject(v[1][1],v[1][2])
+								if prt then
+									BuildItemsList[prt] = Value and true or nil
+								end
+							end
+							partslist = {}
+						elseif arg1[2] == "SetNetwork" then
+							ownerchanging = true
+							ClaimNetworkOwner:Set(arg1[3])
+							ownerchanging = false
+						elseif arg1[2] == "Highlight" then
+							aa2changing = true
+							aa2:Set(arg1[3])
+							aa2changing = false
+						end
+					end
+				end)
+				buildnum += 1
+			end
+		else
+			if not currantlagpeoplelist[plr.Name] then
+				currantlagpeoplelist[plr.Name] = 0
+			end
+			if arg1 and plr ~= game.Players.LocalPlayer then
+				currantlagpeoplelist[plr.Name] += 1
+				if currantlagpeoplelist[plr.Name] > 50 then
+					if not ALAGE then
+						alag:Set(true)
+					end
+					local timeval = timesincelastlist[plr.Name]
+					if not timeval or tick() - timeval > 10 then
+						game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(150, 0, 0)\">[BinisJ] "..plr.DisplayName.." (@"..plr.Name..") is lagging the server</font>")
+						OrionLib:MakeNotification({
+							Name = "Anti-Lag",
+							Content = plr.DisplayName.." (@"..plr.Name..") is lagging the server",
+							Image = "rbxassetid://4483345998",
+							Time = 2
+						})
+						timesincelastlist[plr.Name] = tick()
+					end
+					timesincelast = tick()
+					task.wait(2.5)
+					if tick() - timesincelast > 2.25 and ALAGE then
+						alag:Set(false)
+					end
+				end
+			end
+		end
+	end)
+
+	task.spawn(function()
+		while true do
+			currantlagpeoplelist = {}
+			timeeeee = tick()
+			task.wait()
+		end
+	end)
+
+	game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","BjWho?"})
+	game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","BigBjStarting"})
 
 	game.workspace.ChildAdded:Connect(function(model)
 		if model.Name == "BlackHoleKick" then
@@ -884,316 +1089,10 @@ else
 		end
 	end)
 
-	local penis
-	local penis2
-
-	local DSL = true
-
-	if game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
-		penis = game.Players.LocalPlayer.Character.Humanoid:GetPropertyChangedSignal("Sit"):Connect(function()
-			if not game.Players.LocalPlayer.Character.Humanoid.SeatPart and AXE then
-				game.Players.LocalPlayer.Character.Humanoid.Sit = false
-			end
-		end)
-		penis2 = game.Players.LocalPlayer.Character.Humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
-			local nigger = 1
-			if flying then nigger = 10 end
-			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS * 16 * nigger
-		end)
-		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS
-	end
-
-	game.Players.LocalPlayer.CharacterAdded:Connect(function()
-		local b = game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
-		penis = b:GetPropertyChangedSignal("Sit"):Connect(function()
-			if not game.Players.LocalPlayer.Character.Humanoid.SeatPart and AXE then
-				game.Players.LocalPlayer.Character.Humanoid.Sit = false
-			end
-		end)
-		penis2 = b:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
-			local nigger = 1
-			if flying then nigger = 10 end
-			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS * 16 * nigger
-		end)
-		b.WalkSpeed = WS
-		if DSL then
-			game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(SL)
-		end
-	end)
-
-	task.spawn(function()
-		while true do
-			for _,plr in pairs(game.Players:GetChildren()) do
-				if plr.Character and plr ~= game.Players.LocalPlayer then
-					for _,prt in pairs(plr.Character:GetChildren()) do
-						if prt:IsA("BasePart") then
-							prt.CollisionGroup = "PlotPlayers"
-							if prt:FindFirstChild("RagdollLimbPart") then
-								prt.RagdollLimbPart.CollisionGroup = "PlotPlayers"
-							end
-						end
-					end
-				elseif plr.Character and plr == game.Players.LocalPlayer then
-					for _,prt in pairs(plr.Character:GetChildren()) do
-						if prt:IsA("BasePart") then
-							prt.CollisionGroup = "Players"
-							if prt:FindFirstChild("RagdollLimbPart") then
-								prt.RagdollLimbPart.CollisionGroup = "Players"
-							end
-						end
-					end
-				end
-			end
-			task.wait()
-		end
-	end)
-
-	local pOTP
-	local pLK
-	local pOL
-	local pFATASS
-	local coord
-	local pBK
-	local pBLK
-	local pESP
-	local pPenis
-	local pAK
-	local pBLH
-	local pOK
-	local Changing = false
-	local sellplr
-	local LS
-	local pPCS
-	local MiSPCS
-
-	local OTPList = {}
-	local BlobkickList = {"BarnoDDino","ay3vx"}
-	local BlobKillList = {}
-	local HoldableList = {}
-	local GrabItemsList = {}
-	local badboyfriendslist = {8790892084,9584241219,3478752556,2949841304,3478752556}
-	local badboylist = {
-		{8790892084,"IQ over 50 required"},
-		{8514316442,"retarded"},
-		{9584241219,"IQ below 50 required"},
-		{4747895524,"Bum ass"},
-		{2331338191,"have you ever played blox fruits with your life on the line? (referencing the edits)"},
-		{3478752556,"hes a baaaad boy!!"},
-		{2949841304,"fat shit lose some weight, and grow a little midget"},
-		{2975941060,"no FAT accounts"},
-		{3252968165,"bit of a slag honestly"},
-		{440734350,"fix your fuckass playstyle big 'bease"},
-		{9904680669,"has a weird script that makes her eat a lot"},
-		{10386060656,"pea brain"},
-		{501121956,"weird guy"},
-		{7546484255,"get this cheeky bugger out of town"},
-		{2434958706,"bris hes a weirdo bris"},
-		{10418034183,"cheeky loopys alt"},
-		{10325532344,"his scripts are buns"},
-		{2483594046,"get this guy out of the server hes so cringe and just sits in purple"},
-		{10346300231,"jenny is not ok"},
-		{7805935078,"friends with a bunch of weirdos"},
-		{10340953217,"nice chin mate"},
-		{10318260179,"big person"},
-		{10335658081,"cheater cheater carbohydrate eater"},
-		{1562458632,"look its fagloo, weight limit exceeded"},
-		{9711228307,"cheater cheater carbohydrate eater"},
-		{7474624570,"friggin aza brahh"},
-		{4481785988,"its praise bris hes an odd one"},
-		{1679335714,"weird guy pls bully him away"},
-		{6056562599,"its just water weight!!"},
-		{2780607294,"azas alt"},
-		{8458061687,"azas alt"},
-		{4519790581,"azas alt"},
-		{4176940323,"azas alt"},
-		{4783917869,"azas alt"},
-		{963044051,"lil' snowflake!!!!"},
-		{9345859623,"cheeky location"},
-		{9126911790,"cheeky yaoi"},
-		{8610874987,"show me your bane"},
-		{444041229,"yikes not that one"},
-		{5474657315,"he!!"},
-		{8985403372,"dont let him hop the border"},
-		{7409764191,"abrascaxs"},
-		{9276866772,"clitlicka!! its nav hes ass"},
-		{120518925,"abraxas' bum account"},
-		{8543250542,"smelly alt account loop them"},
-		{7243555120,"dont show emotion 🥷😶"},
-		{4397245423,"i dont know stupid fat fuck you uhhm get on your main youve got to add the uhm in there yeah heheh, youve got to add the laugh in there heheh.... hehehe"},
-		{651512593,"willy wanka!! big biceps!"},
-		{7461173814,"theyve got a galactic dick"},
-		{8591319823,"ohhh shes giving it now"},
-		{8618243481,"whys she watching 👀"},
-		{6083098569,"thats nitrozz"},
-		{3526820612,"cheeky thermal!! ciz used to get nice and warm with him in bed and such you know"},
-		{1012712525,"BUMSTA HAHAHAHA"},
-		{7138072144,"that is NOT the real tech brooo get him out"},
-		{7736821031,"fartcyde lol whys he hot garbage"},
-		{1112870704,"fartcyde lol whys he hot garbage"},
-		{579831809,"nav's bummy ass main"},
-		{14413761,"is this fae? idk loop them for me like the good boy you are bris"},
-		{1276463110,"his lil' nesia is very micro"},
-		{10287152810,"fartcyde lol whys he hot garbage"},
-		{3258799639,"hes very full of time to be quite frank"},
-		{8842590569,"thats phrcyde broo whys he gay"},
-		{5209659026,"wingding"},
-		{626502592,"bad boy"},
-		{561878584,"i bet boons there too"},
-		{1762306425,"got slammed by loopy lol"},
-		{1768138569,"got slammed by loopy lol"},
-		{2511298323,"got slammed by loopy lol"},
-		{3606734034,"got slammed by loopy lol"},
-		{401304786,"dont know who this is hes just got a lot of BAD GUYS added"},
-		{5533600189,"such a weird cunt bro hide your children he might just send them nudes"},
-		{3020071071,"ew cunt get rid of him"},
-		{635576153,"friggin navvgr brah hes a big bum"},
-		{10234143951,"big cheater cheater pumpkin eater get him out the server"},
-		{5069961687,"honestly not much of a problem himself just watch out for morored"},
-		{1881057647,"really i mean this, watch out with this guy hes got some weird ass shit"},
-		{3096351771,"this guys kinda buns at cheating"},
-		{8089834774,"cheater cheater pumpkin eater"},
-		{10353040209,"hes cheating bro just look at his name"},
-		{9073424914,"suspected cheaters main"},
-		{3796494548,"friends with a few good cheaters"},
-		{3687061074,"has blitz premium"},
-		{2334245032,"cheater cheater pumpkin eater"},
-		{2763995918,"thats blitz"},
-		{8125089627,"thats blitz"},
-		{9492246804,"thats blitz"},
-		{10416893483,"cheeky oats, hes a cheater"},
-		{3796494548,"no clue if he cheats just be weary"},
-		{2636495757,"bobs kinda BUNS"},
-		{5096830050,"hes a cheater!!!"},
-		{5095159939,"hes a cheater!!!"},
-		{5097961324,"hes a cheater!!!"},
-		{9535225511,"bit weird hes posing as a roblox admin, hes a cheater"}
-	}
-
-	local LocList = {}
-	local Freelist = {}
-	local LoopKillList = {}
-	local AKList = {}
-	local OKList = {}
-	local PenisList = {}
-	local whitelist = {}
-
-	local OKA = false
-	local OWF = true
-	local OKLA = false
-	local OKLWF = true
-	local BKA = false
-	local BKAWL = true
-	local BKLAWL = true
-
-	local plrlist
-	local plrlistsel
-	local WLL
-	local WLlistsel
-
-	game:GetService("Players").ChildAdded:Connect(function(plr)
-		workspace:WaitForChild(plr.Name.."SpawnedInToys").ChildAdded:Connect(function(model)
-			model:SetAttribute("Bumass", 1)
-			if model.Name == "CreatureBlobman" then
-				if WSE then
-					model:WaitForChild("HumanoidCreature").WalkSpeed = WS * 20
-				end
-			elseif model.Name == "ToolPencil" then
-				local bill = model:WaitForChild("SoundPart")
-				local prt = Instance.new("Part")
-				prt.Name = "PenisPart"
-				prt.Parent = model
-				prt.CFrame = bill.CFrame + (bill.CFrame.RightVector * 2.193)
-				prt.Rotation += Vector3.new(0, 0, 270)
-				prt.Transparency = 1
-				prt.CanCollide = false
-				prt.CanQuery = false
-				prt.CanTouch = false
-				prt.Size = Vector3.new(0.5,0.5,0.5)
-
-				local wc = Instance.new("WeldConstraint")
-				wc.Parent = prt
-				wc.Part0 = bill
-				wc.Part1 = prt
-
-				local pe = Instance.new("ParticleEmitter")
-				pe.Parent = prt
-				pe.SpreadAngle = Vector2.new(10,10)
-				pe.Texture = "rbxassetid://120974828567943"
-				pe.Rate = 100
-				pe.Speed = NumberRange.new(25,25)
-				pe.Lifetime = NumberRange.new(0.25,0.5)
-				local numberSequence = NumberSequence.new{
-					NumberSequenceKeypoint.new(0, 0),
-					NumberSequenceKeypoint.new(1, 1),
-				}
-				pe.Transparency = numberSequence
-				numberSequence = NumberSequence.new{
-					NumberSequenceKeypoint.new(0, 0.5),
-					NumberSequenceKeypoint.new(1, 0.5),
-				}
-				pe.Size = numberSequence
-
-				for _,prt in pairs(model:GetChildren()) do
-					if prt:IsA("BasePart") then
-						prt.CanQuery = false
-						prt.CanTouch = false
-					end
-				end
-			elseif model.Name == "NinjaKunai" then
-				local bbg = Instance.new("BillboardGui")
-				bbg.Parent = model
-				bbg.Size = UDim2.new(1, 0, 1, 0)
-				bbg.Adornee = model
-
-				local bbl = Instance.new("ImageLabel")
-				bbl.Parent = bbg
-				bbl.BackgroundTransparency = 1
-				bbl.Size = UDim2.new(1, 0, 1, 0)
-				bbl.Position = UDim2.new(0, 0, 0, 0)
-				bbl.AnchorPoint = Vector2.new(0.5, 0.5)
-				bbl.Position = UDim2.new(0.5, 0, 0.5, 0)
-
-				local constraint = Instance.new("UIAspectRatioConstraint")
-				constraint.AspectRatio = 1
-				constraint.Parent = bbl
-				bbl.Image = 'rbxassetid://120974828567943'
-
-				task.wait()
-
-				for _,prt in pairs(model:GetChildren()) do
-					if prt:IsA("BasePart") then
-						prt.CanQuery = false
-						prt.CanTouch = false
-						prt.Transparency = 1
-					end
-				end
-			elseif model.Name == "BallMagicLight" and bonerenabled then
-				Boner(model)
-			elseif model.Name == "BombMissile" or model.Name == "BallSnowball" or model.Name == "BombDarkMatter" or model.Name == "BombBalloon" then
-				task.wait()
-				for _,prt in pairs(model:GetChildren()) do
-					if prt:IsA("BasePart") then
-						prt.CollisionGroup = "PlotItems"
-					end
-				end
-			elseif model:WaitForChild("HoldPart",1) then
-				local lasttime = tick()
-				model.HoldPart:WaitForChild("RigidConstraint"):GetPropertyChangedSignal("Attachment1"):Connect(function()
-					if model.HoldPart.RigidConstraint.Attachment1 then
-						if 1 / (tick() - lasttime) > 5 then
-							HoldableList[plr.UserId] = true
-						end
-						lasttime = tick()
-					end
-				end)
-			end
-		end)
-
-		plr.CharacterAdded:Connect(function()
-			if plr.BinisJ.ESP.Value or ESPA then
-				ESPP(plr)
-			end
-		end)
+	for _,plr in pairs(game.Players:GetChildren()) do
+		table.insert(joinland,plr.UserId)
+		table.insert(joinland,plr.Name)
+		table.insert(joinland,plr.DisplayName)
 
 		currantplrlist = {}
 		for _,plr in pairs(game.Players:GetChildren()) do
@@ -1202,89 +1101,6 @@ else
 			end
 		end
 
-		local b = Instance.new("Folder")
-		b.Name = "BinisJ"
-		b.Parent = plr
-
-		local ba = Instance.new("BoolValue")
-		ba.Name = "OwnershipTP"
-		ba.Parent = b
-
-		for _,plrr in pairs(OTPList) do
-			if plr.Name == plrr then
-				ba.Value = true
-			end
-		end
-
-		local bb = Instance.new("Vector3Value")
-		bb.Name = "OwnershipLocation"
-		bb.Parent = b
-
-		local bc = Instance.new("BoolValue")
-		bc.Name = "ESP"
-		bc.Parent = b
-
-		for _,plrr in pairs(EspList) do
-			if plr.Name == plrr then
-				bc.Value = true
-			end
-		end
-
-		local bd = Instance.new("BoolValue")
-		bd.Name = "Blobkick"
-		bd.Parent = b
-
-		for _,plrr in pairs(BlobkickList) do
-			if plr.Name == plrr then
-				bd.Value = true
-			end
-		end
-		
-		local be = Instance.new("BoolValue")
-		be.Name = "LoopKill"
-		be.Parent = b
-
-		for _,plrr in pairs(LoopKillList) do
-			if plr.Name == plrr then
-				be.Value = true
-			end
-		end
-
-		local bf = Instance.new("BoolValue")
-		bf.Name = "Penis"
-		bf.Parent = b
-
-		for _,plrr in pairs(PenisList) do
-			if plr.Name == plrr then
-				bf.Value = true
-			end
-		end
-
-		local bg = Instance.new("BoolValue")
-		bg.Name = "AntiKick"
-		bg.Parent = b
-
-		for _,plrr in pairs(AKList) do
-			if plr.Name == plrr then
-				bg.Value = true
-			end
-		end
-
-		local bh = Instance.new("BoolValue")
-		bh.Name = "OwnershipKick"
-		bh.Parent = b
-
-		for _,plrr in pairs(OKList) do
-			if plr.Name == plrr then
-				bh.Value = true
-			end
-		end
-
-		local bi = Instance.new("BoolValue")
-		bi.Name = "BJValue"
-		bi.Parent = b
-		bi.Value = false
-
 		if loaded then
 			plrlist:Refresh(currantplrlist,true)
 			plrlist:Set(plrlistsel)
@@ -1292,168 +1108,43 @@ else
 			WLL:Set(WLlistsel)
 		end
 
-		task.wait()
-		local beenbefore = false
-		local kickedbefore = false
-		for _,itm in pairs(kickland) do
-			if itm == plr.UserId then
-				kickedbefore = true
-			end
-		end
-		for _,itm in pairs(joinland) do
-			if itm == plr.UserId then
-				beenbefore = true
-			end
-		end
-		local success1, isFriend = pcall(function()
-			return game.Players.LocalPlayer:IsFriendsWith(plr.UserId)
-		end)
-		if success1 and isFriend then
-			whitelist[plr.UserId] = "yesbro"
-		end
-		local ishebadornahh = false
-		local dingdong = ""
-		for _,dude in badboylist do
-			if plr.UserId == dude[1] then
-				ishebadornahh = true
-				dingdong = "flagged for: "..dude[2]
-			end
-		end
-		local _,bplayerRank = pcall(function()
-			return plr:GetRankInGroup(16168861)
-		end)
-		if not bplayerRank then bplayerRank = 0 end
-		local _,pplayerRank = pcall(function()
-			plr:GetRankInGroup(1082151871)
-		end)
-		if not pplayerRank then pplayerRank = 0 end
-		local blizrank = ""
-		local patorank = ""
-		if bplayerRank == 255 then
-			blizrank = "Blitz Owner"
-		elseif bplayerRank == 4 then
-			blizrank = "Blitz High Rank Admin"
-		elseif bplayerRank == 3 then
-			blizrank = "Blitz Low Rank Admin"
-		elseif bplayerRank == 2 then
-			blizrank = "Blitz Lowest Ranked Admin"
-		elseif bplayerRank == 1 then
-			blizrank = "Blitz Fanboy (non admin)"
-		elseif bplayerRank ~= 0 then
-			patorank = "Blitz: Unknown Rank "..bplayerRank.." (Send ss to dillywag)"
-		end
-		if pplayerRank == 255 then
-			patorank = "Pato's Owner"
-		elseif pplayerRank == 254 then
-			patorank = "Pato's High Rank Admin"
-		elseif pplayerRank == 253 then
-			patorank = "Pato's Low Rank Admin"
-		elseif pplayerRank == 250 then
-			patorank = "Pato's Lowest Ranked Admin"
-		elseif pplayerRank == 1 then
-			patorank = "Pato's Fanboy (non admin)"
-		elseif pplayerRank ~= 0 then
-			patorank = "Pato: Unknown Rank "..pplayerRank.." (Send ss to dillywag)"
-		end
-		if blizrank ~= "" or patorank ~= "" then
-			if not beenbefore then
-				table.insert(joinland,plr.UserId)
-				table.insert(joinland,plr.Name)
-				table.insert(joinland,plr.DisplayName)
-			end
-			local yingrang = blizrank
-			if blizrank ~= "" and patorank ~= "" then
-				yingrang = yingrang.." and "
-			end
-			yingrang = yingrang..patorank
-			if ishebadornahh then
-				dingdong = ", also "..dingdong
-			else
-				dingdong = ""
-			end
-			diduel = "[Scripter Warning] "..plr.DisplayName.." (@"..plr.Name.."): "..yingrang.." has joined the game",
-			game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(0, 0, 0)\">[Scripter Warning] "..plr.DisplayName.." (@"..plr.Name.."): "..yingrang.." has joined the game"..dingdong.."</font>")
-		elseif ishebadornahh then
-			if not beenbefore then
-				table.insert(joinland,plr.UserId)
-				table.insert(joinland,plr.Name)
-				table.insert(joinland,plr.DisplayName)
-			end
-			diduel = "[Retard Warning] "..plr.DisplayName.." (@"..plr.Name..") has joined the game",
-			game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(150, 0, 0)\">[Retard Warning] "..plr.DisplayName.." (@"..plr.Name..") has joined the game, "..dingdong.."</font>")
-		else
-			if isFriend then
-				if beenbefore then
-					diduel = "Your friend "..plr.DisplayName.." (@"..plr.Name..") has rejoined",
-					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(150,150,150)\">"..plr.DisplayName.." (@"..plr.Name..") has rejoined</font>")
-				else
-					table.insert(joinland,plr.UserId)
-					table.insert(joinland,plr.Name)
-					table.insert(joinland,plr.DisplayName)
-					diduel = plr.DisplayName.." (@"..plr.Name..") has joined the game",
-					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(150,150,150)\">Your friend "..plr.DisplayName.." (@"..plr.Name..") has joined the game</font>")
-				end
-			else
-				if beenbefore then
-					diduel = plr.DisplayName.." (@"..plr.Name..") has rejoined",
-					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(150,150,150)\">"..plr.DisplayName.." (@"..plr.Name..") has rejoined</font>")
-				else
-					table.insert(joinland,plr.UserId)
-					table.insert(joinland,plr.Name)
-					table.insert(joinland,plr.DisplayName)
-					diduel = plr.DisplayName.." (@"..plr.Name..") has joined the game",
-					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(150,150,150)\">"..plr.DisplayName.." (@"..plr.Name..") has joined the game</font>")
-				end	
-			end
-		end
-		OrionLib:MakeNotification({
-			Name = "Join Logger",
-			Content = diduel,
-			Image = "rbxassetid://4483345998",
-			Time = 2
-		})
-	end)
-
-	for _,plr in pairs(game.Players:GetPlayers()) do
 		if plr ~= game.Players.LocalPlayer then
-			workspace:WaitForChild(plr.Name.."SpawnedInToys").ChildAdded:Connect(function(itm)
-				if itm:WaitForChild("HoldPart",1) then
-					local lasttime = tick()
-					itm.HoldPart:WaitForChild("RigidConstraint"):GetPropertyChangedSignal("Attachment1"):Connect(function()
-						if itm.HoldPart.RigidConstraint.Attachment1 then
-							if 1 / (tick() - lasttime) > 5 then
-								HoldableList[plr.UserId] = true
-							end
-							lasttime = tick()
-						end
-					end)
+			plr.CharacterAdded:Connect(function(char)
+				if ESPList[plr.UserId] or ESPA then
+					ESPP(plr)
 				end
-			end)
-			for _,itm in pairs(workspace[plr.Name.."SpawnedInToys"]:GetChildren()) do
-				task.spawn(function()
-					if itm:WaitForChild("HoldPart",1) then
-						local lasttime = tick()
-						itm.HoldPart:WaitForChild("RigidConstraint"):GetPropertyChangedSignal("Attachment1"):Connect(function()
-							if itm.HoldPart.RigidConstraint.Attachment1 then
-								if 1 / (tick() - lasttime) > 5 then
-									HoldableList[plr.UserId] = true
-								end
-								lasttime = tick()
+				local _ = char:WaitForChild("Head")
+				char:GetPropertyChangedSignal("Parent"):Connect(function()
+					for _,prt in pairs(char:GetChildren()) do
+						if prt:IsA("BasePart") then
+							prt.CollisionGroup = "PlotPlayers"
+							if prt:FindFirstChild("RagdollLimbPart") then
+								prt.RagdollLimbPart.CollisionGroup = "PlotPlayers"
 							end
-						end)
+						end
 					end
 				end)
-			end
-			table.insert(joinland,plr.UserId)
-			table.insert(joinland,plr.Name)
-			table.insert(joinland,plr.DisplayName)
-			task.spawn(function()
-				local success, isFriend = pcall(function()
-					return game.Players.LocalPlayer:IsFriendsWith(plr.UserId)
+				_ = char.Head:WaitForChild("BallSocketConstraint")
+				char.Head.BallSocketConstraint:GetPropertyChangedSignal("Enabled"):Connect(function()
+					for _,prt in pairs(char:GetChildren()) do
+						if prt:IsA("BasePart") then
+							prt.CollisionGroup = "PlotPlayers"
+							if prt:FindFirstChild("RagdollLimbPart") then
+								prt.RagdollLimbPart.CollisionGroup = "PlotPlayers"
+							end
+						end
+					end
 				end)
-				if success and isFriend then
-					whitelist[plr.UserId] = "yesbro"
-				end
+			end)
+			task.spawn(function()
+				task.spawn(function()
+					local success, isFriend = pcall(function()
+						return game.Players.LocalPlayer:IsFriendsWith(plr.UserId)
+					end)
+					if success and isFriend then
+						whitelist[plr.UserId] = "yesbro"
+					end
+				end)
 				local ishebadornahh = false
 				local dingdong = ""
 				for _,dude in badboylist do
@@ -1462,14 +1153,19 @@ else
 						dingdong = "flagged for: "..dude[2]
 					end
 				end
-				local _,bplayerRank = pcall(function()
-					return plr:GetRankInGroup(16168861)
+				task.spawn(function()
+					local _,bplayerRank = pcall(function()
+						return plr:GetRankInGroup(16168861)
+					end)
+					if not bplayerRank then bplayerRank = 0 end
 				end)
-				if not bplayerRank then bplayerRank = 0 end
-				local _,pplayerRank = pcall(function()
-					plr:GetRankInGroup(1082151871)
+				task.spawn(function()
+					local _,pplayerRank = pcall(function()
+						plr:GetRankInGroup(1082151871)
+					end)
+					if not pplayerRank then pplayerRank = 0 end
 				end)
-				if not pplayerRank then pplayerRank = 0 end
+				while not (pplayerRank and bplayerRank) do task.wait() end
 				local blizrank = ""
 				local patorank = ""
 				if bplayerRank == 255 then
@@ -1516,18 +1212,9 @@ else
 				end
 			end)
 		end
-		plr.CharacterAdded:Connect(function()
-			if plr ~= game.Players.LocalPlayer then
-				if plr.BinisJ.ESP.Value or ESPA then
-					ESPP(plr)
-				end
-			end
-		end)
+
 		workspace:WaitForChild(plr.Name.."SpawnedInToys").ChildAdded:Connect(function(model)
-			model:SetAttribute("Bumass", 1)
-			if model.Name == "CreatureBlobman" then
-				model:WaitForChild("HumanoidCreature").WalkSpeed = WS * 20
-			elseif model.Name == "ToolPencil" then
+			if model.Name == "ToolPencil" then
 				local bill = model:WaitForChild("SoundPart")
 				local prt = Instance.new("Part")
 				prt.Name = "PenisPart"
@@ -1606,67 +1293,358 @@ else
 						prt.CollisionGroup = "PlotItems"
 					end
 				end
+			elseif not BJList[plr.UserId] and model:WaitForChild("HoldPart",1) then
+				local lasttime = nil
+				model.HoldPart:WaitForChild("RigidConstraint"):GetPropertyChangedSignal("Attachment1"):Connect(function()
+					if lasttime and model.HoldPart.RigidConstraint.Attachment1 then
+						if 1 / (tick() - lasttime) > 10 then
+							HoldableList[plr.UserId] = true
+							if uid == plr.UserId then 
+								pBLH:Set(true)
+							end
+						end
+						lasttime = tick()
+					end
+				end)
+				task.wait(.2)
+				lasttime = tick()
 			end
 		end)
-		for _,model in pairs(workspace:FindFirstChild(plr.Name.."SpawnedInToys")) do
-			if model:IsA("Model") then
-				model:SetAttribute("Bumass", 1)
-			end
-		end
 	end
 
-	game:GetService("Players").ChildRemoved:Connect(function(plr)
+	game.Players.ChildAdded:Connect(function(plr)
+		plr.CharacterAdded:Connect(function(char)
+			if ESPList[plr.UserId] or ESPA then
+				ESPP(plr)
+			end
+			local _ = char:WaitForChild("Head")
+			char:GetPropertyChangedSignal("Parent"):Connect(function()
+				for _,prt in pairs(char:GetChildren()) do
+					if prt:IsA("BasePart") then
+						prt.CollisionGroup = "PlotPlayers"
+						if prt:FindFirstChild("RagdollLimbPart") then
+							prt.RagdollLimbPart.CollisionGroup = "PlotPlayers"
+						end
+					end
+				end
+			end)
+			_ = char.Head:WaitForChild("BallSocketConstraint")
+			char.Head.BallSocketConstraint:GetPropertyChangedSignal("Enabled"):Connect(function()
+				for _,prt in pairs(char:GetChildren()) do
+					if prt:IsA("BasePart") then
+						prt.CollisionGroup = "PlotPlayers"
+						if prt:FindFirstChild("RagdollLimbPart") then
+							prt.RagdollLimbPart.CollisionGroup = "PlotPlayers"
+						end
+					end
+				end
+			end)
+		end)
+
 		currantplrlist = {}
-		local masterplr = game.Players.LocalPlayer
 		for _,plr in pairs(game.Players:GetChildren()) do
 			if plr ~= game.Players.LocalPlayer then
 				table.insert(currantplrlist,plr.Name)
 			end
-			if table.find(bjlist,plr.Name) then
-				local msplr = game.Players.LocalPlayer
-				local msnum = 0
-				for _,plr in pairs(game.Players:GetPlayers()) do
-					if plr ~= game.Players.LocalPlayer and plr.BinisJ.BJValue.Value and plr.AccountAge > msnum then
-						msplr = plr
-						msnum = plr.AccountAge
-					end
-				end
-				if MasterPlayer ~= msplr then
-					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(200,200,200)\">"..plr.DisplayName.." (@"..plr.Name..") is the muscle tustler</font>")
-					MasterPlayer = msplr
-				end
-			end
 		end
+
 		if loaded then
 			plrlist:Refresh(currantplrlist,true)
 			plrlist:Set(plrlistsel)
+			WLL:Refresh(currantplrlist,true)
+			WLL:Set(WLlistsel)
 		end
-		local alrflagged = false
-		for _,plrr in pairs(gettingkicked) do
-			if plrr == plr.UserId then
-				alrflagged = true
+
+		local beenbefore = false
+		local kickedbefore = false
+		for _,itm in pairs(kickland) do
+			if itm == plr.UserId then
+				kickedbefore = true
 			end
 		end
-		if not alrflagged then
-			game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(150,150,150)\">"..plr.DisplayName.." (@"..plr.Name..") has left the game</font>")
+		for _,itm in pairs(joinland) do
+			if itm == plr.UserId then
+				beenbefore = true
+			end
+		end
+		if not beenbefore then
+			table.insert(joinland,plr.UserId)
+			table.insert(joinland,plr.Name)
+			table.insert(joinland,plr.DisplayName)
+		end
+		task.spawn(function()
+			task.spawn(function()
+				local success1, isFriend = pcall(function()
+					return game.Players.LocalPlayer:IsFriendsWith(plr.UserId)
+				end)
+				if success1 and isFriend then
+					whitelist[plr.UserId] = "yesbro"
+				end
+			end)
+			local ishebadornahh = false
+			local dingdong = ""
+			for _,dude in badboylist do
+				if plr.UserId == dude[1] then
+					ishebadornahh = true
+					dingdong = "flagged for: "..dude[2]
+					return
+				end
+			end
+			task.spawn(function()
+				local _,bplayerRank = pcall(function()
+					return plr:GetRankInGroup(16168861)
+				end)
+				if not bplayerRank then bplayerRank = 0 end
+			end)
+			task.spawn(function()
+				local _,pplayerRank = pcall(function()
+					plr:GetRankInGroup(1082151871)
+				end)
+				if not pplayerRank then pplayerRank = 0 end
+			end)
+			while not (pplayerRank and bplayerRank) do task.wait() end
+			local blizrank = ""
+			local patorank = ""
+			if bplayerRank == 255 then
+				blizrank = "Blitz Owner"
+			elseif bplayerRank == 4 then
+				blizrank = "Blitz High Rank Admin"
+			elseif bplayerRank == 3 then
+				blizrank = "Blitz Low Rank Admin"
+			elseif bplayerRank == 2 then
+				blizrank = "Blitz Lowest Ranked Admin"
+			elseif bplayerRank == 1 then
+				blizrank = "Blitz Fanboy (non admin)"
+			elseif bplayerRank ~= 0 then
+				patorank = "Blitz: Unknown Rank "..bplayerRank.." (Send ss to dillywag)"
+			end
+			if pplayerRank == 255 then
+				patorank = "Pato's Owner"
+			elseif pplayerRank == 254 then
+				patorank = "Pato's High Rank Admin"
+			elseif pplayerRank == 253 then
+				patorank = "Pato's Low Rank Admin"
+			elseif pplayerRank == 250 then
+				patorank = "Pato's Lowest Ranked Admin"
+			elseif pplayerRank == 1 then
+				patorank = "Pato's Fanboy (non admin)"
+			elseif pplayerRank ~= 0 then
+				patorank = "Pato: Unknown Rank "..pplayerRank.." (Send ss to dillywag)"
+			end
+			if blizrank ~= "" or patorank ~= "" then
+				local yingrang = blizrank
+				if blizrank ~= "" and patorank ~= "" then
+					yingrang = yingrang.." and "
+				end
+				yingrang = yingrang..patorank
+				if ishebadornahh then
+					dingdong = ", also "..dingdong
+				else
+					dingdong = ""
+				end
+				diduel = "[Scripter Warning] "..plr.DisplayName.." (@"..plr.Name.."): "..yingrang.." has joined the game",
+				game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(0, 0, 0)\">[Scripter Warning] "..plr.DisplayName.." (@"..plr.Name.."): "..yingrang.." has joined the game"..dingdong.."</font>")
+			elseif ishebadornahh then
+				diduel = "[Retard Warning] "..plr.DisplayName.." (@"..plr.Name..") has joined the game",
+				game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(150, 0, 0)\">[Retard Warning] "..plr.DisplayName.." (@"..plr.Name..") has joined the game, "..dingdong.."</font>")
+			else
+				if isFriend then
+					if beenbefore then
+						diduel = "Your friend "..plr.DisplayName.." (@"..plr.Name..") has rejoined",
+						game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(150,150,150)\">"..plr.DisplayName.." (@"..plr.Name..") has rejoined</font>")
+					else
+						diduel = plr.DisplayName.." (@"..plr.Name..") has joined the game",
+						game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(150,150,150)\">Your friend "..plr.DisplayName.." (@"..plr.Name..") has joined the game</font>")
+					end
+				else
+					if beenbefore then
+						diduel = plr.DisplayName.." (@"..plr.Name..") has rejoined",
+						game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(150,150,150)\">"..plr.DisplayName.." (@"..plr.Name..") has rejoined</font>")
+					else
+						diduel = plr.DisplayName.." (@"..plr.Name..") has joined the game",
+						game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(150,150,150)\">"..plr.DisplayName.." (@"..plr.Name..") has joined the game</font>")
+					end	
+				end
+			end
+
 			OrionLib:MakeNotification({
 				Name = "Join Logger",
-				Content = plr.DisplayName.." (@"..plr.Name..") has left the game",
+				Content = diduel,
 				Image = "rbxassetid://4483345998",
 				Time = 2
 			})
-		end
+		end)
+
+		workspace:WaitForChild(plr.Name.."SpawnedInToys").ChildAdded:Connect(function(model)
+			if model.Name == "ToolPencil" then
+				local bill = model:WaitForChild("SoundPart")
+				local prt = Instance.new("Part")
+				prt.Name = "PenisPart"
+				prt.Parent = model
+				prt.CFrame = bill.CFrame + (bill.CFrame.RightVector * 2.193)
+				prt.Rotation += Vector3.new(0, 0, 270)
+				prt.Transparency = 1
+				prt.CanCollide = false
+				prt.CanQuery = false
+				prt.CanTouch = false
+				prt.Size = Vector3.new(0.5,0.5,0.5)
+
+				local wc = Instance.new("WeldConstraint")
+				wc.Parent = prt
+				wc.Part0 = bill
+				wc.Part1 = prt
+
+				local pe = Instance.new("ParticleEmitter")
+				pe.Parent = prt
+				pe.SpreadAngle = Vector2.new(10,10)
+				pe.Texture = "rbxassetid://120974828567943"
+				pe.Rate = 100
+				pe.Speed = NumberRange.new(25,25)
+				pe.Lifetime = NumberRange.new(0.25,0.5)
+				local numberSequence = NumberSequence.new{
+					NumberSequenceKeypoint.new(0, 0),
+					NumberSequenceKeypoint.new(1, 1),
+				}
+				pe.Transparency = numberSequence
+				numberSequence = NumberSequence.new{
+					NumberSequenceKeypoint.new(0, 0.5),
+					NumberSequenceKeypoint.new(1, 0.5),
+				}
+				pe.Size = numberSequence
+
+				for _,prt in pairs(model:GetChildren()) do
+					if prt:IsA("BasePart") then
+						prt.CanQuery = false
+						prt.CanTouch = false
+					end
+				end
+			elseif model.Name == "NinjaKunai" then
+				local bbg = Instance.new("BillboardGui")
+				bbg.Parent = model
+				bbg.Size = UDim2.new(1, 0, 1, 0)
+				bbg.Adornee = model
+
+				local bbl = Instance.new("ImageLabel")
+				bbl.Parent = bbg
+				bbl.BackgroundTransparency = 1
+				bbl.Size = UDim2.new(1, 0, 1, 0)
+				bbl.Position = UDim2.new(0, 0, 0, 0)
+				bbl.AnchorPoint = Vector2.new(0.5, 0.5)
+				bbl.Position = UDim2.new(0.5, 0, 0.5, 0)
+
+				local constraint = Instance.new("UIAspectRatioConstraint")
+				constraint.AspectRatio = 1
+				constraint.Parent = bbl
+				bbl.Image = 'rbxassetid://120974828567943'
+
+				task.wait()
+
+				for _,prt in pairs(model:GetChildren()) do
+					if prt:IsA("BasePart") then
+						prt.CanQuery = false
+						prt.CanTouch = false
+						prt.Transparency = 1
+					end
+				end
+			elseif model.Name == "BallMagicLight" and bonerenabled then
+				Boner(model)
+			elseif model.Name == "BombMissile" or model.Name == "BallSnowball" or model.Name == "BombDarkMatter" or model.Name == "BombBalloon" then
+				task.wait()
+				for _,prt in pairs(model:GetChildren()) do
+					if prt:IsA("BasePart") then
+						prt.CollisionGroup = "PlotItems"
+					end
+				end
+			elseif not BJList[plr.UserId] and model:WaitForChild("HoldPart",1) then
+				local lasttime = nil
+				model.HoldPart:WaitForChild("RigidConstraint"):GetPropertyChangedSignal("Attachment1"):Connect(function()
+					if lasttime and model.HoldPart.RigidConstraint.Attachment1 then
+						if 1 / (tick() - lasttime) > 10 then
+							HoldableList[plr.UserId] = true
+							if uid == plr.UserId then 
+								pBLH:Set(true)
+							end
+						end
+						lasttime = tick()
+					end
+				end)
+				task.wait(.2)
+				lasttime = tick()
+			end
+		end)
 	end)
 
-	locations = {"Spawn","Prison","ChineseRoof","SpawnCave","TheWedge","TheCompartment","GreenHouse","PinkHouse","Barn","BlueHouse","ChineseHouse","PurpleHouse","Factory","OtherGreenHouse","BigCave","GoodPrison","RuhubsDogAhhPrison","ExtremelyGoodPrison","TrainCave","IslandCave","UfoCave","BlueHouseSlot","SpawnSlot","HauntedSlot","RandomSlot","BeachSlot"}
-	newlocations = {}
+	for _,prt in pairs(game.workspace:GetChildren()) do
+		if prt.Name == "GrabParts" then
+			prt.Name = "OfflineGrabParts"
+		end
+	end
 
-	local Window = OrionLib:MakeWindow({Name = "BinisJ - Nigga Deluxe Edition", IntroText = "BinisJ - Nigga Deluxe Edition"})
+	for _,house in pairs(game:GetService("Workspace").Plots:GetChildren()) do
+		for _,prt in pairs(house.Barrier:GetChildren()) do
+			prt.CanQuery = false
+			prt.CanCollide = false
+		end
+		house.PlotArea.CanCollide = false
+		house.PlotArea.CanQuery = false
+	end
+
+    local Window = OrionLib:MakeWindow({Name = "BinisJ - Nigga Deluxe Edition", IntroText = "BinisJ - Nigga Deluxe Edition"})
 
 	local GS = Window:MakeTab({
 		Name = "Grab Stuff",
 		Icon = "rbxassetid://4483362458",
 	})
+
+	local PT = Window:MakeTab({
+		Name = "Player Tab",
+		Icon = "rbxassetid://4483362458",
+	})
+
+	local AS = Window:MakeTab({
+		Name = "Anti-Shit",
+		Icon = "rbxassetid://4483345998",
+	})
+
+	local PL = Window:MakeTab({
+		Name = "Players",
+		Icon = "rbxassetid://4483345998",
+	})
+
+	BS = Window:MakeTab({
+		Name = "Builds",
+		Icon = "rbxassetid://4483362458",
+	})
+
+	LSD = Window:MakeTab({
+		Name = "Line thingys",
+		Icon = "rbxassetid://4483362458",
+	})
+
+	MS = Window:MakeTab({
+		Name = "Map",
+		Icon = "rbxassetid://4483362458",
+	})
+
+	local MiS = Window:MakeTab({
+		Name = "Miscellaneous",
+		Icon = "rbxassetid://4483362458",
+	})
+
+	local TS = Window:MakeTab({
+		Name = "Teleportation",
+		Icon = "rbxassetid://4483362458",
+		PremiumOnly = false
+	})
+
+	local ST = Window:MakeTab({
+		Name = "Config",
+		Icon = "rbxassetid://4483345998",
+	})
+
+
+
+
 
 	GS:AddSection({
 		Name = "My muscles are getting bigger!"
@@ -1799,10 +1777,9 @@ else
 		end    
 	})
 
-	local PT = Window:MakeTab({
-		Name = "Player Tab",
-		Icon = "rbxassetid://4483362458",
-	})
+
+    task.wait(.25)
+
 
 	PT:AddSection({
 		Name = "Walk-Speed"
@@ -1892,8 +1869,10 @@ else
 
 	local already = false
 	local AKT
+	local AST
 	local APT
 	local AKE
+	local ASE
 	local APKE
 
 	local already2 = false
@@ -1904,6 +1883,7 @@ else
 		while true do
 			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
 				game.Players.LocalPlayer.Character.Humanoid.JumpHeight = 0
+				game.Players.LocalPlayer.Character.Humanoid.JumpPower = 24
 				if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and game.Players.LocalPlayer.Character.Humanoid.SeatPart and game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent and game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent.Name == "CreatureBlobman" then
 					game.Players.LocalPlayer.Character.Humanoid.UseJumpPower = false
 					if game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent:FindFirstChild("HumanoidCreature") then
@@ -1981,8 +1961,8 @@ else
 					end)
 					local function FloatPadLoop()
 						if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild('CreativeFlyPart') and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and flying then
-							if not AKE and not APKE then
-								APT:Set(true)
+							if not AKE and not APKE and not ASE then
+								AST:Set(true)
 							end
 							game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS * 16 * 10
 							Float.Transparency = 1
@@ -2069,8 +2049,8 @@ else
 						end)
 						local function FloatPadLoop()
 							if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild('CreativeFlyPart') and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and flying then
-								if not AKE and not APKE then
-									APT:Set(true)
+								if not AKE and not APKE and not ASE then
+									AST:Set(true)
 								end
 								game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS * 16 * 10
 								Float.Transparency = 1
@@ -2119,13 +2099,12 @@ else
 		end
 	end)
 
-	local AS = Window:MakeTab({
-		Name = "Anti-Shit",
-		Icon = "rbxassetid://4483345998",
-	})
+
+    task.wait(.25)
+
 
 	AS:AddSection({
-		Name = "Gucci Antigrab (Sleigh is the best but is invis)"
+		Name = "Gucci Antigrab"
 	})
 	
 	local GUE = false
@@ -2379,22 +2358,37 @@ else
 		end,
 	})
 
+	AST = AS:AddToggle({
+		Name = "Shuriken Anti-Kick",
+		Default = true,
+		Callback = function(Value)
+			ASE = Value
+            ShurList[game.Players.LocalPlayer.UserId] = Value
+			if Value then
+				if loaded then
+					APT:Set(false)
+					AKT:Set(false)
+				end
+			else
+				if workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild(game.Players.LocalPlayer.Name) then
+					game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"][game.Players.LocalPlayer.Name])
+				end
+			end
+		end,
+	})
+
 	AKT = AS:AddToggle({
 		Name = "Anti-Kick",
 		Default = false,
 		Callback = function(Value)
 			AKE = Value
+            AKList[game.Players.LocalPlayer.UserId] = Value
 			if Value then
-				table.insert(AKList,game.Players.LocalPlayer.Name)
 				APT:Set(false)
+				AST:Set(false)
 			else
 				if workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild(game.Players.LocalPlayer.Name) then
 					game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"][game.Players.LocalPlayer.Name])
-				end
-				for line,var in pairs(AKList) do
-					if var == game.Players.LocalPlayer.Name then
-						table.remove(AKList,line)
-					end
 				end
 			end
 		end,
@@ -2402,20 +2396,16 @@ else
 
 	APT = AS:AddToggle({
 		Name = "Penis Anti-Kick",
-		Default = true,
+		Default = false,
 		Callback = function(Value)
 			APKE = Value
+            PenisList[game.Players.LocalPlayer.UserId] = Value
 			if Value then
-				table.insert(PenisList,game.Players.LocalPlayer.Name)
 				AKT:Set(false)
+				AST:Set(false)
 			else
 				if workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild(game.Players.LocalPlayer.Name) then
 					game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"][game.Players.LocalPlayer.Name])
-				end
-				for line,var in pairs(PenisList) do
-					if var == game.Players.LocalPlayer.Name then
-						table.remove(PenisList,line)
-					end
 				end
 			end
 		end,
@@ -2678,10 +2668,9 @@ else
 		game:GetService("VirtualUser"):ClickButton2(Vector2.new(0, 0))
 	end)
 
-	local PL = Window:MakeTab({
-		Name = "Players",
-		Icon = "rbxassetid://4483345998",
-	})
+
+    task.wait(.25)
+
 
 	PL:AddSection({
 		Name = "Select Players"
@@ -2762,8 +2751,9 @@ else
 							else
 								continue = true
 							end
+							local vel = plr.Character.HumanoidRootPart.AssemblyLinearVelocity
 							if plr.Character.HumanoidRootPart.AssemblyLinearVelocity.Magnitude > 10000 then
-								plr.Character.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(0,0,0)
+								vel = Vector3.zero
 							end
 							if plr.Character.HumanoidRootPart.CFrame.Position.Magnitude > 1000000 then
 								continue = false
@@ -2883,7 +2873,7 @@ else
 				end
 				task.wait()
 				if blob and blob:FindFirstChild("HumanoidRootPart") then
-					blob.HumanoidRootPart.CFrame = CFrame.new(-1e6,-1e6,-1e6)
+					blob.HumanoidRootPart.CFrame = CFrame.new(0,1e15,0)
 				end
 			end
 			task.wait()
@@ -2895,9 +2885,13 @@ else
 	task.spawn(function()
 		while true do
 			for line,plr in pairs(game.Players:GetPlayers()) do
-				if (LoopKillList[plr.UserId] or LocList[plr.UserId] or OKLA or OKA) and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+				if (LoopKillList[plr.UserId] or LocList[plr.UserId] or OKLA or OKA) and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
 					local j = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
 					local p = game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity
+                    local vel = plr.Character.HumanoidRootPart.AssemblyLinearVelocity
+                    if plr.Character.HumanoidRootPart.AssemblyLinearVelocity.Magnitude > 10000 then
+                        vel = Vector3.zero
+                    end
 					local continue = true
 					if LocList[plr.UserId] then
 						if not (OKLA or OKA) then
@@ -2906,10 +2900,10 @@ else
 							end
 						end
 					end
-					if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr ~= game.Players.LocalPlayer and plr.Character.Parent ~= workspace.PlotItems.PlayersInPlots and plr.Character.Parent ~= plrinplot and plr.Character.HumanoidRootPart.CFrame.Position.Y < 1000 and continue then
+					if plr.Character.Parent == workspace and plr.Character.HumanoidRootPart.CFrame.Position.Magnitude < 10000 and continue then
 						hrp = plr.Character.HumanoidRootPart
-						game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame + Vector3.new(0,10,0) + (plr.Character.HumanoidRootPart.AssemblyLinearVelocity / math.pi)
-						game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = plr.Character.HumanoidRootPart.AssemblyLinearVelocity
+						game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame + Vector3.new(0,10,0) + (vel / math.pi)
+						game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = vel
 						local Continue = true
 						if OKLA then
 							if OKLWF and whitelist[plr.UserId] then
@@ -3021,31 +3015,10 @@ else
 				end
 			end
 			for itm in GrabItemsList do
-				if itm then
+				if itm and acno then
 					local isgrabbed
 					for _,prt in pairs(itm:GetChildren()) do
-						if prt:IsA("BasePart") and prt:FindFirstChild("PartOwner") and prt.PartOwner.Value ~= game.Players.LocalPlayer.Name then
-							if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-								local j = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-								local p = game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity
-								if prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-									if (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 30 then
-										game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = prt.CFrame + Vector3.new(0,10,0) + (prt.AssemblyLinearVelocity / math.pi)
-										game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = prt.AssemblyLinearVelocity
-										task.wait(0.25)
-									end
-									if prt then
-										game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prt,prt.CFrame)
-									end
-								end
-								if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-									game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = j
-									game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = p
-									task.wait()
-								end
-							end
-						end
-						if prt:IsA("BasePart") and prt:FindFirstChild("PartOwner") and prt.PartOwner.Value then
+						if prt:IsA("BasePart") and prt:FindFirstChild("PartOwner") and prt.PartOwner.Value == game.Players.LocalPlayer.Name then
 							isgrabbed = true
 						end
 					end
@@ -3053,7 +3026,39 @@ else
 						if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
 							local j = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
 							local p = game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity
-							local prt = itm:FindFirstChildWhichIsA("BasePart")
+							local prt = itm:FindFirstChild("SoundPart")
+							if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+								if (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 30 then
+									game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = prt.CFrame + Vector3.new(0,10,0) + (prt.AssemblyLinearVelocity / math.pi)
+									game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = prt.AssemblyLinearVelocity
+									task.wait(0.25)
+								end
+								if prt then
+									game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prt,prt.CFrame)
+								end
+							end
+							if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+								game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = j
+								game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = p
+								task.wait()
+							end
+						end
+					end
+				end
+			end
+			for itm in BuildItemsList do
+				if itm and acno then
+					local isgrabbed
+					for _,prt in pairs(itm:GetChildren()) do
+						if prt:IsA("BasePart") and prt:FindFirstChild("PartOwner") and prt.PartOwner.Value == game.Players.LocalPlayer.Name then
+							isgrabbed = true
+						end
+					end
+					if not isgrabbed then
+						if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+							local j = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+							local p = game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity
+							local prt = itm:FindFirstChild("SoundPart")
 							if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
 								if (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 30 then
 									game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = prt.CFrame + Vector3.new(0,10,0) + (prt.AssemblyLinearVelocity / math.pi)
@@ -3080,7 +3085,7 @@ else
 	function WaitForPenis(plr)
 		while not game.Players.LocalPlayer.CanSpawnToy.Value do task.wait() end
 		task.spawn(function()
-			game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("ToolPencil",CFrame.new(game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame.Position)+Vector3.new(0,0,15),Vector3.new(0,0,0))
+			game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("ToolPencil",game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame * CFrame.new(0,2,0),Vector3.new(0,0,0))
 		end)
 
 		local diddle = game.workspace:FindFirstChild(game.Players.LocalPlayer.Name.."SpawnedInToys"):WaitForChild("ToolPencil",1)
@@ -3102,7 +3107,7 @@ else
 	function WaitForNinja(plr)
 		while not game.Players.LocalPlayer.CanSpawnToy.Value do task.wait() end
 		task.spawn(function()
-			game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("NinjaKunai",CFrame.new(game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame.Position)+Vector3.new(0,0,15),Vector3.new(0,0,0))
+			game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("NinjaKunai",game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame * CFrame.new(0,2,0),Vector3.new(0,0,0))
 		end)
 		local diddle = game.workspace:FindFirstChild(game.Players.LocalPlayer.Name.."SpawnedInToys"):WaitForChild("NinjaKunai",1)
 		
@@ -3116,32 +3121,66 @@ else
 		end
 	end
 
-	function ticklepenis(diddle)
-		while not diddle:FindFirstChild("SoundPart") do task.wait() end
-		game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(diddle.SoundPart,diddle.SoundPart.CFrame)
+	function WaitForBane(plr)
+		while not game.Players.LocalPlayer.CanSpawnToy.Value do task.wait() end
+		task.spawn(function()
+			game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("NinjaShuriken",game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame * CFrame.new(0,2,0),Vector3.new(0,0,0))
+		end)
+		local diddle = game.workspace:FindFirstChild(game.Players.LocalPlayer.Name.."SpawnedInToys"):WaitForChild("NinjaShuriken",1)
+		
+		if not diddle then return "Nigga" end
+
+		if plr then
+			diddle.Name = plr.Name
+			return diddle
+		else
+			return "Nigga"
+		end
 	end
 
+	function ticklepenis(diddle)
+		while diddle and not diddle:FindFirstChild("SoundPart") do task.wait() end
+		while diddle and diddle:FindFirstChild("SoundPart") and not (diddle.SoundPart:FindFirstChild("PartOwner") and diddle.SoundPart.PartOwner.Value == game.Players.LocalPlayer.Name) do
+			game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(diddle.SoundPart,diddle.SoundPart.CFrame)
+			task.wait()
+		end
+	end
+
+	local fondlelist = {}
+
 	function fondle(nimrod,nuggets)
-		task.spawn(function()
-			task.wait(0.5)
-			if nimrod.Character then
-				if nuggets and nuggets:FindFirstChild("StickyPart") and nuggets.StickyPart:FindFirstChild("StickyWeld") and nimrod.Character:FindFirstChild("Torso") and nuggets.StickyPart.StickyWeld.Part1 == nimrod.Character.Torso then return end
-				if nuggets and nuggets:FindFirstChild("StickyPart") and nuggets.StickyPart:FindFirstChild("StickyWeld") and nimrod.Character:FindFirstChild("Left Leg") and nuggets.StickyPart.StickyWeld.Part1 == nimrod.Character["Left Leg"] then return end
+		if not fondlelist[nuggets] then
+			fondlelist[nuggets] = true
+			if nuggets and nuggets:FindFirstChild("SoundPart") and nuggets.SoundPart:FindFirstChild("PartOwner") and nuggets.SoundPart.PartOwner.Value == game.Players.LocalPlayer.Name then
+				local st = tick()
+				while tick() - st < 0.5 and nuggets and nuggets:FindFirstChild("SoundPart") and nuggets.SoundPart:FindFirstChild("PartOwner") and nuggets.SoundPart.PartOwner.Value == game.Players.LocalPlayer.Name do
+					task.wait()
+				end
+			end
+			if nimrod and nimrod.Character then
+				if nuggets and nuggets:FindFirstChild("StickyPart") and nuggets.StickyPart:FindFirstChild("StickyWeld") and nuggets.StickyPart.StickyWeld.Enabled and nimrod.Character:FindFirstChild("Torso") and nuggets.StickyPart.StickyWeld.Part1 == nimrod.Character.Torso then
+					fondlelist[nuggets] = nil
+					return
+				end
+				if nuggets and nuggets:FindFirstChild("StickyPart") and nuggets.StickyPart:FindFirstChild("StickyWeld") and nuggets.StickyPart.StickyWeld.Enabled and nimrod.Character:FindFirstChild("Left Leg") and nuggets.StickyPart.StickyWeld.Part1 == nimrod.Character["Left Leg"] then
+					fondlelist[nuggets] = nil
+					return
+				end
 				game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(nuggets)
 			else
 				game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(nuggets)
 			end
-		end)
+			fondlelist[nuggets] = nil
+		end
 	end
 
 	function tickle(plr,diddle)
 		if plr.Character and plr.Character:FindFirstChild("Torso") then
 			ticklepenis(diddle)
-			task.wait(0.75)
 			if plr.Character and plr.Character:FindFirstChild("Torso") then
-				if plr.Character.Parent == workspace and diddle:FindFirstChild("StickyPart") then 
+				if plr.Character.Parent == workspace and diddle and diddle:FindFirstChild("StickyPart") then 
 					game.ReplicatedStorage.PlayerEvents.StickyPartEvent:FireServer(diddle.StickyPart,plr.Character.Torso,CFrame.new(0,-1,0) * CFrame.Angles(0,math.pi,0))
-				else
+				elseif diddle then
 					game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(diddle)
 				end
 			end
@@ -3151,10 +3190,22 @@ else
 	function tickletipson(plr,diddle)
 		if plr.Character and plr.Character:FindFirstChild("Left Leg") then
 			ticklepenis(diddle)
-			task.wait(0.75)
 			if plr.Character and plr.Character:FindFirstChild("Left Leg") then
 				if plr.Character.Parent == workspace and diddle:FindFirstChild("StickyPart") then
 					game.ReplicatedStorage.PlayerEvents.StickyPartEvent:FireServer(diddle.StickyPart,plr.Character["Left Leg"],CFrame.new(0,-0.5,0) * CFrame.Angles(0,0,math.pi/2))
+				else
+					game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(diddle)
+				end
+			end
+		end
+	end
+
+	function ticklebane(plr,diddle)
+		if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+			ticklepenis(diddle)
+			if plr.Character and plr.Character:FindFirstChild("Torso") then
+				if plr.Character.Parent == workspace and diddle:FindFirstChild("StickyPart") then
+					game.ReplicatedStorage.PlayerEvents.StickyPartEvent:FireServer(diddle.StickyPart,plr.Character["Torso"],CFrame.new(0,0,0) * CFrame.Angles(0,math.pi/2,math.pi/2))
 				else
 					game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(diddle)
 				end
@@ -3171,10 +3222,15 @@ else
 						if diddle ~= "Nigga" then
 							tickle(plr,diddle)
 						end
-					else
+					elseif typee == 2 then
 						local diddle = WaitForNinja(plr)
 						if diddle ~= "Nigga" then
 							tickletipson(plr,diddle)
+						end
+					elseif typee == 3 then
+						local diddle = WaitForBane(plr)
+						if diddle ~= "Nigga" then
+							ticklebane(plr,diddle)
 						end
 					end
 				end
@@ -3187,23 +3243,24 @@ else
 
 	task.spawn(function()
 		while true do
-			for _,plr in pairs(PenisList) do
-				if game.Players:FindFirstChild(plr) then
-					showmeyourpenis(game.Players:FindFirstChild(plr),1)
+			for id,plr in pairs(PenisList) do
+				if plr and game.Players:GetPlayerByUserId(id) then
+					showmeyourpenis(game.Players:GetPlayerByUserId(id),1)
 				end
 			end
-			for _,plr in pairs(AKList) do
-				if game.Players:FindFirstChild(plr) then
-					showmeyourpenis(game.Players:FindFirstChild(plr),2)
+			for id,plr in pairs(AKList) do
+				if plr and game.Players:GetPlayerByUserId(id) then
+					showmeyourpenis(game.Players:GetPlayerByUserId(id),2)
+				end
+			end
+			for id,plr in pairs(ShurList) do
+				if plr and game.Players:GetPlayerByUserId(id) then
+					showmeyourpenis(game.Players:GetPlayerByUserId(id),3)
 				end
 			end
 			task.wait()
 		end
 	end)
-
-	local niggalog = nil
-	local uid = 0
-	local selname = nil
 
 	local lTPE
 
@@ -3227,6 +3284,10 @@ else
 					local kckwb = false
 					local fattylmao = false
 					local blthdbs = false
+                    local PNL = false
+                    local AKL = false
+					local ASL
+                    local ESPL = false
 					lTPE = false
 					if LoopKillList[uid] == "who you loop killin nigga" then
 						lk = true
@@ -3242,7 +3303,6 @@ else
 						possy = otpland[X..", "..Y..", "..Z]
 					end
 					if LoopKillList[uid] then
-						print('yojizz')
 						kwb = true
 					end
 					if BlobkickList[uid] then
@@ -3254,6 +3314,18 @@ else
 					if HoldableList[uid] then
 						blthdbs = true
 					end
+					if PenisList[uid] then
+						PNL = true
+					end
+					if AKList[uid] then
+						AKL = true
+					end
+					if ShurList[uid] then
+						ASL = true
+					end
+					if ESPList[uid] then
+						ESPL = true
+					end
 					pLK:Set(lk)
 					pOK:Set(otk)
 					pOTP:Set(tpp)
@@ -3262,9 +3334,10 @@ else
 					pBLK:Set(kwb)
 					pBK:Set(kckwb)
 					pBLH:Set(blthdbs)
-					pESP:Set(sellplr.BinisJ.ESP.Value)
-					pPenis:Set(sellplr.BinisJ.Penis.Value)
-					pAK:Set(sellplr.BinisJ.AntiKick.Value)
+					pESP:Set(ESPL)
+					pPenis:Set(PNL)
+					pAK:Set(AKL)
+					pSK:Set(ASL)
 					local stringmcding = "\nUser has no private chats"
 					local isfelladude = false
 					for _,pc in pairs(game.TextChatService.TextChannels:GetChildren()) do
@@ -3356,7 +3429,7 @@ else
 	end)
 
 	task.spawn(function()
-		task.wait()
+		while not MiSPCS do task.wait() end
 		local otherstringmcding = "No Active Private Chats"
 		local isfelladudev2 = false
 		for _,thechat in pairs(game.TextChatService.TextChannels:GetChildren()) do
@@ -3512,7 +3585,6 @@ else
 					tpland[strvalue] = v3
 					otpland[strvalue] = v3
 					pOL:Refresh(displaylist,true)
-					for i,v in pairs(locations) do print(v) end
 					pOL:Set(strvalue)
 					LS:Refresh(listtt,true)
 					pdd:Refresh(listtt,true)
@@ -3545,17 +3617,11 @@ else
 		Default = false,
 		Callback = function(Value)
 			if not Changing and sellplr then
-				sellplr.BinisJ.ESP.Value = Value
+				ESPList[uid] = Value
 				if Value then
-					table.insert(EspList,sellplr.Name)
 					ESPP(sellplr)
 				else
 					UNESPP(sellplr)
-					for line,var in pairs(EspList) do
-						if var == sellplr.Name then
-							table.remove(EspList,line)
-						end
-					end
 				end
 			end
 		end    
@@ -3565,23 +3631,36 @@ else
 		Name = "Third Party Anti-Kick"
 	})
 
+	pSK = PL:AddToggle({
+		Name = "Shuriken Anti-Kick",
+		Default = false,
+		Callback = function(Value)
+			if not Changing and sellplr then
+				ShurList[uid] = Value
+				if Value then
+					pAK:Set(false)
+					pPenis:Set(false)
+				else
+					if workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild(sellplr.Name) then
+						game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"][sellplr.Name])
+					end
+				end
+			end
+		end    
+	})
+
 	pPenis = PL:AddToggle({
 		Name = "Loop Penis Player",
 		Default = false,
 		Callback = function(Value)
 			if not Changing and sellplr then
-				sellplr.BinisJ.Penis.Value = Value
+				PenisList[uid] = Value
 				if Value then
-					table.insert(PenisList,sellplr.Name)
 					pAK:Set(false)
+					pSK:Set(false)
 				else
 					if workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild(sellplr.Name) then
 						game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"][sellplr.Name])
-					end
-					for line,var in pairs(PenisList) do
-						if var == sellplr.Name then
-							table.remove(PenisList,line)
-						end
 					end
 				end
 			end
@@ -3589,22 +3668,17 @@ else
 	})
 
 	pAK = PL:AddToggle({
-		Name = "Anti-Kick Player",
+		Name = "Kunai Anti-Kick",
 		Default = false,
 		Callback = function(Value)
 			if not Changing and sellplr then
-				sellplr.BinisJ.AntiKick.Value = Value
+				AKList[uid] = Value
 				if Value then
-					table.insert(AKList,sellplr.Name)
 					pPenis:Set(false)
+					pSK:Set(false)
 				else
 					if workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild(sellplr.Name) then
 						game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"][sellplr.Name])
-					end
-					for line,var in pairs(AKList) do
-						if var == sellplr.Name then
-							table.remove(AKList,line)
-						end
 					end
 				end
 			end
@@ -3665,20 +3739,34 @@ else
 			end
 			task.wait()
 		end
+		for _,itm in pairs(workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:GetChildren()) do
+			if itm.Name == "CreatureBlobMan" or itm.Name:find("Gucci") then
+				if not itm:FindFirstChild("VehicleSeat") then
+					itm.Name = "disabled shit"
+				end
+			end
+		end
+		if plot then
+			plott = workspace.PlotItems[plot]
+			for _,itm in pairs(plott:GetChildren()) do
+				if itm.Name == "CreatureBlobMan" or itm.Name:find("Gucci") then
+					if not itm:FindFirstChild("VehicleSeat") then
+						itm.Name = "disabled shit"
+					end
+				end
+			end
+		end
 	end)
 
-	BS = Window:MakeTab({
-		Name = "Builds",
-		Icon = "rbxassetid://4483362458",
-		PremiumOnly = false
-	})
+
+    task.wait(.25)
+
 
 	BS:AddSection({
 		Name = "Freeze Item"
 	})
 
 	local FA
-	local acno
 
 	BS:AddBind({
 		Name = "Freeze Item",
@@ -3771,7 +3859,7 @@ else
 		Name = "Auto-claim network ownership",
 		Default = true,
 		Callback = function(Value)
-			acno = true
+			acno = Value
 		end
 	})
 
@@ -3786,23 +3874,17 @@ else
 		end
 	})
 
-	LSD = Window:MakeTab({
-		Name = "Line thingys",
-		Icon = "rbxassetid://4483362458",
-		PremiumOnly = false
-	})
 
+    task.wait(.25)
 
 
 	LSD:AddSection({
-		Name = "Edit Map"
+		Name = "Line Shit (remind dj to do this)"
 	})
 
-	MS = Window:MakeTab({
-		Name = "Map",
-		Icon = "rbxassetid://4483362458",
-		PremiumOnly = false
-	})
+
+    task.wait(.25)
+
 
 	MS:AddSection({
 		Name = "Edit Map"
@@ -3961,29 +4043,33 @@ else
 		if plot.Name ~= "PlayersInPlots" then
 			plot.ChildAdded:Connect(function(itm)
 				if itm:WaitForChild("HoldPart",1) then
-					local lasttime = tick()
+					local lasttime = nil
 					itm.HoldPart:WaitForChild("RigidConstraint"):GetPropertyChangedSignal("Attachment1"):Connect(function()
-						if itm.HoldPart.RigidConstraint.Attachment1 then
-							if 1 / (tick() - lasttime) > 5 then
+						if lasttime and itm.HoldPart.RigidConstraint.Attachment1 then
+							if 1 / (tick() - lasttime) > 10 then
 								HoldableList[plot.Name] = true
 							end
 							lasttime = tick()
 						end
 					end)
+					task.wait(.2)
+					lasttime = tick()
 				end
 			end)
 			for _,itm in pairs(plot:GetChildren()) do
 				task.spawn(function()
 					if itm:WaitForChild("HoldPart",1) then
-						local lasttime = tick()
+						local lasttime = nil
 						itm.HoldPart:WaitForChild("RigidConstraint"):GetPropertyChangedSignal("Attachment1"):Connect(function()
-							if itm.HoldPart.RigidConstraint.Attachment1 then
-								if 1 / (tick() - lasttime) > 5 then
+							if lasttime and itm.HoldPart.RigidConstraint.Attachment1 then
+								if 1 / (tick() - lasttime) > 10 then
 									HoldableList[plot.Name] = true
 								end
 								lasttime = tick()
 							end
 						end)
+						task.wait(.2)
+						lasttime = tick()
 					end
 				end)
 			end
@@ -4043,6 +4129,7 @@ else
 			if canC then
 				for _,plot in pairs(game.workspace.PlotItems:GetChildren()) do
 					if plot.Name ~= "PlayersInPlots" then
+                        task.wait()
 						for _,prt in pairs(plot:GetDescendants()) do
 							if prt:IsA("BasePart") then
 								prt.CollisionGroup = "Items"
@@ -4053,6 +4140,7 @@ else
 			else
 				for _,plot in pairs(game.workspace.PlotItems:GetChildren()) do
 					if plot.Name ~= "PlayersInPlots" then
+                        task.wait()
 						for _,prt in pairs(plot:GetDescendants()) do
 							if prt:IsA("BasePart") then
 								prt.CollisionGroup = "PlotItems"
@@ -4201,21 +4289,20 @@ else
 		end,
 	})
 
-	local MiS = Window:MakeTab({
-		Name = "Miscellaneous",
-		Icon = "rbxassetid://4483362458",
-	})
+
+    task.wait(.25)
+
 
 	TK = MiS:AddLabel("Total Players Kicked: 0")
 
 	MiS:AddSection({
-		Name = "Blobman Kick All"
+		Name = "Private Chats"
 	})
 
 	MiSPCS = MiS:AddParagraph("All Private Chats","No Active Private Chats")
 
 	MiS:AddSection({
-		Name = "Blobman Kick All"
+		Name = "Blobman All"
 	})
 
 	MiS:AddToggle({
@@ -4227,18 +4314,6 @@ else
 	})
 
 	MiS:AddToggle({
-		Name = "Whitelist Friends",
-		Default = true,
-		Callback = function(Value)
-			BKAWL = Value
-		end    
-	})
-
-	MiS:AddSection({
-		Name = "Blobman Kill All"
-	})
-
-	MiS:AddToggle({
 		Name = "Blobman Kill All",
 		Default = false,
 		Callback = function(Value)
@@ -4247,10 +4322,40 @@ else
 	})
 
 	MiS:AddToggle({
-		Name = "Whitelist Friends",
+		Name = "Use chill on friends",
 		Default = true,
 		Callback = function(Value)
+			BKAWL = Value
 			BKLAWL = Value
+		end    
+	})
+
+	MiS:AddSection({
+		Name = "Ownership Stuff"
+	})
+
+	MiS:AddToggle({
+		Name = "Ownership Kick All",
+		Default = false,
+		Callback = function(Value)
+			OKA = Value
+		end    
+	})
+
+	MiS:AddToggle({
+		Name = "Kill All",
+		Default = false,
+		Callback = function(Value)
+			OKLA = Value
+		end    
+	})
+
+	MiS:AddToggle({
+		Name = "Use chill on friends",
+		Default = true,
+		Callback = function(Value)
+			OWF = Value
+			OKLWF = Value
 		end    
 	})
 
@@ -4289,46 +4394,6 @@ else
 		Callback = function(Value)
 			LAGAMM = Value
 		end
-	})
-
-	MiS:AddSection({
-		Name = "Ownership Kick All"
-	})
-
-	MiS:AddToggle({
-		Name = "Ownership Kick All",
-		Default = false,
-		Callback = function(Value)
-			OKA = Value
-		end    
-	})
-
-	MiS:AddToggle({
-		Name = "Whitelist Friends",
-		Default = true,
-		Callback = function(Value)
-			OWF = Value
-		end    
-	})
-
-	MiS:AddSection({
-		Name = "Kill All"
-	})
-
-	MiS:AddToggle({
-		Name = "Kill All",
-		Default = false,
-		Callback = function(Value)
-			OKLA = Value
-		end    
-	})
-
-	MiS:AddToggle({
-		Name = "Whitelist Friends",
-		Default = true,
-		Callback = function(Value)
-			OKLWF = Value
-		end    
 	})
 
 	MiS:AddSection({
@@ -4375,11 +4440,9 @@ else
 		end
 	})
 
-	local TS = Window:MakeTab({
-		Name = "Teleportation",
-		Icon = "rbxassetid://4483362458",
-		PremiumOnly = false
-	})
+
+    task.wait(.25)
+
 
 	TS:AddSection({
 		Name = "Spawn Location"
@@ -4833,10 +4896,9 @@ else
 		end    
 	})
 
-	local ST = Window:MakeTab({
-		Name = "Config",
-		Icon = "rbxassetid://4483345998",
-	})
+
+    task.wait(.25)
+
 
 	ST:AddSection({
 		Name = "Whitelist"
@@ -4844,7 +4906,7 @@ else
 
 
 	WLL = ST:AddDropdown({
-		Name = "Player Whitelist (no workie sorry)",
+		Name = "Chill on friends (no workie sorry)",
 		Options = currantplrlist,
 		Callback = function(Value)
 			WLlistsel = Value
@@ -4886,7 +4948,6 @@ else
 				tpland[selting] = nil
 				otpland[selting] = nil
 				pOL:Refresh(displaylist,true)
-				for i,v in pairs(locations) do print(v) end
 				LS:Refresh(listtt,true)
 				pdd:Refresh(displaylist,true)
 				locations = otherlocs
@@ -4967,7 +5028,7 @@ else
 						end
 					end
 					if not herenow then
-						print("(Joinland: Left) "..joinland[line+2].." (@"..joinland[line+1]..") UserID: "..joinland[line])
+						print("(Joinland: Left) "..joinland[line+2].." (@"..joinland[line+1]..") UserId: "..joinland[line])
 					end
 				end
 			end
@@ -4980,7 +5041,7 @@ else
 						end
 					end
 					if herenow then
-						print("(Joinland) "..joinland[line+2].." (@"..joinland[line+1]..") UserID: "..joinland[line])
+						print("(Joinland) "..joinland[line+2].." (@"..joinland[line+1]..") UserId: "..joinland[line])
 					end
 				end
 			end
@@ -5001,9 +5062,9 @@ else
 			print("----------------------- Kick Land -----------------------")
 			for line,itm in pairs(kickland) do
 				if kickland[line] == true then
-					print("(Kickland) "..dplist[line].." (@"..uslist[line]..") UserID: "..usidlist[line].." At Position ("..poslist[line]..") By A Player")
+					print("(Kickland) "..dplist[line].." (@"..uslist[line]..") UserId: "..usidlist[line].." At Position ("..poslist[line]..") By A Player")
 				else
-					print("(Kickland) "..dplist[line].." (@"..uslist[line]..") UserID: "..usidlist[line].." At Position ("..poslist[line]..")")
+					print("(Kickland) "..dplist[line].." (@"..uslist[line]..") UserId: "..usidlist[line].." At Position ("..poslist[line]..")")
 				end
 			end
 			print("------------------- End Of Kick Land -------------------")
