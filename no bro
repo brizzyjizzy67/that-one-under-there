@@ -22,6 +22,7 @@ else
 	local coord
 	local pBK
 	local pBLK
+	local pNK
 	local pESP
 	local pPenis
 	local pAK
@@ -32,15 +33,20 @@ else
 	local sellplr
 	local LS
 	local pPCS
+	local pFreinds
 	local MiSPCS
 	local bpbtog
+
+	local GETNAKED = false
 
 	local OTPList = {}
 	local BlobkickList = {"BarnoDDino","ay3vx"}
 	local BlobKillList = {}
 	local HoldableList = {}
 	local GrabItemsList = {}
+	local pusslist = {}
 	local BuildItemsList = {}
+	local NakedList = {}
     local ESPList = {}
 	local badboyfriendslist = {8790892084,9584241219,3478752556,2949841304,3478752556}
 	local badboylist = {
@@ -202,8 +208,9 @@ else
 				local size
 				offset = info[2]
 				size = info[3]
+				local sp =  inst:FindFirstChild("Wedge") or inst:FindFirstChild("SoundPart")
 				if offset then
-					inst.SoundPart.CFrame = list[1] * offset
+					sp.CFrame = list[1] * offset
 				end
 				if inst:FindFirstChild("somebodyshotaloadintomyburger2") then
 					inst.somebodyshotaloadintomyburger2:Destroy()
@@ -215,6 +222,7 @@ else
 				end
 				inst.Archivable = true
 				local dbcooper = inst:Clone()
+				local dbpart = dbcooper:FindFirstChild("Wedge") or dbcooper:FindFirstChild("SoundPart")
 				dbcooper:ScaleTo(size)
 				local gottheblicky = Instance.new("Highlight")
 				gottheblicky.Name = "somebodyshotaloadintomyburger"
@@ -230,16 +238,16 @@ else
 				local wc = Instance.new("WeldConstraint")
 				wc.Name = 'diddyconstraint'
 				wc.Parent = dbcooper
-				wc.Part0 = dbcooper.SoundPart
+				wc.Part0 = dbpart
 				wc.Part1 = pp1
 				local a1 = Instance.new("Attachment")
 				local a2 = Instance.new("Attachment")
 				local pp = Instance.new("AlignPosition")
 				local pp2 = Instance.new("AlignOrientation")
-				pp.Parent = inst.SoundPart
-				pp2.Parent = inst.SoundPart
-				a1.Parent = inst.SoundPart
-				a2.Parent = dbcooper.SoundPart
+				pp.Parent = sp
+				pp2.Parent = sp
+				a1.Parent = sp
+				a2.Parent = dbpart
 				pp.Attachment0 = a1
 				pp2.Attachment0 = a1
 				pp.Attachment1 = a2
@@ -285,8 +293,8 @@ else
 					end
 				end)
 				task.spawn(function()
-					while inst and dbcooper and dbcooper.SoundPart and inst.SoundPart do
-						local biddy = (dbcooper.SoundPart.CFrame.Position - inst.SoundPart.CFrame.Position).Magnitude
+					while inst and dbcooper and dbpart and sp do
+						local biddy = (dbpart.CFrame.Position - sp.CFrame.Position).Magnitude
 						local trans = 0
 						if biddy - 20 > 0 then
 							trans = (biddy - 20) / 10
@@ -400,10 +408,6 @@ else
 
 	local plot = nil
 
-	local mapp = game:GetService("Workspace").Map:Clone()
-	mapp.AlwaysHereTweenedObjects:Destroy()
-	mapp.MapNoises:Destroy()
-
 	local plrinplot
 	if not workspace:FindFirstChild("Players In Plots") then
 		plrinplot = Instance.new("Folder", game:getService("Workspace"))
@@ -490,6 +494,12 @@ else
 			itm.BonerPart:Destroy()
 		end
     end
+
+	if workspace.Map.AlwaysHereTweenedObjects:FindFirstChild("Train") and workspace.Map.AlwaysHereTweenedObjects.Train:FindFirstChild("Object") and workspace.Map.AlwaysHereTweenedObjects.Train.Object:FindFirstChild("FollowThisPart") then
+		local pigger = workspace.Map.AlwaysHereTweenedObjects.Train.Object.FollowThisPart
+		pigger.AlignPosition.Enabled = false
+		pigger.AlignOrientation.Enabled = false
+	end
 
 	local kickland = {}
 	local dplist = {}
@@ -1606,7 +1616,12 @@ else
 		house.PlotArea.CanQuery = false
 	end
 
-    local Window = OrionLib:MakeWindow({Name = "BinisJ - Nigga Deluxe Edition", IntroText = "BinisJ - Nigga Deluxe Edition"})
+    local Window = OrionLib:MakeWindow({Name = "BinisJ - Ultra Nigga Edition", IntroText = "BinisJ - Ultra Nigga Edition"})
+
+	local OV = Window:MakeTab({
+		Name = "Overview",
+		Icon = "rbxassetid://4483362458",
+	})
 
 	local GS = Window:MakeTab({
 		Name = "Grab Stuff",
@@ -1644,7 +1659,7 @@ else
 	})
 
 	local MiS = Window:MakeTab({
-		Name = "Miscellaneous",
+		Name = "Miscillaneous",
 		Icon = "rbxassetid://4483362458",
 	})
 
@@ -1658,6 +1673,16 @@ else
 		Name = "Config",
 		Icon = "rbxassetid://4483345998",
 	})
+
+
+
+
+	OV:AddSection({
+		Name = `<font size="40"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V2</font></b></font>`
+	})
+	OV:AddParagraph(`<font size="20"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V2</font> Additions</b></font>`,"<b>\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Overview\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Overview\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Player Tab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Gravity\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added No-clip\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Anti-Shit\n<font color=\"rgb(0, 255, 0)\">[+] </font>Re-Arranged Menu\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Loop Microphone\n<font color=\"rgb(0, 255, 0)\">[+] </font>Patched Gucci grab system\n<font color=\"rgb(0, 255, 0)\">[+] </font>Upgraded Gucci\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Players\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added List of Friends\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added SUS Player\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Builds\n<font color=\"rgb(0, 255, 0)\">[+] </font>Upgraded builds\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added holding x to anchor\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added unanchor all\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Miscillaneous\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added SUS All\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Background Processes\n<font color=\"rgb(0, 255, 0)\">[+] </font>Upgraded Ownership Service\n<font color=\"rgb(0, 255, 0)\">[+] </font>Upgraded Blobman Service</b>")
+	
+	OV:AddParagraph(`<font size="20"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V1</font> Existing Abilities</b></font>`,"\n<b><font color=\"rgb(255, 0, 100)\">&lt; </font>Grab Stuff\n<font color=\"rgb(0, 255, 0)\">[+] </font>Strong Grab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Tp Holding\n<font color=\"rgb(0, 255, 0)\">[+] </font>Go to locations\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Player Tab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Walkspeed\n<font color=\"rgb(0, 255, 0)\">[+] </font>Third Person\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Anti-Shit\n<font color=\"rgb(0, 255, 0)\">[+] </font>Gucci Antigrab (all types)\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti-Grab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti-Fire\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti-Explosion\n<font color=\"rgb(0, 255, 0)\">[+] </font>Shuriken Antikick\n<font color=\"rgb(0, 255, 0)\">[+] </font>Penis Antikick\n<font color=\"rgb(0, 255, 0)\">[+] </font>Kunai Antikick\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti Ownership Kick\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti-Blob\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti-Banana\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti-Void\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti-Lag\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ruhub Anti-Grab (super buns)\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Players\n<font color=\"rgb(0, 255, 0)\">[+] </font>Player Selector\n<font color=\"rgb(0, 255, 0)\">[+] </font>View Private Chats\n<font color=\"rgb(0, 255, 0)\">[+] </font>Loop Blobman Kick\n<font color=\"rgb(0, 255, 0)\">[+] </font>Loop Blobman Kill\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ownership Kick V1\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ownership Kill\n<font color=\"rgb(0, 255, 0)\">[+] </font>Tp Player\n<font color=\"rgb(0, 255, 0)\">[+] </font>Type location\n<font color=\"rgb(0, 255, 0)\">[+] </font>Free After Teleporting\n<font color=\"rgb(0, 255, 0)\">[+] </font>Esp Player\n<font color=\"rgb(0, 255, 0)\">[+] </font>Shuriken Anti-Kick Player\n<font color=\"rgb(0, 255, 0)\">[+] </font>Loop Penis Player\n<font color=\"rgb(0, 255, 0)\">[+] </font>Kunai Anti-Kick Player\n<font color=\"rgb(0, 255, 0)\">[+] </font>Destroy Holdables\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Builds\n<font color=\"rgb(0, 255, 0)\">[+] </font>Freeze Item\n<font color=\"rgb(0, 255, 0)\">[+] </font>Auto-Claim Network Ownership\n<font color=\"rgb(0, 255, 0)\">[+] </font>Release All Frozen\n<font color=\"rgb(0, 255, 0)\">[+] </font>Create New Build\n<font color=\"rgb(0, 255, 0)\">[+] </font>Add Anchored Items\n<font color=\"rgb(0, 255, 0)\">[+] </font>Set Build Size\n<font color=\"rgb(0, 255, 0)\">[+] </font>Highlight Build\n<font color=\"rgb(0, 255, 0)\">[+] </font>Auto-Claim Build Ownership\n<font color=\"rgb(0, 255, 0)\">[+] </font>Dismantle Build\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Line Thingys\n<font color=\"rgb(0, 255, 0)\">[+] </font>Line Lag Server\n<font color=\"rgb(0, 255, 0)\">[+] </font>Invis Line\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Map\n<font color=\"rgb(0, 255, 0)\">[+] </font>Private Map\n<font color=\"rgb(0, 255, 0)\">[+] </font>Water Walk\n<font color=\"rgb(0, 255, 0)\">[+] </font>Freeze Ocean\n<font color=\"rgb(0, 255, 0)\">[+] </font>Break Plot Barrier\n<font color=\"rgb(0, 255, 0)\">[+] </font>Plot Barrier Collision\n<font color=\"rgb(0, 255, 0)\">[+] </font>Grab People In Plots (Blobman only)\n<font color=\"rgb(0, 255, 0)\">[+] </font>Plot Item Collision\n<font color=\"rgb(0, 255, 0)\">[+] </font>Boner Items\n<font color=\"rgb(0, 255, 0)\">[+] </font>Foggy Map\n<font color=\"rgb(0, 255, 0)\">[+] </font>Dave Boner Skybox\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Miscillaneous\n<font color=\"rgb(0, 255, 0)\">[+] </font>Player Kick Count\n<font color=\"rgb(0, 255, 0)\">[+] </font>All Private Chats\n<font color=\"rgb(0, 255, 0)\">[+] </font>Blobman Kick All\n<font color=\"rgb(0, 255, 0)\">[+] </font>Blobman Kill All\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ownership Blobman All\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ownership Kick V1 All\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ownership Kill All\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ownership Whitelist Friends\n<font color=\"rgb(0, 255, 0)\">[+] </font>Esp All\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Miscillaneous\n<font color=\"rgb(0, 255, 0)\">[+] </font>Teleportation\n<font color=\"rgb(0, 255, 0)\">[+] </font>Activate Spawn Location\n<font color=\"rgb(0, 255, 0)\">[+] </font>Tp To Mouse\n<font color=\"rgb(0, 255, 0)\">[+] </font>Teleport To All Locations\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Config\n<font color=\"rgb(0, 255, 0)\">[+] </font>Add Players To Whitelist (Broken)\n<font color=\"rgb(0, 255, 0)\">[+] </font>Remove Custom Locations\n<font color=\"rgb(0, 255, 0)\">[+] </font>Infinite Yield\n<font color=\"rgb(0, 255, 0)\">[+] </font>Dex\n<font color=\"rgb(0, 255, 0)\">[+] </font>Rejoin Server\n<font color=\"rgb(0, 255, 0)\">[+] </font>Print Join Logs to Console\n<font color=\"rgb(0, 255, 0)\">[+] </font>Print Kick Logs to Console\n<font color=\"rgb(0, 255, 0)\">[+] </font>View Offline Blackholes\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Background Processes\n<font color=\"rgb(0, 255, 0)\">[+] </font>Automatic Anti-Lag\n<font color=\"rgb(0, 255, 0)\">[+] </font>Binis Pencils Shurikens and Kunais\n<font color=\"rgb(0, 255, 0)\">[+] </font>Set Blobman Walkspeed\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ownership Service\n<font color=\"rgb(0, 255, 0)\">[+] </font>Join Logger\n<font color=\"rgb(0, 255, 0)\">[+] </font>Kick Logger\n<font color=\"rgb(0, 255, 0)\">[+] </font>Exploiter Warning Service\n<font color=\"rgb(0, 255, 0)\">[+] </font>Train Service\n<font color=\"rgb(0, 255, 0)\">[+] </font>Double Injection Protection</b>")
 
 
 
@@ -1846,6 +1871,66 @@ else
 		Name = "Set Walk-Speed To 1",
 		Callback = function()
 			gotitdownPAT:Set(1)
+		end    
+	})
+
+	PT:AddSection({
+		Name = "No-Clip"
+	})
+
+	local ncon = false
+
+	PT:AddToggle({
+		Name = "No-Clip",
+		Default = false,
+		Callback = function(Value)
+			ncon = Value
+			while ncon do
+				print(ncon)
+				if game.Players.LocalPlayer.Character then
+					for _,prt in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+						if prt.ClassName == "Part" then
+							prt.CanCollide = false
+							if prt:FindFirstChild("RagdollLimbPart") then
+								prt.RagdollLimbPart.CanCollide = false
+							end
+						end
+					end
+				end
+				task.wait()
+			end
+			if game.Players.LocalPlayer.Character then
+				for _,prt in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+					if prt.ClassName == "Part" then
+						print(prt)
+						prt.CanCollide = false
+					end
+				end
+			end
+		end,
+	})
+
+	PT:AddSection({
+		Name = "Gravity"
+	})
+
+	local gotitdownPAT2 = PT:AddSlider({
+		Name = "Set Gravity",
+		Min = 0,
+		Max = 1000,
+		Default = 100,
+		Color = Color3.fromRGB(255,255,255),
+		Increment = 1,
+		ValueName = "Gravity",
+		Callback = function(Value)
+			workspace.Gravity = Value
+		end
+	})
+
+	PT:AddButton({
+		Name = "Set Gravity To 100 (default)",
+		Callback = function()
+			gotitdownPAT2:Set(100)
 		end    
 	})
 
@@ -2121,7 +2206,7 @@ else
 
 
 	AS:AddSection({
-		Name = "Gucci Antigrab"
+		Name = "Antigrab"
 	})
 	
 	local GUE = false
@@ -2163,6 +2248,7 @@ else
 				end
 				task.wait()
 			end
+			task.wait()
 			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
 				hrp.AssemblyLinearVelocity = j
 				hrp.CFrame = c
@@ -2179,7 +2265,7 @@ else
 			else
 				while not (workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild(GUTYPE) or plott:FindFirstChild(GUTYPE)) do
 					task.spawn(function()
-						game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer(GUTYPE,CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position)+Vector3.new(0,0,15),Vector3.new(0,0,0))
+						game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer(GUTYPE,CFrame.new(1e5,1e3,1e5),Vector3.new(0,0,0))
 					end)
 					local diddytime = tick()
 					while tick() - diddytime < 1 and not (workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild(GUTYPE) or plott:FindFirstChild(GUTYPE)) do
@@ -2190,6 +2276,9 @@ else
 			if not itm then
 				itm = workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild(GUTYPE) or plott:FindFirstChild(GUTYPE)
 			end
+			local hrp = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+			local j = hrp.AssemblyLinearVelocity
+			local c = hrp.CFrame
 			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = itm:WaitForChild(niggerspart).CFrame
 			guccion = false
 			local doit = true
@@ -2209,9 +2298,6 @@ else
 					if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and game.Players.LocalPlayer.Character.Humanoid.SeatPart and game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent and game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent.Name == GUTYPE then
 						guccion = true
 						doit = false
-						if niggerspart == "SoundPart" then
-							itm.VehicleSeat:Sit(game.Players.LocalPlayer.Character.Humanoid)
-						end
 					end
 				else
 					gucciblob()
@@ -2219,13 +2305,30 @@ else
 				end
 				task.wait()
 			end
-			task.wait(.1)
 			if itm then
-				for _,prt in pairs(itm:GetChildren()) do
-					if prt:IsA("BasePart") then
-						game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prt,prt.CFrame)
-					end
+				itm.Name = "Gucci"..GUTYPE
+				while itm and (itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart")) and not checkgrab(itm) do
+					GrabItemsList[itm] = true
+					task.wait()
 				end
+				if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = c
+					game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = j
+				end
+				task.spawn(function()
+					local st = tick()
+					local patchnograb = true
+					while patchnograb and tick() - st < 2 and itm and itm:FindFirstChild("VehicleSeat") do
+						if not game.Players.LocalPlayer.PlayerGui.ControlsGui.Enabled then
+							local v = itm.VehicleSeat
+							v.Parent = nil
+							v.Parent = itm
+							patchnograb = false
+						end
+						task.wait()
+					end
+				end)
+				GrabItemsList[itm] = nil
 				while itm do
 					for _,prt in pairs(itm:GetChildren()) do
 						if prt:IsA("BasePart") then
@@ -2236,7 +2339,6 @@ else
 					task.wait()
 				end
 			end
-			itm.Name = "Gucci"..GUTYPE
 		end
 	end
 
@@ -2248,7 +2350,7 @@ else
 			if Value then
 				OrionLib:MakeNotification({
 					Name = "Gucci on Nigga",
-					Content = "Yobro!",
+					Content = "John Gucci",
 					Image = "rbxassetid://4483345998",
 					Time = 2
 				})
@@ -2256,7 +2358,7 @@ else
 			else
 				OrionLib:MakeNotification({
 					Name = "Gucci on a little bit less than usual Nigga",
-					Content = "See you latere",
+					Content = "John Gucci",
 					Image = "rbxassetid://4483345998",
 					Time = 2
 				})
@@ -2274,7 +2376,7 @@ else
 					heebyjeeby:Set("CreatureBlobman")
 						OrionLib:MakeNotification({
 						Name = "Train does not exist",
-						Content = "John Gucciantigrab",
+						Content = "John Gucci",
 						Image = "rbxassetid://4483345998",
 						Time = 2
 					})
@@ -2288,7 +2390,7 @@ else
 	})
 	
 	AS:AddSection({
-		Name = "All the other shennanigans"
+		Name = " "
 	})
 
 	local AGE = false
@@ -2329,50 +2431,92 @@ else
 		end,
 	})
 
-	local antifirepart
-
-	if game.workspace.Plots.Plot5.Barrier:FindFirstChild("AntiFirePart") then	
-		antifirepart = game.workspace.Plots.Plot5.Barrier["AntiFirePart"]
-	else
-		antifirepart = game.workspace.Plots.Plot5.Barrier:FindFirstChild("PlotBarrier")
-	end
-	antifirepart.CanCollide = true
-	antifirepart.CanQuery = true
-	antifirepart.Name = "AntiFirePart"
-	local h = antifirepart:Clone()
-	h.Name = "FalseBorder"
-	h.Parent = antifirepart.Parent
-	antifirepart.Size = Vector3.new(1,1,1)
-	for _,prt in pairs(antifirepart:GetChildren()) do
-		prt:Destroy()
-	end
-	antifirepart.CanQuery = false
-	antifirepart.CanCollide = false
-	AFE = false
+	local LM = false
 
 	AS:AddToggle({
-		Name = "Anti-Fire",
+		Name = "Loop Microphone",
 		Default = false,
 		Callback = function(Value)
-			AFE = Value
-			while AFE do
-				if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-					antifirepart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+			LM = Value
+			local string = Value and "Enabled" or "Disabled"
+			OrionLib:MakeNotification({
+				Name = "Loop Microphone "..string,
+				Content = "Loop Microphone",
+				Image = "rbxassetid://4483345998",
+				Time = 2
+			})
+			local model
+			while LM do
+				model = workspace.SammcsturdySpawnedInToys:FindFirstChild("InstrumentVoiceMicrophone")
+				if model then
+					if model:FindFirstChild("HoldPart") and game.Players.LocalPlayer.Character then
+						if model.HoldPart:FindFirstChild("DropItemRemoteFunction") then
+							task.spawn(function()
+								model.HoldPart.DropItemRemoteFunction:InvokeServer(model,CFrame.new(0,0,0),Vector3.new(0,-46.05,0))
+							end)
+						end
+						if model.HoldPart:FindFirstChild("HoldItemRemoteFunction") then
+							task.spawn(function()
+								model.HoldPart.HoldItemRemoteFunction:InvokeServer(model,game:GetService("Players").LocalPlayer.Character)
+							end)
+						end
+					end
+				else
+					while not (game.Players.LocalPlayer.Character and game.Players.LocalPlayer.CanSpawnToy.Value) do task.wait() end
+					task.spawn(function()
+						game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("InstrumentVoiceMicrophone",CFrame.new(1e5,1e5,1e5),Vector3.new(0,0,0))
+					end)
+					local st = tick()
+					while tick() - st < 1 and not workspace.SammcsturdySpawnedInToys:FindFirstChild("InstrumentVoiceMicrophone") do
+						task.wait()
+					end
 				end
-				antifirepart.CanCollide = not antifirepart.CanCollide
-				antifirepart.CanCollide = not antifirepart.CanCollide
 				task.wait()
 			end
-			antifirepart.CFrame = CFrame.new(0,-15,0)
+			if model then
+				game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(model)
+			end
 		end,
 	})
 
+	local RDAAG = false
+
 	AS:AddToggle({
-		Name = "Anti-Explosion",
+		Name = "Ruhubs dog ahh antigrab",
 		Default = false,
 		Callback = function(Value)
-			AXE = Value
+			RDAAG = Value
+			if Value then
+				OrionLib:MakeNotification({
+					Name = "Ruhub Anti-Grab has been enabled",
+					Content = "Buns ahh 💀",
+					Image = "rbxassetid://4483345998",
+					Time = 2
+				})
+			else
+				OrionLib:MakeNotification({
+					Name = "Ruhub Anti-Grab has been disabled",
+					Content = "Buns ahh 💀",
+					Image = "rbxassetid://4483345998",
+					Time = 2
+				})
+			end
+			while RDAAG do
+				while game:GetService("Players").LocalPlayer.IsHeld.Value do
+					game:GetService("ReplicatedStorage").CharacterEvents.Struggle:FireServer(plr)
+					if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+						game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
+					end
+					task.wait()
+				end
+				game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
+				task.wait()
+			end
 		end,
+	})
+
+	AS:AddSection({
+		Name = "Anti-Kick"
 	})
 
 	AST = AS:AddToggle({
@@ -2455,6 +2599,86 @@ else
 			end)
 		end    
 	})
+	
+	AS:AddSection({
+		Name = "Other Stuff"
+	})
+
+	alag = AS:AddToggle({
+		Name = "Anti-Lag",
+		Default = false,
+		Callback = function(Value)
+			ALAGE = Value
+			if Value then 
+				game:GetService("Players").LocalPlayer.PlayerScripts.CharacterAndBeamMove.Disabled = true
+				for _,plr in pairs(game:GetService("Players"):GetChildren()) do
+					if plr.Character and plr.Character:FindFirstChild("GrabParts") then
+						plr.Character.GrabParts:Destroy()
+					end
+				end
+				OrionLib:MakeNotification({
+					Name = "Anti-Lag has ben enabled",
+					Content = "Anti-Lag",
+					Image = "rbxassetid://4483345998",
+					Time = 2
+				})
+			else
+				game:GetService("Players").LocalPlayer.PlayerScripts.CharacterAndBeamMove.Enabled = true
+				OrionLib:MakeNotification({
+					Name = "Anti-Lag has been disabled",
+					Content = "Anti-lag",
+					Image = "rbxassetid://4483345998",
+					Time = 2
+				})	
+			end
+		end   
+	})
+
+	local antifirepart
+
+	if game.workspace.Plots.Plot5.Barrier:FindFirstChild("AntiFirePart") then	
+		antifirepart = game.workspace.Plots.Plot5.Barrier["AntiFirePart"]
+	else
+		antifirepart = game.workspace.Plots.Plot5.Barrier:FindFirstChild("PlotBarrier")
+	end
+	antifirepart.CanCollide = true
+	antifirepart.CanQuery = true
+	antifirepart.Name = "AntiFirePart"
+	local h = antifirepart:Clone()
+	h.Name = "FalseBorder"
+	h.Parent = antifirepart.Parent
+	antifirepart.Size = Vector3.new(1,1,1)
+	for _,prt in pairs(antifirepart:GetChildren()) do
+		prt:Destroy()
+	end
+	antifirepart.CanQuery = false
+	antifirepart.CanCollide = false
+	AFE = false
+
+	AS:AddToggle({
+		Name = "Anti-Fire",
+		Default = false,
+		Callback = function(Value)
+			AFE = Value
+			while AFE do
+				if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+					antifirepart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+				end
+				antifirepart.CanCollide = not antifirepart.CanCollide
+				antifirepart.CanCollide = not antifirepart.CanCollide
+				task.wait()
+			end
+			antifirepart.CFrame = CFrame.new(0,-15,0)
+		end,
+	})
+
+	AS:AddToggle({
+		Name = "Anti-Explosion",
+		Default = false,
+		Callback = function(Value)
+			AXE = Value
+		end,
+	})
 
 	local antiblob = false
 
@@ -2530,18 +2754,16 @@ else
 						if plot.Name ~= "PlayersInPlot" then
 							for _,model in pairs(plot:GetChildren()) do
 								if model.Name == "FoodBanana" or model.Name == "PoopPileSparkle" then
-									task.spawn(function()
-										if model:FindFirstChild("HoldPart") then
-											if model.HoldPart:FindFirstChild("HoldItemRemoteFunction") then
-												task.spawn(function()
-													model.HoldPart.HoldItemRemoteFunction:InvokeServer(model,game:GetService("Players").LocalPlayer.Character)
-												end)
-												if model.HoldPart:FindFirstChild("DropItemRemoteFunction") then
-													model.HoldPart.DropItemRemoteFunction:InvokeServer(model,CFrame.new(0,-10^40,0),Vector3.new(0,-46.05,0))
-												end
+									if model:FindFirstChild("HoldPart") then
+										if model.HoldPart:FindFirstChild("HoldItemRemoteFunction") then
+											task.spawn(function()
+												model.HoldPart.HoldItemRemoteFunction:InvokeServer(model,game:GetService("Players").LocalPlayer.Character)
+											end)
+											if model.HoldPart:FindFirstChild("DropItemRemoteFunction") then
+												model.HoldPart.DropItemRemoteFunction:InvokeServer(model,CFrame.new(0,-10^40,0),Vector3.new(0,-46.05,0))
 											end
 										end
-									end)
+									end
 								end
 							end
 						end
@@ -2597,37 +2819,7 @@ else
 				})
 			end
 		end,
-	})
-
-	alag = AS:AddToggle({
-		Name = "Anti-Lag",
-		Default = false,
-		Callback = function(Value)
-			ALAGE = Value
-			if Value then 
-				game:GetService("Players").LocalPlayer.PlayerScripts.CharacterAndBeamMove.Disabled = true
-				for _,plr in pairs(game:GetService("Players"):GetChildren()) do
-					if plr.Character and plr.Character:FindFirstChild("GrabParts") then
-						plr.Character.GrabParts:Destroy()
-					end
-				end
-				OrionLib:MakeNotification({
-					Name = "Anti-Lag has ben enabled",
-					Content = "Anti-Lag",
-					Image = "rbxassetid://4483345998",
-					Time = 2
-				})
-			else
-				game:GetService("Players").LocalPlayer.PlayerScripts.CharacterAndBeamMove.Enabled = true
-				OrionLib:MakeNotification({
-					Name = "Anti-Lag has been disabled",
-					Content = "Anti-lag",
-					Image = "rbxassetid://4483345998",
-					Time = 2
-				})	
-			end
-		end    
-	})
+	}) 
 
 	task.spawn(function()
 		while true do
@@ -2643,42 +2835,6 @@ else
 			task.wait()
 		end
 	end)
-
-	local RDAAG = false
-
-	AS:AddToggle({
-		Name = "Ruhubs dog ahh antigrab",
-		Default = false,
-		Callback = function(Value)
-			RDAAG = Value
-			if Value then
-				OrionLib:MakeNotification({
-					Name = "Ruhub Anti-Grab has been enabled",
-					Content = "Buns ahh 💀",
-					Image = "rbxassetid://4483345998",
-					Time = 2
-				})
-			else
-				OrionLib:MakeNotification({
-					Name = "Ruhub Anti-Grab has been disabled",
-					Content = "Buns ahh 💀",
-					Image = "rbxassetid://4483345998",
-					Time = 2
-				})
-			end
-			while RDAAG do
-				while game:GetService("Players").LocalPlayer.IsHeld.Value do
-					game:GetService("ReplicatedStorage").CharacterEvents.Struggle:FireServer(plr)
-					if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-						game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
-					end
-					task.wait()
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
-				task.wait()
-			end
-		end,
-	})
 
 	game.Players.LocalPlayer.Idled:Connect(function(timeSpentIdle)
 		game:GetService("VirtualUser"):CaptureController()
@@ -2858,7 +3014,7 @@ else
 														smegma = false
 													end
 												end
-												if workspace:FindFirstChild(game.Players.LocalPlayer.Name.."SpawnedInToys"):FindFirstChild("CreatureBlobman") or workspace.PlotItems[plot]:FindFirstChild("CreatureBlobman") then
+												if workspace:FindFirstChild(game.Players.LocalPlayer.Name.."SpawnedInToys"):FindFirstChild("CreatureBlobman") or plot and workspace.PlotItems[plot]:FindFirstChild("CreatureBlobman") then
 													blob = workspace:FindFirstChild(game.Players.LocalPlayer.Name.."SpawnedInToys"):FindFirstChild("CreatureBlobman") or workspace.PlotItems[plot]:FindFirstChild("CreatureBlobman")
 												elseif game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character.Parent ~= workspace and (game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position - SL).Magnitude > 90  then
 													game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(SL)
@@ -2913,19 +3069,18 @@ else
 								if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and (plr.Character.HumanoidRootPart.CFrame.Position - LocList[plr.UserId]).Magnitude < 50 then
 									satisfied = true
 								end
-							else
-								if OKLA then
-									if OKLWF and whitelist[plr.UserId] then
-										satisfied = true
-										print(1,OKLWF,whitelist[plr.UserId])
-									end
-									print(1,OKLWF,whitelist[plr.UserId])
-								elseif OKA then
-									if OWF and whitelist[plr.UserId] then
-										satisfied = true
-										print(2,OWF,whitelist[plr.UserId])
-									end
-									print(2,OWF,whitelist[plr.UserId])
+							end
+						end
+						if OKLA then
+							if OKLWF then
+								if whitelist[plr.UserId] then
+									satisfied = true
+								end
+							end
+						elseif OKA then
+							if OWF then
+								if whitelist[plr.UserId] then
+									satisfied = true
 								end
 							end
 						end
@@ -2956,9 +3111,7 @@ else
 										j = nil
 										p = nil
 										if OKLA then
-											if plr.Character:FindFirstChild("Humanoid") then
-												plr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
-											end
+											plr.Character:PivotTo(CFrame.new(0,1e29,0))
 											for _,prt in pairs(plr.Character:GetChildren()) do
 												if prt.ClassName == "Part" then
 													local bv = Instance.new("BodyPosition")
@@ -2973,10 +3126,14 @@ else
 													end)
 												end
 											end
+											if plr.Character:FindFirstChild("Humanoid") then
+												plr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
+											end
 											if hrp then
 												game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(hrp)
 											end
 										elseif OKA then
+											plr.Character:PivotTo(CFrame.new(0,1e29,0))
 											for _,prt in pairs(plr.Character:GetChildren()) do
 												if prt.ClassName == "Part" then
 													local bv = Instance.new("BodyPosition")
@@ -2991,10 +3148,14 @@ else
 													end)
 												end
 											end
+											if plr.Character:FindFirstChild("Humanoid") then
+												plr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Freefall)
+											end
 											if hrp then
 												game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(hrp)
 											end
 										elseif LocList[plr.UserId] then
+											plr.Character:PivotTo(CFrame.new(LocList[plr.UserId]))
 											for _,prt in pairs(plr.Character:GetChildren()) do
 												if prt.ClassName == "Part" then
 													local bv = Instance.new("BodyPosition")
@@ -3020,9 +3181,7 @@ else
 												game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(hrp)
 											end
 										else
-											if plr.Character:FindFirstChild("Humanoid") then
-												plr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
-											end
+											plr.Character:PivotTo(CFrame.new(0,1e29,0))
 											for _,prt in pairs(plr.Character:GetChildren()) do
 												if prt.ClassName == "Part" then
 													local bv = Instance.new("BodyPosition")
@@ -3036,6 +3195,9 @@ else
 														bv:Destroy()
 													end)
 												end
+											end
+											if plr.Character:FindFirstChild("Humanoid") then
+												plr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
 											end
 											if hrp then
 												game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(hrp)
@@ -3052,42 +3214,101 @@ else
 				end
 			end
 			for itm in GrabItemsList do
-				if itm and (itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart")) and acno then
-					while not checkgrab(itm) do
-						if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-							local j
-							local p
-							local prt = itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart")
-							if prt and (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 30 then
-								j = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-								p = game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity
-							end
-							if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-								if (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 30 then
-									game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = prt.CFrame + Vector3.new(0,10,0) + (prt.AssemblyLinearVelocity / math.pi)
-									game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = prt.AssemblyLinearVelocity
+				if itm and itm.Parent and acno then
+					if itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") then
+						while itm and itm.Parent and not checkgrab(itm) and GrabItemsList[itm] do
+							if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+								local j
+								local p
+								local prt = itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart")
+								if prt and (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 30 then
+									j = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+									p = game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity
 								end
-								if prt then
-									for _,prt in pairs(itm:GetChildren()) do
-										if prt.Name == "SoundPart" or prt.Name == "HumanoidRootPart" or prt.Name == "1" or prt.Name == "Wedge" then
-											game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prt,prt.CFrame)
+								if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+									if (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 30 then
+										game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = prt.CFrame + Vector3.new(0,10,0) + (prt.AssemblyLinearVelocity / math.pi)
+										game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = prt.AssemblyLinearVelocity
+									end
+									if prt then
+										for _,prt in pairs(itm:GetChildren()) do
+											if prt.Name == "SoundPart" or prt.Name == "HumanoidRootPart" or prt.Name == "1" or prt.Name == "Wedge" then
+												game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prt,prt.CFrame)
+											end
 										end
 									end
 								end
+								task.wait()
+								if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and j then
+									game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = j
+									game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = p
+								end
+							else
+								task.wait()
 							end
-							task.wait()
-							if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and j then
-								game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = j
-								game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = p
+						end
+					elseif itm.Parent == game.Players then
+						if itm.Character then
+							local plr = itm
+							itm = itm.Character
+							while itm and itm.Parent and not checkgrab(itm) do
+								if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+									local j
+									local p
+									local prt = itm:FindFirstChild("HumanoidRootPart")
+									if prt and (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 30 then
+										j = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+										p = game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity
+									end
+									if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and pusslist[plr] then
+										if not itm:FindFirstChild("somebodyshotaloadintomyburger2") then
+											local diddysbiscuit = Instance.new("Attachment")
+											diddysbiscuit.Name = "somebodyshotaloadintomyburger"
+											diddysbiscuit.Parent = prt
+											local diddlysquat = Instance.new("AlignPosition")
+											diddlysquat.Parent = diddysbiscuit
+											diddlysquat.Attachment0 = diddysbiscuit
+											diddlysquat.Mode = "OneAttachment"
+											diddlysquat.MaxForce = math.huge
+											diddlysquat.MaxVelocity = math.huge
+											diddlysquat.Responsiveness = 200
+											diddlysquat.Position = pusslist[plr][1]
+											local penismcandrew = Instance.new("AlignOrientation")
+											penismcandrew.Parent = diddysbiscuit
+											penismcandrew.Mode = "OneAttachment"
+											penismcandrew.Attachment0 = diddysbiscuit
+											penismcandrew.Responsiveness = 200
+											penismcandrew.MaxTorque = math.huge
+											penismcandrew.CFrame = pusslist[plr][2]
+											local gottheblicky = Instance.new("Highlight")
+											gottheblicky.Parent = itm
+											gottheblicky.Name = "somebodyshotaloadintomyburger2"
+											gottheblicky.FillTransparency = 0.4
+											gottheblicky.FillColor = Color3.fromRGB(27,126,208)
+											gottheblicky.OutlineColor = Color3.fromRGB(21,97,161)
+										end
+										if (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 30 then
+											game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = prt.CFrame + Vector3.new(0,10,0) + (prt.AssemblyLinearVelocity / math.pi)
+											game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = prt.AssemblyLinearVelocity
+										end
+										if prt then
+											game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prt,prt.CFrame)
+										end
+									end
+									task.wait()
+									if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and j then
+										game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = j
+										game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = p
+									end
+								else
+									task.wait()
+								end
 							end
-						else
-							task.wait()
 						end
 					end
 				end
 			end
 			for itm in BuildItemsList do
-				print(BuildItemsList)
 				if itm and (itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart")) then
 					local isgrabbed
 					for _,prt in pairs(itm:GetChildren()) do
@@ -3355,6 +3576,7 @@ else
                     local AKL = false
 					local ASL
                     local ESPL = false
+					local NakedVal = false
 					lTPE = false
 					if LoopKillList[uid] == "who you loop killin nigga" then
 						lk = true
@@ -3393,6 +3615,9 @@ else
 					if ESPList[uid] then
 						ESPL = true
 					end
+					if NakedList[uid] then
+						NakedVal = true
+					end
 					pLK:Set(lk)
 					pOK:Set(otk)
 					pOTP:Set(tpp)
@@ -3402,6 +3627,7 @@ else
 					pBK:Set(kckwb)
 					pBLH:Set(blthdbs)
 					pESP:Set(ESPL)
+					pNK:Set(NakedVal)
 					pPenis:Set(PNL)
 					pAK:Set(AKL)
 					pSK:Set(ASL)
@@ -3437,6 +3663,8 @@ else
 	})
 
 	pPCS = PL:AddParagraph("Private Chats","No-One selected")
+
+	pFreinds = PL:AddParagraph("Friends","No-One selected")
 
 	task.spawn(function()
 		while not MiSPCS do task.wait() end
@@ -3676,25 +3904,6 @@ else
 	})
 
 	PL:AddSection({
-		Name = "ESP Player"
-	})
-
-	pESP = PL:AddToggle({
-		Name = "ESP",
-		Default = false,
-		Callback = function(Value)
-			if not Changing and sellplr then
-				ESPList[uid] = Value
-				if Value then
-					ESPP(sellplr)
-				else
-					UNESPP(sellplr)
-				end
-			end
-		end    
-	})
-
-	PL:AddSection({
 		Name = "Third Party Anti-Kick"
 	})
 
@@ -3747,6 +3956,48 @@ else
 					if workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild(sellplr.Name) then
 						game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"][sellplr.Name])
 					end
+				end
+			end
+		end    
+	})
+
+	PL:AddSection({
+		Name = "SUS Player"
+	})
+
+	pNK = PL:AddToggle({
+		Name = "Make them NAKED 😳",
+		Default = false,
+		Callback = function(Value)
+			NakedList[uid] = Value
+			if not Value then
+				local plr = game.Players:GetPlayerByUserId(uid)
+				if plr and plr.Character then
+					if plr.Character:FindFirstChild("Pants") and plr.Character.Pants:GetAttribute("NakedValue") then
+						plr.Character.Pants.PantsTemplate = plr.Character.Pants:GetAttribute("NakedValue")
+					end
+					if plr.Character:FindFirstChild("Shirt") and plr.Character.Shirt:GetAttribute("NakedValue") then
+						plr.Character.Shirt.ShirtTemplate = plr.Character.Shirt:GetAttribute("NakedValue")
+					end
+				end
+			end
+		end    
+	})
+
+	PL:AddSection({
+		Name = "ESP Player"
+	})
+
+	pESP = PL:AddToggle({
+		Name = "ESP",
+		Default = false,
+		Callback = function(Value)
+			if not Changing and sellplr then
+				ESPList[uid] = Value
+				if Value then
+					ESPP(sellplr)
+				else
+					UNESPP(sellplr)
 				end
 			end
 		end    
@@ -3814,7 +4065,7 @@ else
 			end
 		end
 		if plot then
-			plott = workspace.PlotItems[plot]
+			plott = plot and workspace.PlotItems[plot]
 			for _,itm in pairs(plott:GetChildren()) do
 				if itm.Name == "CreatureBlobMan" or itm.Name:find("Gucci") then
 					if not itm:FindFirstChild("VehicleSeat") then
@@ -3833,7 +4084,6 @@ else
 		Name = "Freeze Item"
 	})
 
-	local FA
 	local holdingx = false
 
 	BS:AddBind({
@@ -3844,7 +4094,7 @@ else
 			holdingx = Value
 			local indexmcgee = {}
 			local gotone = false
-			if Value and FA and workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") and workspace.GrabParts.GrabPart:FindFirstChild("WeldConstraint") and workspace.GrabParts.GrabPart.WeldConstraint.Part1 then
+			if Value and workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") and workspace.GrabParts.GrabPart:FindFirstChild("WeldConstraint") and workspace.GrabParts.GrabPart.WeldConstraint.Part1 then
 				local jellyfish = workspace.GrabParts.GrabPart.WeldConstraint
 				local chillonme = workspace.GrabParts.GrabPart.WeldConstraint.Part1
 				if not chillonme:FindFirstAncestor("Plots") and not chillonme:FindFirstAncestor("Slots") and not chillonme:FindFirstAncestor("Map") then
@@ -3857,15 +4107,25 @@ else
 							end
 						end
 						frozenlist[chillonme.Parent] = nil
-						GrabItemsList[chillonme.Parent] = nil
+						if game.Players:GetPlayerFromCharacter(chillonme.Parent) then
+							GrabItemsList[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = nil
+							pusslist[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = nil
+						else
+							GrabItemsList[chillonme.Parent] = nil
+						end
 						game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(chillonme.Parent:FindFirstChild("SoundPart") or chillonme.Parent:FindFirstChild("HumanoidRootPart"))
 						return
 					else
 						gotone = true
-						if chillonme.Parent:FindFirstChild("SoundPart") and not chillonme.Parent:FindFirstAncestor("BinisCreations") then
+						if chillonme.Parent:FindFirstChild("SoundPart") and chillonme.Parent:FindFirstChild("ThisToysNumber") and not chillonme.Parent:FindFirstAncestor("BinisCreations") then
 							frozenlist[chillonme.Parent] = true
 						end
-						GrabItemsList[chillonme.Parent] = true
+						if game.Players:GetPlayerFromCharacter(chillonme.Parent) then
+							GrabItemsList[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = true
+							pusslist[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = {chillonme.CFrame.Position, chillonme.CFrame}
+						else
+							GrabItemsList[chillonme.Parent] = true
+						end
 						local diddysbiscuit = Instance.new("Attachment")
 						diddysbiscuit.Name = "somebodyshotaloadintomyburger"
 						diddysbiscuit.Parent = chillonme
@@ -3919,9 +4179,17 @@ else
 											end
 										end
 										frozenlist[chillonme.Parent] = nil
-										GrabItemsList[chillonme.Parent] = nil
+										if game.Players:GetPlayerFromCharacter(chillonme.Parent) then
+											GrabItemsList[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = nil
+											pusslist[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = nil
+										else
+											GrabItemsList[chillonme.Parent] = nil
+										end
 										game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(chillonme.Parent:FindFirstChild("SoundPart") or chillonme.Parent:FindFirstChild("HumanoidRootPart"))
 									else
+										if game.Players:GetPlayerFromCharacter(chillonme.Parent) then
+											pusslist[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = {chillonme.CFrame.Position, chillonme.CFrame}
+										end
 										local diddysbiscuit = Instance.new("Attachment")
 										diddysbiscuit.Name = "somebodyshotaloadintomyburger"
 										diddysbiscuit.Parent = chillonme
@@ -3958,18 +4226,14 @@ else
 						if chillonme:FindFirstChild("SoundPart") and not chillonme:FindFirstAncestor("BinisCreations") then
 							frozenlist[chillonme] = true
 						end
-						GrabItemsList[chillonme] = true
+						if game.Players:GetPlayerFromCharacter(chillonme) then
+							GrabItemsList[game.Players:GetPlayerFromCharacter(chillonme)] = true
+						else
+							GrabItemsList[chillonme] = true
+						end
 					end
 				end
 			end
-		end
-	})
-
-	BS:AddToggle({
-		Name = "Activate Freeze Item",
-		Default = true,
-		Callback = function(Value)
-			FA = Value
 		end
 	})
 
@@ -4088,11 +4352,18 @@ else
 		Name = "Edit Map"
 	})
 
+	local mapp
+
 	MS:AddToggle({
 		Name = "Private Map",
 		Default = false,
 		Callback = function(Value)
 			if Value and not game:GetService("Workspace"):FindFirstChild("PrivateMap") then
+				if not mapp then
+					mapp = game:GetService("Workspace").Map:Clone()
+					mapp.AlwaysHereTweenedObjects:Destroy()
+					mapp.MapNoises:Destroy()
+				end
 				nigga = mapp:Clone()
 				game:GetService("Workspace").Plots:Clone().Parent = nigga
 				game:GetService("Workspace").Slots:Clone().Parent = nigga
@@ -4191,7 +4462,6 @@ else
 	})
 
 	local pbp = false
-	local broken = false
 
 	bpbtog = MS:AddToggle({
 		Name = "Break Plot Barrier",
@@ -4199,41 +4469,29 @@ else
 		Callback = function(Value)
 			bpb = Value
 			while bpb do
-				if broken then
+				while not (game.Players.LocalPlayer.Character and game.Players.LocalPlayer.CanSpawnToy.Value) do task.wait() end
+				local _
+				task.spawn(function()
+					if game.Players.LocalPlayer.Character.Parent == workspace then
+						game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("BallSnowball",CFrame.new(355.048615, -5.63270235, 553.709595, -0.995227516, -0.000525230716, 0.0975805596, 0, 0.999985576, 0.00538245682, -0.0975819677, 0.00535676908, -0.995213151),Vector3.new(0,0,0))
+					else
+						game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("BallSnowball",CFrame.new(262.23056, 28.7192783, 322.344788, -0.941351771, -0.0306104273, -0.33603549, 0, 0.995876729, -0.0907172337, 0.337426811, -0.0853968263, -0.937470317),Vector3.new(0,0,0))
+					end
+				end)
+				if game.Players.LocalPlayer.Character.Parent == workspace then
+					_ = workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:WaitForChild("BallSnowball",1)
+				elseif plot then
+					_ = workspace.PlotItems[plot]:WaitForChild("BallSnowball",1)
+				end
+				if _ then
 					bpb = false
 					OrionLib:MakeNotification({
 						Name = "Plot Barrier Shit",
-						Content = "It's broken fatass",
+						Content = "Plot Barrier broken bris",
 						Image = "rbxassetid://4483345998",
 						Time = 2
 					})
 					bpbtog:Set(false)
-				else
-					while not (game.Players.LocalPlayer.Character and game.Players.LocalPlayer.CanSpawnToy.Value) do task.wait() end
-					local _
-					task.spawn(function()
-						if game.Players.LocalPlayer.Character.Parent == workspace then
-							game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("BallSnowball",CFrame.new(355.048615, -5.63270235, 553.709595, -0.995227516, -0.000525230716, 0.0975805596, 0, 0.999985576, 0.00538245682, -0.0975819677, 0.00535676908, -0.995213151),Vector3.new(0,0,0))
-						else
-							game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("BallSnowball",CFrame.new(262.23056, 28.7192783, 322.344788, -0.941351771, -0.0306104273, -0.33603549, 0, 0.995876729, -0.0907172337, 0.337426811, -0.0853968263, -0.937470317),Vector3.new(0,0,0))
-						end
-					end)
-					if game.Players.LocalPlayer.Character.Parent == workspace then
-						_ = workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:WaitForChild("BallSnowball",1)
-					else
-						_ = workspace.PlotItems[plot]:WaitForChild("BallSnowball",1)
-					end
-					if _ then
-						broken = true
-						bpb = false
-						OrionLib:MakeNotification({
-							Name = "Plot Barrier Shit",
-							Content = "Plot Barrier broken bris",
-							Image = "rbxassetid://4483345998",
-							Time = 2
-						})
-						bpbtog:Set(false)
-					end
 				end
 				task.wait()
 			end
@@ -4533,6 +4791,48 @@ else
 	})
 
 	MiSPCS = MiS:AddParagraph("All Private Chats","No Active Private Chats")
+
+	MiS:AddSection({
+		Name = "SUS Mode"
+	})
+
+	MiS:AddToggle({
+		Name = "Toggle SUS Mode 😳",
+		Default = false,
+		Callback = function(Value)
+			GETNAKED = Value
+			if not Value then
+				for _,plr in pairs(game.Players:GetPlayers()) do
+					if plr.Character and not NakedList[plr.UserId] then
+						if plr.Character:FindFirstChild("Pants") and plr.Character.Pants:GetAttribute("NakedValue") then
+							plr.Character.Pants.PantsTemplate = plr.Character.Pants:GetAttribute("NakedValue")
+						end
+						if plr.Character:FindFirstChild("Shirt") and plr.Character.Shirt:GetAttribute("NakedValue") then
+							plr.Character.Shirt.ShirtTemplate = plr.Character.Shirt:GetAttribute("NakedValue")
+						end
+					end
+				end
+			end
+		end    
+	})
+
+	task.spawn(function()
+		while true do
+			for _,plr in pairs(game.Players:GetPlayers()) do
+				if plr.Character and (GETNAKED or NakedList[plr.UserId]) then
+					if plr.Character:FindFirstChild("Pants") then
+						plr.Character.Pants:SetAttribute("NakedValue",plr.Character.Pants.PantsTemplate)
+						plr.Character.Pants.PantsTemplate = ""
+					end
+					if plr.Character:FindFirstChild("Shirt") then
+						plr.Character.Shirt:SetAttribute("NakedValue",plr.Character.Shirt.ShirtTemplate)
+						plr.Character.Shirt.ShirtTemplate = ""
+					end
+				end
+			end
+			task.wait()
+		end
+	end)
 
 	MiS:AddSection({
 		Name = "Blobman All"
