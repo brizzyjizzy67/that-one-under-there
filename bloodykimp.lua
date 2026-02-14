@@ -1263,15 +1263,15 @@ function OrionLib:MakeWindow(WindowConfig)
                     end
                 end
 
-                for _, p in pairs(PlayerService:GetPlayers()) do
+                for _, p in pairs(game.Players:GetPlayers()) do
                     AddOption(p)
                 end
 
-                PlayerService.PlayerAdded:Connect(function(p) 
+                game.Players.PlayerAdded:Connect(function(p) 
                     AddOption(p)
                 end)
 
-                PlayerService.PlayerRemoving:Connect(function(p) 
+                game.Players.PlayerRemoving:Connect(function(p) 
                     RemoveOption(p.Name)
                 end)
 
