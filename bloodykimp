@@ -858,8 +858,9 @@ function OrionLib:MakeWindow(WindowConfig)
 				ParagraphFrame.Content.Text = Content
 
 				local ParagraphFunction = {}
-				function ParagraphFunction:Set(ToChange)
+				function ParagraphFunction:Set(ToChange,title)
 					ParagraphFrame.Content.Text = ToChange
+					ParagraphFrame.Title.Text = title or Text
 				end
 				return ParagraphFunction
 			end    
