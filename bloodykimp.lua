@@ -1420,7 +1420,7 @@ function OrionLib:MakeWindow(WindowConfig)
                     
                 end)
 
-                if DropdownConfig.Flag the  n        
+                if DropdownConfig.Flag then        
                     OrionLib.Flags[DropdownConfig.Flag] = Dropdown
                 end
                 
