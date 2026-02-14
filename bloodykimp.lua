@@ -247,11 +247,6 @@ local WhitelistedMouse = {Enum.UserInputType.MouseButton1, Enum.UserInputType.Mo
 local BlacklistedKeys = {Enum.KeyCode.Unknown,Enum.KeyCode.W,Enum.KeyCode.A,Enum.KeyCode.S,Enum.KeyCode.D,Enum.KeyCode.Up,Enum.KeyCode.Left,Enum.KeyCode.Down,Enum.KeyCode.Right,Enum.KeyCode.Slash,Enum.KeyCode.Tab,Enum.KeyCode.Backspace,Enum.KeyCode.Escape}
 
 local freeMouse = Create("TextButton", {Name = "FMouse", Size = UDim2.new(0,0,0,0), BackgroundTransparency = 1, Text = "", Position = UDim2.new(0,0,0,0), Modal = true, Parent = Orion, Visible = false})
-
-
-function OrionLib:UnlockMouse(Value)
-	freeMouse.Visible = Value
-end  
 		
 local function CheckKey(Table, Key)
 	for _, v in next, Table do
@@ -655,6 +650,7 @@ function OrionLib:MakeWindow(WindowConfig)
 
 	AddConnection(CloseBtn.MouseButton1Up, function()
 		MainWindow.Visible = false
+		freeMouse.Visible = MainWindow.Visible
 		UIHidden = true
 		OrionLib:MakeNotification({
 			Name = "Interface Hidden",
@@ -667,6 +663,7 @@ function OrionLib:MakeWindow(WindowConfig)
 	AddConnection(UserInputService.InputBegan, function(Input, gameProcessed)
     if Input.KeyCode == Enum.KeyCode.RightShift then
       MainWindow.Visible = not MainWindow.Visible
+	  freeMouse.Visible = MainWindow.Visible
       UIHidden = not MainWindow.Visible
 
       if not MainWindow.Visible then
@@ -701,6 +698,7 @@ function OrionLib:MakeWindow(WindowConfig)
 
 	local function LoadSequence()
 		MainWindow.Visible = false
+		freeMouse.Visible = MainWindow.Visible
 		local LoadSequenceLogo = SetProps(MakeElement("Image", WindowConfig.IntroIcon), {
 			Parent = Orion,
 			AnchorPoint = Vector2.new(0.5, 0.5),
