@@ -651,6 +651,7 @@ function OrionLib:MakeWindow(WindowConfig)
 	AddConnection(CloseBtn.MouseButton1Up, function()
 		MainWindow.Visible = false
 		freeMouse.Visible = MainWindow.Visible
+		print(freeMouse.Visible)
 		UIHidden = true
 		OrionLib:MakeNotification({
 			Name = "Interface Hidden",
@@ -664,6 +665,7 @@ function OrionLib:MakeWindow(WindowConfig)
     if Input.KeyCode == Enum.KeyCode.RightShift then
       MainWindow.Visible = not MainWindow.Visible
 	  freeMouse.Visible = MainWindow.Visible
+	  print(freeMouse.Visible)
       UIHidden = not MainWindow.Visible
 
       if not MainWindow.Visible then
@@ -699,6 +701,7 @@ function OrionLib:MakeWindow(WindowConfig)
 	local function LoadSequence()
 		MainWindow.Visible = false
 		freeMouse.Visible = MainWindow.Visible
+		print(freeMouse.Visible)
 		local LoadSequenceLogo = SetProps(MakeElement("Image", WindowConfig.IntroIcon), {
 			Parent = Orion,
 			AnchorPoint = Vector2.new(0.5, 0.5),
