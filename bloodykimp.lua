@@ -248,24 +248,10 @@ local BlacklistedKeys = {Enum.KeyCode.Unknown,Enum.KeyCode.W,Enum.KeyCode.A,Enum
 
 local freeMouse = Create("TextButton", {Name = "FMouse", Size = UDim2.new(0,0,0,0), BackgroundTransparency = 1, Text = "", Position = UDim2.new(0,0,0,0), Modal = true, Parent = Orion, Visible = false})
 
-local function UnlockMouse(Value)
-	if Value then
-		mouselock = true
 
-		task.spawn(function() 
-			while mouselock do
-				UserInputService.MouseIconEnabled = Value
-				freeMouse.Visible = Value
-				task.wait()
-			end
-
-			UserInputService.MouseIconEnabled = false
-			freeMouse.Visible = false
-		end)
-	else
-		mouselock = false
-	end
-end
+function OrionLib:UnlockMouse(Value)
+	freeMouse.Visible = Value
+end  
 		
 local function CheckKey(Table, Key)
 	for _, v in next, Table do
@@ -846,9 +832,6 @@ function OrionLib:MakeWindow(WindowConfig)
 				end
 				return LabelFunction
 			end
-			function ElementFunction:UnlockMouse(Value)
-				freeMouse.Visible = Value
-			end  
 			function ElementFunction:AddParagraph(Text, Content)
 				Text = Text or "Text"
 				Content = Content or "Content"
