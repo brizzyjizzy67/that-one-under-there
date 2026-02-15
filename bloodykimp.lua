@@ -1104,6 +1104,7 @@ function OrionLib:MakeWindow(WindowConfig)
 				end
 				return Slider
 			end  
+			local namelist = {}
 			function ElementFunction:AddPlayersDropdown(DropdownConfig)
                 DropdownConfig = DropdownConfig or {}
                 DropdownConfig.Name = DropdownConfig.Name or "Dropdown"
@@ -1273,11 +1274,15 @@ function OrionLib:MakeWindow(WindowConfig)
                 end
 
                 for _, p in pairs(game.Players:GetPlayers()) do
-                    AddOption(p)
+					if p ~= game.Players.LocalPlayer then
+                    	AddOption(p)
+						namelist[p.Name] = p.DisplayName
+					end
                 end
 
                 game.Players.PlayerAdded:Connect(function(p) 
                     AddOption(p)
+					namelist[p.Name] = p.DisplayName
                 end)
 
                 game.Players.PlayerRemoving:Connect(function(p) 
@@ -1561,7 +1566,11 @@ function OrionLib:MakeWindow(WindowConfig)
 					end
 
 					Dropdown.Value = Value
-					DropdownFrame.F.Selected.Text = Dropdown.Value
+					if Dropdown.Value ~= "..." then
+						DropdownFrame.F.Selected.Text = "<b>"..namelist[Value].." (@"..Value..")</b>"
+					else
+						DropdownFrame.F.Selected.Text = Value
+					end
 
 					for _, v in pairs(Dropdown.Buttons) do
 						TweenService:Create(v,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{BackgroundTransparency = 1}):Play()
