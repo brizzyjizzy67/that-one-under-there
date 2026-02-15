@@ -1366,9 +1366,18 @@ function OrionLib:MakeWindow(WindowConfig)
                             if Dropdown.Buttons[Value] then
                                 TweenService:Create(Dropdown.Buttons[Value],TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{BackgroundTransparency = 0.5}):Play()
                                 TweenService:Create(Dropdown.Buttons[Value].Title,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{TextTransparency = 0}):Play()
-                                
+								
                                 Dropdown.Value = Value
-                                DropdownFrame.F.Selected.Text = Dropdown.Value
+
+								if Dropdown.Value ~= "..." then
+									if namelist[Value] then
+										DropdownFrame.F.Selected.Text = "<b>"..namelist[Value].." (@"..Value..")</b>"
+									else
+										DropdownFrame.F.Selected.Text = "<b>@"..Value.."</b>"
+									end
+								else
+									DropdownFrame.F.Selected.Text = Value
+								end
                             else
                                 Dropdown.Value = nil
                                 DropdownFrame.F.Selected.Text = ""
@@ -1566,17 +1575,7 @@ function OrionLib:MakeWindow(WindowConfig)
 					end
 
 					Dropdown.Value = Value
-					print(Value)
-					print(namelist[Value])
-					if Dropdown.Value ~= "..." then
-						if namelist[Value] then
-							DropdownFrame.F.Selected.Text = "<b>"..namelist[Value].." (@"..Value..")</b>"
-						else
-							DropdownFrame.F.Selected.Text = "<b>@"..Value.."</b>"
-						end
-					else
-						DropdownFrame.F.Selected.Text = Value
-					end
+					DropdownFrame.F.Selected.Text = Value
 
 					for _, v in pairs(Dropdown.Buttons) do
 						TweenService:Create(v,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{BackgroundTransparency = 1}):Play()
