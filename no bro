@@ -1,9 +1,6 @@
 if workspace:FindFirstChild("Boiyoubuiltlikeanigger") and workspace.Boiyoubuiltlikeanigger.Value then
 	game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">BinisJ Already Started Nigga</font>")
 else
-	getgenv().gethui = function() return game.CoreGui end
-	local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/brizzyjizzy67/that-one-under-there/refs/heads/NOT-main/bloodykimp')))()
-	
     local bjjjj = Instance.new("BoolValue")
 	bjjjj.Name = "Boiyoubuiltlikeanigger"
 	bjjjj.Parent = workspace
@@ -11,6 +8,9 @@ else
 	local bjlist = {}
 	local MasterPlayer = game.Players.LocalPlayer
 	game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">[BinisJ]</font><font color=\"rgb(255, 255, 255)\"> Initiating the EDITION</font>")
+
+	getgenv().gethui = function() return game.CoreGui end
+	local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/brizzyjizzy67/that-one-under-there/refs/heads/NOT-main/bloodykimp.lua')))()
 
 	local joinland = {}
 	local currantplrlist = {}
