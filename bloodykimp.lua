@@ -1115,7 +1115,7 @@ function OrionLib:MakeWindow(WindowConfig)
                 DropdownConfig.Flag = DropdownConfig.Flag or nil
                 DropdownConfig.MultipleSelection = DropdownConfig.MultipleSelection or false
                 DropdownConfig.Save = DropdownConfig.Save or false
-                DropdownConfig.AutoUpdate = DropdownConfig.AutoUpdate or false
+                DropdownConfig.AutoUpdate = DropdownConfig.AutoUpdate or true
 
                 local Dropdown = {Value = DropdownConfig.Default, Options = DropdownConfig.Options, Buttons = {}, Toggled = false, Type = "Dropdown", Save = DropdownConfig.Save, MultipleSelection = DropdownConfig.MultipleSelection}
                 local MaxElements = 3
