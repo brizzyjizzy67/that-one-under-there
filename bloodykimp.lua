@@ -1206,6 +1206,7 @@ function OrionLib:MakeWindow(WindowConfig)
                 end
 
                 local function AddOption(Option)
+
                     local Player_Name = Option.Name
                     local Player_Display = Option.DisplayName
                     local UId = Option.UserId
@@ -1232,14 +1233,14 @@ function OrionLib:MakeWindow(WindowConfig)
                                 Visible = false
                             }),
 
-                            AddThemeObject(SetProps(MakeElement("Label", "@" .. Option, 13, 0.4), {
+                            AddThemeObject(SetProps(MakeElement("Label", "<b>@" .. Option.."</b>", 13, 0.4), {
                                 Position = UDim2.new(0.135, 0, 0, 7),
                                 Size = UDim2.new(1, -10, 1, 0),
                                 Name = "Title"
                             }), "Text"),
 
-                            AddThemeObject(SetProps(MakeElement("Label", Player_Display, 17, 0.4), {
-                                Position = UDim2.new(0.135, 0, 0, -5),
+                            AddThemeObject(SetProps(MakeElement("Label", "<b>"..Player_Display.."</b>", 17, 0.4), {
+                                Position = UDim2.new(0.135, 0, 0, -6),
                                 Size = UDim2.new(1, -8, 1, 0),
                                 Name = "Subtitle"
                             }), "Text"),
