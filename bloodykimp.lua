@@ -1115,6 +1115,7 @@ function OrionLib:MakeWindow(WindowConfig)
                 DropdownConfig.Flag = DropdownConfig.Flag or nil
                 DropdownConfig.MultipleSelection = DropdownConfig.MultipleSelection or false
                 DropdownConfig.Save = DropdownConfig.Save or false
+                DropdownConfig.AutoUpdate = DropdownConfig.AutoUpdate or false
 
                 local Dropdown = {Value = DropdownConfig.Default, Options = DropdownConfig.Options, Buttons = {}, Toggled = false, Type = "Dropdown", Save = DropdownConfig.Save, MultipleSelection = DropdownConfig.MultipleSelection}
                 local MaxElements = 3
@@ -1273,31 +1274,34 @@ function OrionLib:MakeWindow(WindowConfig)
                     end
                 end
 
-                for _, p in pairs(game.Players:GetPlayers()) do
-					if p ~= game.Players.LocalPlayer then
-                    	AddOption(p)
+						
+				if DropdownConfig.AutoUpdate then
+	                for _, p in pairs(game.Players:GetPlayers()) do
+						if p ~= game.Players.LocalPlayer then
+	                    	AddOption(p)
+							namelist[p.Name] = p.DisplayName
+						end
+	                end
+	
+	                game.Players.PlayerAdded:Connect(function(p) 
+	                    AddOption(p)
 						namelist[p.Name] = p.DisplayName
-					end
-                end
-
-                game.Players.PlayerAdded:Connect(function(p) 
-                    AddOption(p)
-					namelist[p.Name] = p.DisplayName
-                end)
-
-                game.Players.PlayerRemoving:Connect(function(p) 
-                    RemoveOption(p.Name)
-                end)
-
-                local function DeleteAllDisconnectedPlayers()
-                    for i, v in pairs(Dropdown.Buttons) do
-                        if v and v:FindFirstChild("State") and v["State"].Visible then
-                            Dropdown.Buttons[i]:Destroy()
-                            Dropdown.Buttons[i] = nil
-                            Options = Options - 1
-                        end
-                    end
-                end
+	                end)
+	
+	                game.Players.PlayerRemoving:Connect(function(p) 
+	                    RemoveOption(p.Name)
+	                end)
+	
+	                local function DeleteAllDisconnectedPlayers()
+	                    for i, v in pairs(Dropdown.Buttons) do
+	                        if v and v:FindFirstChild("State") and v["State"].Visible then
+	                            Dropdown.Buttons[i]:Destroy()
+	                            Dropdown.Buttons[i] = nil
+	                            Options = Options - 1
+	                        end
+	                    end
+	                end
+				end
 
                 function Dropdown:Refresh() end
 
@@ -1575,7 +1579,7 @@ function OrionLib:MakeWindow(WindowConfig)
 					end
 
 					Dropdown.Value = Value
-					DropdownFrame.F.Selected.Text = Value
+					DropdownFrame.F.Selected.Text = "<b>"..Value.."</b>"
 
 					for _, v in pairs(Dropdown.Buttons) do
 						TweenService:Create(v,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{BackgroundTransparency = 1}):Play()
