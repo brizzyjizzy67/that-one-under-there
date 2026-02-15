@@ -1566,9 +1566,9 @@ function OrionLib:MakeWindow(WindowConfig)
 					end
 
 					Dropdown.Value = Value
+					print(Value)
+					print(namelist[Value])
 					if Dropdown.Value ~= "..." then
-						print(Value)
-						print(namelist[Value])
 						if namelist[Value] then
 							DropdownFrame.F.Selected.Text = "<b>"..namelist[Value].." (@"..Value..")</b>"
 						else
