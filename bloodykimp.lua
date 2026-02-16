@@ -8,26 +8,36 @@ local Mouse = LocalPlayer:GetMouse()
 local HttpService = game:GetService("HttpService")
 
 local BJList = {[game.Players.LocalPlayer.UserId] = true}
+local btnlist = {}
 
 if game.ReplicatedStorage:FindFirstChild("GrabEvents") then
 	game.ReplicatedStorage.GrabEvents.ExtendGrabLine.OnClientEvent:Connect(function(plr,arg1,arg2)
 		if type(arg1) == "table" and arg1[1] == "BinisJ" then
 			if plr ~= game.Players.LocalPlayer then
 				if arg1[2] == "BigBjStarting" then
-					game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","BigBjNotStarting"})
 					if not BJList[plr.UserId] then
 						BJList[plr.UserId] = true
+						if btnlist[plr.UserId] then
+							btnlist[plr.UserId].Text = "<b>"..plr.DisplayName..(BJList[UId] and " <font color='#d300c1'>「</font><font color='#ff00ea'>BINISJ</font><font color='#d300c1'>」</font> " or " ")..(game.Players.LocalPlayer:IsFriendsWith(UId) and "<font color='#62e2ff'>「</font><font color='#91ebff'>FRIEND</font><font color='#62e2ff'>」</font>" or "").."</b>"
+						end
 					end
 				end
 				if arg1[2] == "BigBjNotStarting" then
 					if not BJList[plr.UserId] then
 						BJList[plr.UserId] = true
+						if btnlist[plr.UserId] then
+							btnlist[plr.UserId].Text = "<b>"..plr.DisplayName..(BJList[UId] and " <font color='#d300c1'>「</font><font color='#ff00ea'>BINISJ</font><font color='#d300c1'>」</font> " or " ")..(game.Players.LocalPlayer:IsFriendsWith(UId) and "<font color='#62e2ff'>「</font><font color='#91ebff'>FRIEND</font><font color='#62e2ff'>」</font>" or "").."</b>"
+						end
 					end
 				end
 			end
 		end
 	end)
 end
+
+game.Players.PlayerRemoving:Connect(function(p) 
+	BJList[p.UserId] = nil
+end)
 
 local OrionLib = {
 	Elements = {},
@@ -168,6 +178,11 @@ end
 
 local function MakeElement(ElementName, ...)
 	local NewElement = OrionLib.Elements[ElementName](...)
+	for _,t in pairs(... or {}) do
+		if game.Players:GetPlayerByUserId(t) then
+			btnlist[t] = NewElement
+		end
+	end
 	return NewElement
 end
 
@@ -1263,7 +1278,8 @@ function OrionLib:MakeWindow(WindowConfig)
                                 Name = "Title"
                             }), "Text"),
 
-                            AddThemeObject(SetProps(MakeElement("Label", "<b>"..Player_Display..(BJList[UId] and " <font color='#d300c1'>「</font><font color='#ff00ea'>BINISJ</font><font color='#d300c1'>」</font> " or " ")..(game.Players.LocalPlayer:IsFriendsWith(UId) and "<font color='#62e2ff'>「</font><font color='#91ebff'>FRIEND</font><font color='#62e2ff'>」</font>" or "").."</b>", 17, 0.4), {
+							
+							AddThemeObject(SetProps(MakeElement("Label", "<b>"..Player_Display..(BJList[UId] and " <font color='#d300c1'>「</font><font color='#ff00ea'>BINISJ</font><font color='#d300c1'>」</font> " or " ")..(game.Players.LocalPlayer:IsFriendsWith(UId) and "<font color='#62e2ff'>「</font><font color='#91ebff'>FRIEND</font><font color='#62e2ff'>」</font>" or "").."</b>", 17, 0.4, UId), {
                                 Position = UDim2.new(0.135, 0, 0, -6),
                                 Size = UDim2.new(1, -8, 1, 0),
                                 Name = "Subtitle"
@@ -1300,13 +1316,13 @@ function OrionLib:MakeWindow(WindowConfig)
 	                for _, p in pairs(game.Players:GetPlayers()) do
 						if p ~= game.Players.LocalPlayer then
 	                    	AddOption(p)
-							namelist[p.Name] = p.DisplayName
+							namelist[p.Name] = {p.DisplayName,p.UserId}
 						end
 	                end
 	
 	                game.Players.PlayerAdded:Connect(function(p) 
 	                    AddOption(p)
-						namelist[p.Name] = p.DisplayName
+						namelist[p.Name] = {p.DisplayName,p.UserId}
 	                end)
 	
 	                game.Players.PlayerRemoving:Connect(function(p) 
@@ -1344,13 +1360,11 @@ function OrionLib:MakeWindow(WindowConfig)
                     if Button then
                         if Dropdown.MultipleSelection then
                             if not n then
-                                print("Adicionado")
                                 table.insert(SelectedValues, Value)
                                 DropdownFrame.F.Selected.Text = Dropdown.Value
                                 TweenService:Create(Dropdown.Buttons[Value],TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{BackgroundTransparency = 0.5}):Play()
                                 TweenService:Create(Dropdown.Buttons[Value].Title,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{TextTransparency = 0}):Play()
                             elseif n and not Once then
-                                print("Removido")
                                 table.remove(SelectedValues, n)
         
                                 if Dropdown.Buttons[Value].State.Visible then
@@ -1396,7 +1410,7 @@ function OrionLib:MakeWindow(WindowConfig)
 
 								if Dropdown.Value ~= "..." then
 									if namelist[Value] then
-										DropdownFrame.F.Selected.Text = "<b>"..namelist[Value].." (@"..Value..")</b>"
+										DropdownFrame.F.Selected.Text = "<b>"..namelist[Value][1].." (@"..Value..")</b>"
 									else
 										DropdownFrame.F.Selected.Text = "<b>@"..Value.."</b>"
 									end
