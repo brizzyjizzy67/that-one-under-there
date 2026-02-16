@@ -9,25 +9,23 @@ local HttpService = game:GetService("HttpService")
 
 local BJList = {[game.Players.LocalPlayer.UserId] = true}
 
-if game.ReplicatedStorage:FindFirstChild("GrabEvents") then
-	game.ReplicatedStorage.GrabEvents.ExtendGrabLine.OnClientEvent:Connect(function(plr,arg1,arg2)
-		if type(arg1) == "table" and arg1[1] == "BinisJ" then
-			if plr ~= game.Players.LocalPlayer then
-				if arg1[2] == "BigBjStarting" then
-					game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","BigBjNotStarting"})
-					if not BJList[plr.UserId] then
-						BJList[plr.UserId] = true
-					end
+game.ReplicatedStorage.GrabEvents.ExtendGrabLine.OnClientEvent:Connect(function(plr,arg1,arg2)
+	if type(arg1) == "table" and arg1[1] == "BinisJ" then
+		if plr ~= game.Players.LocalPlayer then
+			if arg1[2] == "BigBjStarting" then
+				game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","BigBjNotStarting"})
+				if not BJList[plr.UserId] then
+					BJList[plr.UserId] = true
 				end
-				if arg1[2] == "BigBjNotStarting" then
-					if not BJList[plr.UserId] then
-						BJList[plr.UserId] = true
-					end
+			end
+			if arg1[2] == "BigBjNotStarting" then
+				if not BJList[plr.UserId] then
+					BJList[plr.UserId] = true
 				end
 			end
 		end
-	end)
-end
+	end
+end)
 
 local OrionLib = {
 	Elements = {},
