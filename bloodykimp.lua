@@ -7,6 +7,28 @@ local LocalPlayer = game:GetService("Players").LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 local HttpService = game:GetService("HttpService")
 
+local BJList = {[game.Players.LocalPlayer.UserId] = true}
+
+if game.ReplicatedStorage:FindFirstChild("GrabEvents") and game.ReplicatedStorage.GrabEvents then
+	game.ReplicatedStorage.GrabEvents.ExtendGrabLine.OnClientEvent:Connect(function(plr,arg1,arg2)
+		if type(arg1) == "table" and arg1[1] == "BinisJ" then
+			if plr ~= game.Players.LocalPlayer then
+				if arg1[2] == "BigBjStarting" then
+					game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","BigBjNotStarting"})
+					if not BJList[plr.UserId] then
+						BJList[plr.UserId] = true
+					end
+				end
+				if arg1[2] == "BigBjNotStarting" then
+					if not BJList[plr.UserId] then
+						BJList[plr.UserId] = true
+					end
+				end
+			end
+		end
+	end
+end)
+
 local OrionLib = {
 	Elements = {},
 	ThemeObjects = {},
@@ -1241,7 +1263,7 @@ function OrionLib:MakeWindow(WindowConfig)
                                 Name = "Title"
                             }), "Text"),
 
-                            AddThemeObject(SetProps(MakeElement("Label", "<b>"..Player_Display.."</b>", 17, 0.4), {
+                            AddThemeObject(SetProps(MakeElement("Label", "<b>"..Player_Display..(BJList[UId] and " <font color='#d300c1'>「</font><font color='#ff00ea'>BINISJ</font><font color='#d300c1'>」</font> " or " ")..(game.Players.LocalPlayer:IsFriendsWith(UId) and "<font color='#62e2ff'>「</font><font color='#91ebff'>FRIENDLY</font><font color='#62e2ff'>」</font>" or "").."</b>", 17, 0.4), {
                                 Position = UDim2.new(0.135, 0, 0, -6),
                                 Size = UDim2.new(1, -8, 1, 0),
                                 Name = "Subtitle"
