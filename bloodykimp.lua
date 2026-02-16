@@ -178,7 +178,7 @@ end
 
 local function MakeElement(ElementName, ...)
 	local NewElement = OrionLib.Elements[ElementName](...)
-	for _,t in pairs(... or {}) do
+	for _,t in pairs(... and type(...) == "table" or {}) do
 		if game.Players:GetPlayerByUserId(t) then
 			btnlist[t] = NewElement
 		end
