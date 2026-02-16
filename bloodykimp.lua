@@ -9,7 +9,7 @@ local HttpService = game:GetService("HttpService")
 
 local BJList = {[game.Players.LocalPlayer.UserId] = true}
 
-if game.ReplicatedStorage:FindFirstChild("GrabEvents") and game.ReplicatedStorage.GrabEvents then
+if game.ReplicatedStorage:FindFirstChild("GrabEvents") then
 	game.ReplicatedStorage.GrabEvents.ExtendGrabLine.OnClientEvent:Connect(function(plr,arg1,arg2)
 		if type(arg1) == "table" and arg1[1] == "BinisJ" then
 			if plr ~= game.Players.LocalPlayer then
@@ -26,8 +26,8 @@ if game.ReplicatedStorage:FindFirstChild("GrabEvents") and game.ReplicatedStorag
 				end
 			end
 		end
-	end
-end)
+	end)
+end
 
 local OrionLib = {
 	Elements = {},
