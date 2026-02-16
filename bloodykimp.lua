@@ -17,17 +17,21 @@ if game.ReplicatedStorage:FindFirstChild("GrabEvents") then
 				if arg1[2] == "BigBjStarting" then
 					if not BJList[plr.UserId] then
 						BJList[plr.UserId] = true
-						if btnlist[plr.UserId] then
-							btnlist[plr.UserId].Text = "<b>"..plr.DisplayName..(BJList[UId] and " <font color='#d300c1'>「</font><font color='#ff00ea'>BINISJ</font><font color='#d300c1'>」</font> " or " ")..(game.Players.LocalPlayer:IsFriendsWith(UId) and "<font color='#62e2ff'>「</font><font color='#91ebff'>FRIEND</font><font color='#62e2ff'>」</font>" or "").."</b>"
+						while not btnlist[plr.UserId] do
+							print('bris')
+							task.wait()
 						end
+						btnlist[plr.UserId].Text = "<b>"..plr.DisplayName..(BJList[UId] and " <font color='#d300c1'>「</font><font color='#ff00ea'>BINISJ</font><font color='#d300c1'>」</font> " or " ")..(game.Players.LocalPlayer:IsFriendsWith(UId) and "<font color='#62e2ff'>「</font><font color='#91ebff'>FRIEND</font><font color='#62e2ff'>」</font>" or "").."</b>"
 					end
 				end
 				if arg1[2] == "BigBjNotStarting" then
 					if not BJList[plr.UserId] then
 						BJList[plr.UserId] = true
-						if btnlist[plr.UserId] then
-							btnlist[plr.UserId].Text = "<b>"..plr.DisplayName..(BJList[UId] and " <font color='#d300c1'>「</font><font color='#ff00ea'>BINISJ</font><font color='#d300c1'>」</font> " or " ")..(game.Players.LocalPlayer:IsFriendsWith(UId) and "<font color='#62e2ff'>「</font><font color='#91ebff'>FRIEND</font><font color='#62e2ff'>」</font>" or "").."</b>"
+						while not btnlist[plr.UserId] do
+							print('bris')
+							task.wait()
 						end
+						btnlist[plr.UserId].Text = "<b>"..plr.DisplayName..(BJList[UId] and " <font color='#d300c1'>「</font><font color='#ff00ea'>BINISJ</font><font color='#d300c1'>」</font> " or " ")..(game.Players.LocalPlayer:IsFriendsWith(UId) and "<font color='#62e2ff'>「</font><font color='#91ebff'>FRIEND</font><font color='#62e2ff'>」</font>" or "").."</b>"
 					end
 				end
 			end
