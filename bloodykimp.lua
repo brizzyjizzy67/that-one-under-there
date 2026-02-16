@@ -18,7 +18,6 @@ if game.ReplicatedStorage:FindFirstChild("GrabEvents") then
 					if not BJList[plr.UserId] then
 						BJList[plr.UserId] = true
 						while not btnlist[plr.UserId] do
-							print('bris')
 							task.wait()
 						end
 						btnlist[plr.UserId].Text = "<b>"..plr.DisplayName..(BJList[UId] and " <font color='#d300c1'>「</font><font color='#ff00ea'>BINISJ</font><font color='#d300c1'>」</font> " or " ")..(game.Players.LocalPlayer:IsFriendsWith(UId) and "<font color='#62e2ff'>「</font><font color='#91ebff'>FRIEND</font><font color='#62e2ff'>」</font>" or "").."</b>"
@@ -28,7 +27,6 @@ if game.ReplicatedStorage:FindFirstChild("GrabEvents") then
 					if not BJList[plr.UserId] then
 						BJList[plr.UserId] = true
 						while not btnlist[plr.UserId] do
-							print('bris')
 							task.wait()
 						end
 						btnlist[plr.UserId].Text = "<b>"..plr.DisplayName..(BJList[UId] and " <font color='#d300c1'>「</font><font color='#ff00ea'>BINISJ</font><font color='#d300c1'>」</font> " or " ")..(game.Players.LocalPlayer:IsFriendsWith(UId) and "<font color='#62e2ff'>「</font><font color='#91ebff'>FRIEND</font><font color='#62e2ff'>」</font>" or "").."</b>"
@@ -38,10 +36,6 @@ if game.ReplicatedStorage:FindFirstChild("GrabEvents") then
 		end
 	end)
 end
-
-game.Players.PlayerRemoving:Connect(function(p) 
-	BJList[p.UserId] = nil
-end)
 
 local OrionLib = {
 	Elements = {},
@@ -1573,7 +1567,7 @@ function OrionLib:MakeWindow(WindowConfig)
 					for _, Option in pairs(Options) do
 						local OptionBtn = AddThemeObject(SetProps(SetChildren(MakeElement("Button", Color3.fromRGB(40, 40, 40)), {
 							MakeElement("Corner", 0, 6),
-							AddThemeObject(SetProps(MakeElement("Label", Option, 13, 0.4), {
+							AddThemeObject(SetProps(MakeElement("Label", "<b>"..Option.."</b>", 13, 0.4), {
 								Position = UDim2.new(0, 8, 0, 0),
 								Size = UDim2.new(1, -8, 1, 0),
 								Name = "Title"
