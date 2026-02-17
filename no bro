@@ -4989,7 +4989,7 @@ else
 			end
 
 			for _,prt in pairs(getcount()[2]) do
-				StickyPartEvent:FireServer(prt.StickyPart,UFO,CFrame.Angles(0,0,0))
+				game.ReplicatedStorage.PlayerEvents.StickyPartEvent:FireServer(prt.StickyPart,UFO,CFrame.Angles(0,0,0))
 			end
 
 			for i = 1,100 do
