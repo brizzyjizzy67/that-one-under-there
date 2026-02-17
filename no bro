@@ -1249,11 +1249,13 @@ else
 			if ncg then
 				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts.GrabPart.WeldConstraint.Part1 then
 					local obj = workspace.GrabParts.GrabPart.WeldConstraint.Part1.Parent
-					ncgo = obj
-					for _,prt in pairs(obj:GetChildren()) do
-						if prt:IsA("BasePart") then
-							prt:SetAttribute("CanCollide",prt.CanCollide)
-							prt.CanCollide = false
+					if not chillonme:FindFirstAncestor("Plots") and not chillonme:FindFirstAncestor("Slots") and (not chillonme:FindFirstAncestor("Map") or chillonme:FindFirstAncestor("AlwaysHereTweenedObjects")) then
+						ncgo = obj
+						for _,prt in pairs(obj:GetChildren()) do
+							if prt:IsA("BasePart") then
+								prt:SetAttribute("CanCollide",prt.CanCollide)
+								prt.CanCollide = false
+							end
 						end
 					end
 				end
@@ -2018,15 +2020,18 @@ else
 			if Value then
 				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts.GrabPart.WeldConstraint.Part1 then
 					local obj = workspace.GrabParts.GrabPart.WeldConstraint.Part1.Parent
-					ncgo = obj
-					for _,prt in pairs(obj:GetChildren()) do
-						if prt:IsA("BasePart") then
-							prt:SetAttribute("CanCollide",prt.CanCollide)
-							prt.CanCollide = false
+					if not chillonme:FindFirstAncestor("Plots") and not chillonme:FindFirstAncestor("Slots") and (not chillonme:FindFirstAncestor("Map") or chillonme:FindFirstAncestor("AlwaysHereTweenedObjects")) then
+						ncgo = obj
+						for _,prt in pairs(obj:GetChildren()) do
+							if prt:IsA("BasePart") then
+								prt:SetAttribute("CanCollide",prt.CanCollide)
+								prt.CanCollide = false
+							end
 						end
 					end
 				end
 			else
+				ncgo = nil
 				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts.GrabPart.WeldConstraint.Part1 then
 					local obj = workspace.GrabParts.GrabPart.WeldConstraint.Part1.Parent
 					for _,prt in pairs(obj:GetChildren()) do
@@ -5660,54 +5665,52 @@ else
 					local randallsresult = workspace:Raycast(workspace.Camera.CFrame.Position,(game.Players.LocalPlayer:GetMouse().Hit.Position - workspace.Camera.CFrame.Position).Unit * 15000,randallsparams)
 					if randallsresult then
 						local chillonme = randallsresult.Instance
-						if not chillonme:FindFirstAncestor("Plots") and not chillonme:FindFirstAncestor("Slots") and not chillonme:FindFirstAncestor("Map") then
-							if not chillonme:FindFirstAncestor("Plots") and not chillonme:FindFirstAncestor("Slots") and not chillonme:FindFirstAncestor("Map") then
-								if not indexmcgee[chillonme.Parent] then
-									indexmcgee[chillonme.Parent] = true
-									if chillonme.Parent:FindFirstChild("somebodyshotaloadintomyburger2") then
-										chillonme.Parent.somebodyshotaloadintomyburger2:Destroy()
-										for _,prt in pairs(chillonme.Parent:GetChildren()) do
-											if prt:FindFirstChild("somebodyshotaloadintomyburger") then
-												prt.somebodyshotaloadintomyburger:Destroy()
-											end
+						if not chillonme:FindFirstAncestor("Plots") and not chillonme:FindFirstAncestor("Slots") and (not chillonme:FindFirstAncestor("Map") or chillonme:FindFirstAncestor("AlwaysHereTweenedObjects")) then
+							if not indexmcgee[chillonme.Parent] then
+								indexmcgee[chillonme.Parent] = true
+								if chillonme.Parent:FindFirstChild("somebodyshotaloadintomyburger2") then
+									chillonme.Parent.somebodyshotaloadintomyburger2:Destroy()
+									for _,prt in pairs(chillonme.Parent:GetChildren()) do
+										if prt:FindFirstChild("somebodyshotaloadintomyburger") then
+											prt.somebodyshotaloadintomyburger:Destroy()
 										end
-										frozenlist[chillonme.Parent] = nil
-										if game.Players:GetPlayerFromCharacter(chillonme.Parent) then
-											GrabItemsList[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = nil
-											pusslist[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = nil
-										else
-											GrabItemsList[chillonme.Parent] = nil
-										end
-										game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(chillonme.Parent:FindFirstChild("SoundPart") or chillonme.Parent:FindFirstChild("HumanoidRootPart"))
-									else
-										if game.Players:GetPlayerFromCharacter(chillonme.Parent) then
-											pusslist[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = {chillonme.CFrame.Position, chillonme.CFrame}
-										end
-										local diddysbiscuit = Instance.new("Attachment")
-										diddysbiscuit.Name = "somebodyshotaloadintomyburger"
-										diddysbiscuit.Parent = chillonme
-										local diddlysquat = Instance.new("AlignPosition")
-										diddlysquat.Parent = diddysbiscuit
-										diddlysquat.Attachment0 = diddysbiscuit
-										diddlysquat.Mode = "OneAttachment"
-										diddlysquat.MaxForce = math.huge
-										diddlysquat.MaxVelocity = math.huge
-										diddlysquat.Responsiveness = 200
-										diddlysquat.Position = chillonme.CFrame.Position
-										local penismcandrew = Instance.new("AlignOrientation")
-										penismcandrew.Parent = diddysbiscuit
-										penismcandrew.Mode = "OneAttachment"
-										penismcandrew.Attachment0 = diddysbiscuit
-										penismcandrew.Responsiveness = 200
-										penismcandrew.MaxTorque = math.huge
-										penismcandrew.CFrame = chillonme.CFrame
-										local gottheblicky = Instance.new("Highlight")
-										gottheblicky.Parent = chillonme.Parent
-										gottheblicky.Name = "somebodyshotaloadintomyburger2"
-										gottheblicky.FillTransparency = 0.4
-										gottheblicky.FillColor = Color3.fromRGB(27,126,208)
-										gottheblicky.OutlineColor = Color3.fromRGB(21,97,161)
 									end
+									frozenlist[chillonme.Parent] = nil
+									if game.Players:GetPlayerFromCharacter(chillonme.Parent) then
+										GrabItemsList[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = nil
+										pusslist[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = nil
+									else
+										GrabItemsList[chillonme.Parent] = nil
+									end
+									game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(chillonme.Parent:FindFirstChild("SoundPart") or chillonme.Parent:FindFirstChild("HumanoidRootPart"))
+								else
+									if game.Players:GetPlayerFromCharacter(chillonme.Parent) then
+										pusslist[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = {chillonme.CFrame.Position, chillonme.CFrame}
+									end
+									local diddysbiscuit = Instance.new("Attachment")
+									diddysbiscuit.Name = "somebodyshotaloadintomyburger"
+									diddysbiscuit.Parent = chillonme
+									local diddlysquat = Instance.new("AlignPosition")
+									diddlysquat.Parent = diddysbiscuit
+									diddlysquat.Attachment0 = diddysbiscuit
+									diddlysquat.Mode = "OneAttachment"
+									diddlysquat.MaxForce = math.huge
+									diddlysquat.MaxVelocity = math.huge
+									diddlysquat.Responsiveness = 200
+									diddlysquat.Position = chillonme.CFrame.Position
+									local penismcandrew = Instance.new("AlignOrientation")
+									penismcandrew.Parent = diddysbiscuit
+									penismcandrew.Mode = "OneAttachment"
+									penismcandrew.Attachment0 = diddysbiscuit
+									penismcandrew.Responsiveness = 200
+									penismcandrew.MaxTorque = math.huge
+									penismcandrew.CFrame = chillonme.CFrame
+									local gottheblicky = Instance.new("Highlight")
+									gottheblicky.Parent = chillonme.Parent
+									gottheblicky.Name = "somebodyshotaloadintomyburger2"
+									gottheblicky.FillTransparency = 0.4
+									gottheblicky.FillColor = Color3.fromRGB(27,126,208)
+									gottheblicky.OutlineColor = Color3.fromRGB(21,97,161)
 								end
 							end
 						end
