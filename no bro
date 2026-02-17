@@ -48,6 +48,7 @@ else
 	local playerstring = ""
 	local friendstring = ""
 	local dih = false
+	local ncg
 
 	local GETNAKED = false
 
@@ -656,6 +657,16 @@ else
 		end
 	end)
 
+	workspace.ChildRemoved:Connect(function(obj)
+		if obj.Name == "GrabParts" and ncgo then
+			for _,prt in pairs(ncgo:GetChildren()) do
+				if prt:IsA("BasePart") then
+					prt.CanCollide = prt:GetAttribute("CanCollide")
+				end
+			end
+		end
+	end)
+
 	game.Players.ChildRemoved:Connect(function(plr)
 		currantplrlist = {}
 		local masterplr = game.Players.LocalPlayer
@@ -1234,6 +1245,18 @@ else
 		elseif model.Name == "GrabParts" then
 			if ILV then
 				game.ReplicatedStorage.GrabEvents.CreateGrabLine:FireServer()
+			end
+			if ncg then
+				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts.GrabPart.WeldConstraint.Part1 then
+					local obj = workspace.GrabParts.GrabPart.WeldConstraint.Part1.Parent
+					ncgo = obj
+					for _,prt in pairs(obj:GetChildren()) do
+						if prt:IsA("BasePart") then
+							prt:SetAttribute("CanCollide",prt.CanCollide)
+							prt.CanCollide = false
+						end
+					end
+				end
 			end
 			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and not model:WaitForChild("GrabPart"):WaitForChild("WeldConstraint").Part1:FindFirstAncestor("Map") and not model.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Plots") and not model.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Slots") then
 				for _,prt in pairs(model.GrabPart.WeldConstraint.Part1.Parent:GetDescendants()) do
@@ -1988,9 +2011,31 @@ else
 	})
 
 	GS:AddToggle({
-		Name = "Noclip grab <font color='#ff9900'>(MAINTENANCE)</font>",
+		Name = "Noclip grab",
 		Default = true,
 		Callback = function(Value)
+			ncg = Value
+			if Value then
+				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts.GrabPart.WeldConstraint.Part1 then
+					local obj = workspace.GrabParts.GrabPart.WeldConstraint.Part1.Parent
+					ncgo = obj
+					for _,prt in pairs(obj:GetChildren()) do
+						if prt:IsA("BasePart") then
+							prt:SetAttribute("CanCollide",prt.CanCollide)
+							prt.CanCollide = false
+						end
+					end
+				end
+			else
+				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts.GrabPart.WeldConstraint.Part1 then
+					local obj = workspace.GrabParts.GrabPart.WeldConstraint.Part1.Parent
+					for _,prt in pairs(obj:GetChildren()) do
+						if prt:IsA("BasePart") then
+							prt.CanCollide = prt:GetAttribute("CanCollide")
+						end
+					end
+				end
+			end
 		end   
 	})
 
@@ -5053,8 +5098,8 @@ else
 		Callback = function(Value)
 			alignlist[selected] = not Value
 			local obj = workspace.Map.AlwaysHereTweenedObjects[selected].Object.FollowThisPart
-			obj.AlignOrientation.Enabled = alignlist[selected]
-			obj.AlignPosition.Enabled = alignlist[selected]
+			obj.AlignOrientation.Enabled = not alignlist[selected]
+			obj.AlignPosition.Enabled = not alignlist[selected]
 		end
 	})
 
