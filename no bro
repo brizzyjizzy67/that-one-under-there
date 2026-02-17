@@ -9,11 +9,18 @@ else
 	local MasterPlayer = game.Players.LocalPlayer
 	game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">[BinisJ]</font><font color=\"rgb(255, 255, 255)\"> Initiating the EDITION</font>")
 
+	local loaded = false
+	local setlist = true
+
 	getgenv().gethui = function() return game.CoreGui end
-	local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/brizzyjizzy67/that-one-under-there/refs/heads/NOT-main/bloodykimp.lua')))()
+	local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/brizzyjizzy67/that-one-under-there/refs/heads/NOT-main/bloodykimp.lua'))()
 
 	local joinland = {}
 	local currantplrlist = {}
+
+	local exploderemote = game.ReplicatedStorage.BombEvents.BombExplode
+
+	local ANKE = false
 
 	local pOTP
 	local pLK
@@ -32,10 +39,15 @@ else
 	local Changing = false
 	local sellplr
 	local LS
+	local diddlefinger
 	local pPCS
-	local pFreinds
+	local pFriends
+	local fList
 	local MiSPCS
 	local bpbtog
+	local playerstring = ""
+	local friendstring = ""
+	local dih = false
 
 	local GETNAKED = false
 
@@ -43,8 +55,11 @@ else
 	local BlobkickList = {"BarnoDDino","ay3vx"}
 	local BlobKillList = {}
 	local HoldableList = {}
+	local HoldableWhite = {}
 	local GrabItemsList = {}
+	local DeleteService = {}
 	local pusslist = {}
+	local friendslist = {}
 	local BuildItemsList = {}
 	local NakedList = {}
     local ESPList = {}
@@ -144,17 +159,17 @@ else
 		{5095159939,"hes a cheater!!!"},
 		{5097961324,"hes a cheater!!!"},
 		{9535225511,"bit weird hes posing as a roblox admin, hes a cheater"},
-		{335291430,"taro!!! watch out if youre a kid"}
+		{335291430,"taro!!! watch out if youre a kid"},
+		{9157516832,"thats praise dude dont get sent gore"},
+		{1903917591,"has blitz premium and ownership kick v2"}
 	}
 
 	local LocList = {}
 	local Freelist = {}
 	local LoopKillList = {}
-	local AKList = {}
 	local ShurList = {}
 	local OKList = {}
 	local PenisList = {[1265789892] = true}
-	local whitelist = {}
 
 	local OKA = false
 	local OWF = true
@@ -167,7 +182,6 @@ else
 
 	local plrlist
 	local plrlistsel
-	local WLL
 	local WLlistsel
 
 	local dick3 = Instance.new("Folder")
@@ -338,7 +352,7 @@ else
 	local timesincelast = 0
 	local timesincelastlist = {}
 	
-	local BJList = {}
+	local BJList = {[game.Players.LocalPlayer.UserId] = true}
 	local PoorBJList = {}
 
 	lodaded = false
@@ -348,6 +362,7 @@ else
 		SpawnCave = Vector3.new(-90,14.6,-314.3),
 		TheWedge = Vector3.new(-73,-6,-265.5),
 		TheCompartment = Vector3.new(538.5,65.5,-220),
+		SmegmmaArea = Vector3.new(585,20.5,-360),
 		GreenHouse = Vector3.new(-538,-7,74),
 		PinkHouse = Vector3.new(-478,-7,-147),
 		Barn = Vector3.new(-228,82,-318),
@@ -377,6 +392,7 @@ else
 		["-90, 14.6, -314.3"] = "SpawnCave",
 		["-73,-6,-265.5"] = "TheWedge",
 		["538.5, 65.5, -220"] = "TheCompartment",
+		["585, 20.5, -360"] = "SmegmaArea",
 		["-538, -7, 74"] = "GreenHouse",
 		["-478, -7, -147"] = "PinkHouse",
 		["-228, 82, -318"] = "Barn",
@@ -405,6 +421,7 @@ else
 	local loccc = "Prison"
 
 	local SL = tpland["Spawn"]
+	local House = nil
 
 	local plot = nil
 
@@ -549,39 +566,47 @@ else
 				if hrp then
 					local bbg = Instance.new("BillboardGui")
 					bbg.Parent = plr.Character
-					bbg.Size = UDim2.new(0, 100, 0, 100)
-					bbg.SizeOffset = Vector2.new(0,0.25)
-					bbg.StudsOffset = Vector3.new(0,3,0)
+					bbg.Size = UDim2.new(1, 500, 1, 500)
+					bbg.StudsOffset = Vector3.new(0, 4, 0)
 					bbg.AlwaysOnTop = true
+					bbg.SizeOffset = Vector2.new(0.375, -0.375)
 					bbg.Adornee = plr.Character.HumanoidRootPart
 
 					local bbt = Instance.new("TextLabel")
 					bbt.Parent = bbg
-					bbt.Size = UDim2.new(0, 100, 0, 100)
+					bbt.Size = UDim2.new(0.25, 0, 0.25, 0)
 					bbt.BackgroundTransparency = 1
 					bbt.TextColor3 = Color3.new(1,1,1)
-					bbt.TextSize = 20
+					bbt.TextSize = 28
 					bbt.Text = plr.DisplayName
 					bbt.TextStrokeColor3 = Color3.new(1,1,1)
 					bbt.TextStrokeTransparency = 0.75
+					bbt.TextScaled = false
+					bbt.Font = Enum.Font.SourceSansBold
+					bbt.TextXAlignment = Enum.TextXAlignment.Center
+					bbt.TextYAlignment = Enum.TextYAlignment.Center
 
 					local bbt2 = Instance.new("TextLabel")
 					bbt2.Parent = bbg
-					bbt2.Size = UDim2.new(0, 100, 0, 100)
+					bbt2.Size = UDim2.new(0.25, 0, 0.25, 0)
 					bbt2.BackgroundTransparency = 1
 					bbt2.TextColor3 = Color3.new(1,1,1)
-					bbt2.TextSize = 12
-					bbt2.Text = "(@"..plr.Name..")"
-					bbt2.Position = UDim2.new(0,0,0,25)
+					bbt2.TextSize = 20
+					bbt2.Text = "(@" .. plr.Name .. ")"
+					bbt2.Position = UDim2.new(0, 0, 0.04, 0)
 					bbt2.TextStrokeColor3 = Color3.new(1,1,1)
 					bbt2.TextStrokeTransparency = 0.75
+					bbt2.TextScaled = false
+					bbt2.Font = Enum.Font.SourceSans
+					bbt2.TextXAlignment = Enum.TextXAlignment.Center
+					bbt2.TextYAlignment = Enum.TextYAlignment.Center
 
 					local bbl = Instance.new("ImageLabel")
 					bbl.Parent = bbg
 					bbl.BackgroundTransparency = 1
-					bbl.Position = UDim2.new(0,0,-0.75,0)
-					bbl.Size = UDim2.new(0,100,0,100)
-					bbl.Image = game.Players:GetUserThumbnailAsync(plr.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420)
+					bbl.Size = UDim2.new(0.15, 0, 0.15, 0)
+					bbl.Position = UDim2.new(0.05, 0, -0.06, 0)
+					bbl.Image = game.Players:GetUserThumbnailAsync(plr.UserId,Enum.ThumbnailType.HeadShot,Enum.ThumbnailSize.Size420x420)
 				end
 			end
 		end)
@@ -590,16 +615,21 @@ else
 	local AXE = false
 
 	local AGE = false
+	local ACGE = false
 
 	local penis
 	local penis2
 
 	local DSL = true
 
-	if game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+	if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
 		penis = game.Players.LocalPlayer.Character.Humanoid:GetPropertyChangedSignal("Sit"):Connect(function()
-			if not game.Players.LocalPlayer.Character.Humanoid.SeatPart and AXE then
-				game.Players.LocalPlayer.Character.Humanoid.Sit = false
+			if not game.Players.LocalPlayer.Character.Humanoid.SeatPart then
+				if AXE then
+					game.Players.LocalPlayer.Character.Humanoid.Sit = false
+				elseif (ACGE or AGE) and game.Players.LocalPlayer.IsHeld.Value then
+					game.Players.LocalPlayer.Character.Humanoid.Sit = false
+				end
 			end
 		end)
 		penis2 = game.Players.LocalPlayer.Character.Humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
@@ -613,8 +643,12 @@ else
 	game.Players.LocalPlayer.CharacterAdded:Connect(function()
 		local b = game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
 		penis = b:GetPropertyChangedSignal("Sit"):Connect(function()
-			if not game.Players.LocalPlayer.Character.Humanoid.SeatPart and AXE then
-				game.Players.LocalPlayer.Character.Humanoid.Sit = false
+			if not game.Players.LocalPlayer.Character.Humanoid.SeatPart then
+				if AXE then
+					game.Players.LocalPlayer.Character.Humanoid.Sit = false
+				elseif (ACGE or AGE) and game.Players.LocalPlayer.IsHeld.Value then
+					game.Players.LocalPlayer.Character.Humanoid.Sit = false
+				end
 			end
 		end)
 		penis2 = b:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
@@ -635,13 +669,16 @@ else
 		local msnum = game.Players.LocalPlayer.AccountAge
 		for _,plr in pairs(game.Players:GetChildren()) do
 			if plr ~= game.Players.LocalPlayer then
-				table.insert(currantplrlist,plr.Name)
+				table.insert(currantplrlist,plr.DisplayName.." (@"..plr.Name..")")
 			end
 			if BJList[plr.UserId] then
 				for _,plr in pairs(game.Players:GetPlayers()) do
 					if plr ~= game.Players.LocalPlayer and BJList[plr.UserId] and plr.AccountAge > msnum then
 						msplr = plr
 						msnum = plr.AccountAge
+					end
+					if BJList[plr.UserId] then
+						game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(200,200,200)\">"..plr.DisplayName.." (@"..plr.Name..")</font>")
 					end
 				end
 			end
@@ -655,8 +692,10 @@ else
 			MasterPlayer = msplr
 		end
 		if loaded then
-			plrlist:Refresh(currantplrlist,true)
-			plrlist:Set(plrlistsel)
+			setlist = true
+			-- plrlist:Refresh(currantplrlist,true)
+			-- plrlist:Set(plrlistsel)
+			setlist = false
 		end
 		local alrflagged = false
 		for _,plrr in pairs(gettingkicked) do
@@ -675,7 +714,7 @@ else
 		end
 	end)
 
-	locations = {"Spawn","Prison","ChineseRoof","SpawnCave","TheWedge","TheCompartment","GreenHouse","PinkHouse","Barn","BlueHouse","ChineseHouse","PurpleHouse","Factory","OtherGreenHouse","BigCave","GoodPrison","RuhubsDogAhhPrison","ExtremelyGoodPrison","TrainCave","IslandCave","UfoCave","BlueHouseSlot","SpawnSlot","HauntedSlot","RandomSlot","BeachSlot"}
+	locations = {"Spawn","Prison","ChineseRoof","SpawnCave","TheWedge","TheCompartment","SmegmmaArea","GreenHouse","PinkHouse","Barn","BlueHouse","ChineseHouse","PurpleHouse","Factory","OtherGreenHouse","BigCave","GoodPrison","RuhubsDogAhhPrison","ExtremelyGoodPrison","TrainCave","IslandCave","UfoCave","BlueHouseSlot","SpawnSlot","HauntedSlot","RandomSlot","BeachSlot"}
 	newlocations = {}
 
 	game.ReplicatedStorage.GrabEvents.ExtendGrabLine.OnClientEvent:Connect(function(plr,arg1,arg2)
@@ -694,6 +733,7 @@ else
 						game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">[BinisJ] "..plr.DisplayName.." (@"..plr.Name..") is a good boy</font>")
 						BJList[plr.UserId] = true
 						HoldableList[plr.UserId] = nil
+						HoldableWhite[plr.UserId] = true
 					end
 				end
 				if arg1[2] == "NotStarting" then
@@ -707,6 +747,7 @@ else
 						game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">[BinisJ] "..plr.DisplayName.." (@"..plr.Name..") is a good boy</font>")
 						BJList[plr.UserId] = true
 						HoldableList[plr.UserId] = nil
+						HoldableWhite[plr.UserId] = true
 					end
 				end
 			end
@@ -716,7 +757,7 @@ else
 			if arg1[2] == "New Build" then
 				local bn = buildnum
 				BS:AddSection({
-					Name = plr.Name.."'s Creation "..bn
+					Name = "<b>"..plr.Name.."'s Creation "..bn.."</b>"
 				})
 				local partslist = {}
 				local owner = plr
@@ -775,7 +816,8 @@ else
 				local jeetard = BS:AddLabel("Build Owner: "..plr.DisplayName.." (@"..plr.Name..")")
 				local agentJEWchaning = false
 				local lastval = 1
-				local agentJEW = BS:AddSlider({
+				local agentJEW
+				agentJEW = BS:AddSlider({
 					Name = "Set Build Size",
 					Min = 0.1,
 					Max = 50,
@@ -991,6 +1033,89 @@ else
 		end
 	end)
 
+	function getOfflinePlayerData(targetId)
+		local success, result = pcall(function()
+			return game.UserService:GetUserInfosByUserIdsAsync({targetId})
+		end)
+		if success and result[1] then
+			local data = result[1]
+			return data.DisplayName, data.Username
+		else
+			return "Banned User", "NULL"
+		end
+	end
+
+	function getAllFriendIds(targetId,num,plr)
+		local friendIdTable = {}
+		local success, friendPages = pcall(function()
+			return game.Players:GetFriendsAsync(targetId)
+		end)
+		if success then
+			while true do
+				local currentPage = friendPages:GetCurrentPage()
+				for _, friendInfo in ipairs(currentPage) do
+					table.insert(friendIdTable, friendInfo.Id)
+					if (num == 1 and plr == selname) or num == 2 then
+						if not game.Players:GetPlayerByUserId(friendInfo.Id) and inbadboylist(friendInfo.Id) then
+							gotadudde = true
+							task.spawn(function()
+								local d, u = getOfflinePlayerData(friendInfo.Id)
+								playerstring = playerstring..(playerstring ~= "" and "\n" or "").."<font color=\"rgb(200, 0, 0)\">[Offline] "..d.." (@"..u..") UserId: "..friendInfo.Id.."</font>"
+								pFriends:Set("<b>"..playerstring.."</b>")
+							end)
+						else
+							pFriends:Set("<b>"..(playerstring == "" and "Loading..." or playerstring).."</b>","Friends "..#friendIdTable)
+						end
+					else
+						fList:Set("<b>"..friendstring.."</b>","Friends "..#friendIdTable)
+					end
+				end
+				if friendPages.IsFinished then
+					break
+				end
+				friendPages:AdvanceToNextPageAsync()
+			end
+		else
+			return {"Attempt Failed"}
+		end
+		return friendIdTable
+	end
+
+	task.spawn(function()
+		local success, friendPages = pcall(function()
+			return game.Players:GetFriendsAsync(game.Players.LocalPlayer.UserId)
+		end)
+		if success then
+			while true do
+				local currentPage = friendPages:GetCurrentPage()
+				for _, friendInfo in ipairs(currentPage) do
+					friendslist[friendInfo.Id] = "yesbro"
+					HoldableWhite[friendInfo.Id] = true
+				end
+				if friendPages.IsFinished then
+					break
+				end
+				friendPages:AdvanceToNextPageAsync()
+			end
+		end
+	end)
+
+	function inbadboylist(targetId)
+		for _,plr in pairs(badboylist) do 
+			if plr[1] == targetId then
+				return true
+			end
+		end
+	end
+
+	function findplr(plrr)
+		for _,plr in pairs(game.Players:GetPlayers()) do
+			if plr.DisplayName.." (@"..plr.Name..")" == plrr or plr.DisplayName.." (@"..plr.Name..") UserId: "..plr.UserId == plrr then
+				return plr
+			end
+		end
+	end
+
 	game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","BjWho?"})
 	game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","BigBjStarting"})
 
@@ -1124,15 +1249,15 @@ else
 		currantplrlist = {}
 		for _,plr in pairs(game.Players:GetChildren()) do
 			if plr ~= game.Players.LocalPlayer then
-				table.insert(currantplrlist,plr.Name)
+				table.insert(currantplrlist,plr.DisplayName.." (@"..plr.Name..")")
 			end
 		end
 
 		if loaded then
-			plrlist:Refresh(currantplrlist,true)
-			plrlist:Set(plrlistsel)
-			WLL:Refresh(currantplrlist,true)
-			WLL:Set(WLlistsel)
+			setlist = true
+			-- plrlist:Refresh(currantplrlist,true)
+			-- plrlist:Set(plrlistsel)
+			setlist = false
 		end
 
 		if plr ~= game.Players.LocalPlayer then
@@ -1164,14 +1289,6 @@ else
 				end)
 			end)
 			task.spawn(function()
-				task.spawn(function()
-					local success, isFriend = pcall(function()
-						return game.Players.LocalPlayer:IsFriendsWith(plr.UserId)
-					end)
-					if success and isFriend then
-						whitelist[plr.UserId] = "yesbro"
-					end
-				end)
 				local ishebadornahh = false
 				local dingdong = ""
 				for _,dude in badboylist do
@@ -1324,7 +1441,7 @@ else
 				local lasttime = nil
 				model.HoldPart:WaitForChild("RigidConstraint"):GetPropertyChangedSignal("Attachment1"):Connect(function()
 					if lasttime and model.HoldPart.RigidConstraint.Attachment1 then
-						if 1 / (tick() - lasttime) > 10 then
+						if 1 / (tick() - lasttime) > 10 and not HoldableWhite[plr.UserId] then
 							HoldableList[plr.UserId] = true
 							if uid == plr.UserId then 
 								pBLH:Set(true)
@@ -1340,6 +1457,24 @@ else
 	end
 
 	game.Players.ChildAdded:Connect(function(plr)
+		task.spawn(function()
+			if uid and plr:IsFriendsWith(uid) and not inbadboylist(id) then
+				if playerstring == "<b>\nNo friends haha noob!!</b>" or playerstring == "<b>\nLoading...</b>" then
+					playerstring = ""
+				end
+				playerstring = playerstring..(playerstring ~= "" and "\n" or "").."<font color=\"rgb(0, 200, 0)\">"..user.DisplayName.." (@"..user.Name..") UserId: "..user.UserId.."</font>"
+				pFriends:Set("<b>"..playerstring.."</b>")
+			end
+			if friendslist[plr.UserId] then
+				if not inbadboylist(plr.UserId) then
+					friendstring = friendstring..(friendstring ~= "" and "\n" or "").."<font color=\"rgb(0, 200, 0)\">"..plr.DisplayName.." (@"..plr.Name..") UserId: "..plr.UserId.."</font>"
+					fList:Set("<b>"..friendstring.."</b>")
+				else
+					friendstring = friendstring..(friendstring ~= "" and "\n" or "").."<font color=\"rgb(200, 0, 0)\">"..plr.DisplayName.." (@"..plr.Name..") UserId: "..plr.UserId.."</font>"
+					fList:Set("<b>"..friendstring.."</b>")
+				end
+			end
+		end)
 		plr.CharacterAdded:Connect(function(char)
 			if ESPList[plr.UserId] or ESPA then
 				ESPP(plr)
@@ -1371,15 +1506,15 @@ else
 		currantplrlist = {}
 		for _,plr in pairs(game.Players:GetChildren()) do
 			if plr ~= game.Players.LocalPlayer then
-				table.insert(currantplrlist,plr.Name)
+				table.insert(currantplrlist,plr.DisplayName.." (@"..plr.Name..")")
 			end
 		end
 
 		if loaded then
-			plrlist:Refresh(currantplrlist,true)
-			plrlist:Set(plrlistsel)
-			WLL:Refresh(currantplrlist,true)
-			WLL:Set(WLlistsel)
+			setlist = true
+			-- plrlist:Refresh(currantplrlist,true)
+			-- plrlist:Set(plrlistsel)
+			setlist = false
 		end
 
 		local beenbefore = false
@@ -1400,14 +1535,6 @@ else
 			table.insert(joinland,plr.DisplayName)
 		end
 		task.spawn(function()
-			task.spawn(function()
-				local success1, isFriend = pcall(function()
-					return game.Players.LocalPlayer:IsFriendsWith(plr.UserId)
-				end)
-				if success1 and isFriend then
-					whitelist[plr.UserId] = "yesbro"
-				end
-			end)
 			local ishebadornahh = false
 			local dingdong = ""
 			for _,dude in badboylist do
@@ -1586,7 +1713,7 @@ else
 				local lasttime = nil
 				model.HoldPart:WaitForChild("RigidConstraint"):GetPropertyChangedSignal("Attachment1"):Connect(function()
 					if lasttime and model.HoldPart.RigidConstraint.Attachment1 then
-						if 1 / (tick() - lasttime) > 10 then
+						if 1 / (tick() - lasttime) > 10 and not HoldableWhite[plr.UserId] then
 							HoldableList[plr.UserId] = true
 							if uid == plr.UserId then 
 								pBLH:Set(true)
@@ -1616,25 +1743,28 @@ else
 		house.PlotArea.CanQuery = false
 	end
 
-    local Window = OrionLib:MakeWindow({Name = "BinisJ - Ultra Nigga Edition", IntroText = "BinisJ - Ultra Nigga Edition"})
+    local Window = OrionLib:MakeWindow({Name = "BinisJ - Ultra Nigga Edition", IntroEnabled = false, FreeMouse = true})
+
+	local OrionLibrary
+	
+	for _,frame in pairs(game.CoreGui.Orion:GetChildren()) do
+		if frame.ClassName == "Frame" and frame.BackgroundTransparency == 0 then
+			OrionLibrary = frame
+		end
+	end
 
 	local OV = Window:MakeTab({
 		Name = "Overview",
 		Icon = "rbxassetid://4483362458",
 	})
 
-	local GS = Window:MakeTab({
-		Name = "Grab Stuff",
-		Icon = "rbxassetid://4483362458",
-	})
-
 	local PT = Window:MakeTab({
-		Name = "Player Tab",
+		Name = "Local Player",
 		Icon = "rbxassetid://4483362458",
 	})
 
 	local AS = Window:MakeTab({
-		Name = "Anti-Shit",
+		Name = "Protection",
 		Icon = "rbxassetid://4483345998",
 	})
 
@@ -1643,14 +1773,30 @@ else
 		Icon = "rbxassetid://4483345998",
 	})
 
+	local GS = Window:MakeTab({
+		Name = "Grab Options",
+		Icon = "rbxassetid://4483362458",
+	})
+
+	AUS = Window:MakeTab({
+		Name = "Auras",
+		Icon = "rbxassetid://4483362458",
+	})
+
 	BS = Window:MakeTab({
 		Name = "Builds",
 		Icon = "rbxassetid://4483362458",
 	})
 
-	LSD = Window:MakeTab({
-		Name = "Line thingys",
+	local MiS = Window:MakeTab({
+		Name = "Misc",
 		Icon = "rbxassetid://4483362458",
+	})
+
+	local LS = Window:MakeTab({
+		Name = "Loop Lists",
+		Icon = "rbxassetid://4483362458",
+		PremiumOnly = false
 	})
 
 	MS = Window:MakeTab({
@@ -1658,15 +1804,9 @@ else
 		Icon = "rbxassetid://4483362458",
 	})
 
-	local MiS = Window:MakeTab({
-		Name = "Miscillaneous",
-		Icon = "rbxassetid://4483362458",
-	})
-
-	local TS = Window:MakeTab({
-		Name = "Teleportation",
-		Icon = "rbxassetid://4483362458",
-		PremiumOnly = false
+	local KT = Window:MakeTab({
+		Name = "Keybinds",
+		Icon = "rbxassetid://4483345998",
 	})
 
 	local ST = Window:MakeTab({
@@ -1678,22 +1818,115 @@ else
 
 
 	OV:AddSection({
-		Name = `<font size="40"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V2</font></b></font>`
+		Name = `<font size="40"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V3</font></b></font>`
 	})
-	OV:AddParagraph(`<font size="20"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V2</font> Additions</b></font>`,"<b>\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Overview\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Overview\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Player Tab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Gravity\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added No-clip\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Anti-Shit\n<font color=\"rgb(0, 255, 0)\">[+] </font>Re-Arranged Menu\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Loop Microphone\n<font color=\"rgb(0, 255, 0)\">[+] </font>Patched Gucci grab system\n<font color=\"rgb(0, 255, 0)\">[+] </font>Upgraded Gucci\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Players\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added List of Friends\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added SUS Player\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Builds\n<font color=\"rgb(0, 255, 0)\">[+] </font>Upgraded builds\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added holding x to anchor\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added unanchor all\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Miscillaneous\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added SUS All\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Background Processes\n<font color=\"rgb(0, 255, 0)\">[+] </font>Upgraded Ownership Service\n<font color=\"rgb(0, 255, 0)\">[+] </font>Upgraded Blobman Service</b>")
+
+	OV:AddParagraph(`<font size="20"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V3</font> Additions</b></font>`,"<b>\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Tab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Item</b>")
 	
-	OV:AddParagraph(`<font size="20"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V1</font> Existing Abilities</b></font>`,"\n<b><font color=\"rgb(255, 0, 100)\">&lt; </font>Grab Stuff\n<font color=\"rgb(0, 255, 0)\">[+] </font>Strong Grab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Tp Holding\n<font color=\"rgb(0, 255, 0)\">[+] </font>Go to locations\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Player Tab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Walkspeed\n<font color=\"rgb(0, 255, 0)\">[+] </font>Third Person\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Anti-Shit\n<font color=\"rgb(0, 255, 0)\">[+] </font>Gucci Antigrab (all types)\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti-Grab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti-Fire\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti-Explosion\n<font color=\"rgb(0, 255, 0)\">[+] </font>Shuriken Antikick\n<font color=\"rgb(0, 255, 0)\">[+] </font>Penis Antikick\n<font color=\"rgb(0, 255, 0)\">[+] </font>Kunai Antikick\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti Ownership Kick\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti-Blob\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti-Banana\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti-Void\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti-Lag\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ruhub Anti-Grab (super buns)\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Players\n<font color=\"rgb(0, 255, 0)\">[+] </font>Player Selector\n<font color=\"rgb(0, 255, 0)\">[+] </font>View Private Chats\n<font color=\"rgb(0, 255, 0)\">[+] </font>Loop Blobman Kick\n<font color=\"rgb(0, 255, 0)\">[+] </font>Loop Blobman Kill\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ownership Kick V1\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ownership Kill\n<font color=\"rgb(0, 255, 0)\">[+] </font>Tp Player\n<font color=\"rgb(0, 255, 0)\">[+] </font>Type location\n<font color=\"rgb(0, 255, 0)\">[+] </font>Free After Teleporting\n<font color=\"rgb(0, 255, 0)\">[+] </font>Esp Player\n<font color=\"rgb(0, 255, 0)\">[+] </font>Shuriken Anti-Kick Player\n<font color=\"rgb(0, 255, 0)\">[+] </font>Loop Penis Player\n<font color=\"rgb(0, 255, 0)\">[+] </font>Kunai Anti-Kick Player\n<font color=\"rgb(0, 255, 0)\">[+] </font>Destroy Holdables\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Builds\n<font color=\"rgb(0, 255, 0)\">[+] </font>Freeze Item\n<font color=\"rgb(0, 255, 0)\">[+] </font>Auto-Claim Network Ownership\n<font color=\"rgb(0, 255, 0)\">[+] </font>Release All Frozen\n<font color=\"rgb(0, 255, 0)\">[+] </font>Create New Build\n<font color=\"rgb(0, 255, 0)\">[+] </font>Add Anchored Items\n<font color=\"rgb(0, 255, 0)\">[+] </font>Set Build Size\n<font color=\"rgb(0, 255, 0)\">[+] </font>Highlight Build\n<font color=\"rgb(0, 255, 0)\">[+] </font>Auto-Claim Build Ownership\n<font color=\"rgb(0, 255, 0)\">[+] </font>Dismantle Build\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Line Thingys\n<font color=\"rgb(0, 255, 0)\">[+] </font>Line Lag Server\n<font color=\"rgb(0, 255, 0)\">[+] </font>Invis Line\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Map\n<font color=\"rgb(0, 255, 0)\">[+] </font>Private Map\n<font color=\"rgb(0, 255, 0)\">[+] </font>Water Walk\n<font color=\"rgb(0, 255, 0)\">[+] </font>Freeze Ocean\n<font color=\"rgb(0, 255, 0)\">[+] </font>Break Plot Barrier\n<font color=\"rgb(0, 255, 0)\">[+] </font>Plot Barrier Collision\n<font color=\"rgb(0, 255, 0)\">[+] </font>Grab People In Plots (Blobman only)\n<font color=\"rgb(0, 255, 0)\">[+] </font>Plot Item Collision\n<font color=\"rgb(0, 255, 0)\">[+] </font>Boner Items\n<font color=\"rgb(0, 255, 0)\">[+] </font>Foggy Map\n<font color=\"rgb(0, 255, 0)\">[+] </font>Dave Boner Skybox\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Miscillaneous\n<font color=\"rgb(0, 255, 0)\">[+] </font>Player Kick Count\n<font color=\"rgb(0, 255, 0)\">[+] </font>All Private Chats\n<font color=\"rgb(0, 255, 0)\">[+] </font>Blobman Kick All\n<font color=\"rgb(0, 255, 0)\">[+] </font>Blobman Kill All\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ownership Blobman All\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ownership Kick V1 All\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ownership Kill All\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ownership Whitelist Friends\n<font color=\"rgb(0, 255, 0)\">[+] </font>Esp All\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Miscillaneous\n<font color=\"rgb(0, 255, 0)\">[+] </font>Teleportation\n<font color=\"rgb(0, 255, 0)\">[+] </font>Activate Spawn Location\n<font color=\"rgb(0, 255, 0)\">[+] </font>Tp To Mouse\n<font color=\"rgb(0, 255, 0)\">[+] </font>Teleport To All Locations\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Config\n<font color=\"rgb(0, 255, 0)\">[+] </font>Add Players To Whitelist (Broken)\n<font color=\"rgb(0, 255, 0)\">[+] </font>Remove Custom Locations\n<font color=\"rgb(0, 255, 0)\">[+] </font>Infinite Yield\n<font color=\"rgb(0, 255, 0)\">[+] </font>Dex\n<font color=\"rgb(0, 255, 0)\">[+] </font>Rejoin Server\n<font color=\"rgb(0, 255, 0)\">[+] </font>Print Join Logs to Console\n<font color=\"rgb(0, 255, 0)\">[+] </font>Print Kick Logs to Console\n<font color=\"rgb(0, 255, 0)\">[+] </font>View Offline Blackholes\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Background Processes\n<font color=\"rgb(0, 255, 0)\">[+] </font>Automatic Anti-Lag\n<font color=\"rgb(0, 255, 0)\">[+] </font>Binis Pencils Shurikens and Kunais\n<font color=\"rgb(0, 255, 0)\">[+] </font>Set Blobman Walkspeed\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ownership Service\n<font color=\"rgb(0, 255, 0)\">[+] </font>Join Logger\n<font color=\"rgb(0, 255, 0)\">[+] </font>Kick Logger\n<font color=\"rgb(0, 255, 0)\">[+] </font>Exploiter Warning Service\n<font color=\"rgb(0, 255, 0)\">[+] </font>Train Service\n<font color=\"rgb(0, 255, 0)\">[+] </font>Double Injection Protection</b>")
+	OV:AddSection({
+		Name = " "
+	})
+
+	OV:AddParagraph(`<font size="20"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V2</font> Additions</b></font>`,"<b>\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Overview\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Overview\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Player Tab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Gravity\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added No-clip\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Protection\n<font color=\"rgb(0, 255, 0)\">[+] </font>Re-Arranged Menu\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Loop Microphone\n<font color=\"rgb(0, 255, 0)\">[+] </font>Patched Gucci grab system\n<font color=\"rgb(0, 255, 0)\">[+] </font>Upgraded Gucci\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Players\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added List of Friends\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added SUS Player\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Builds\n<font color=\"rgb(0, 255, 0)\">[+] </font>Upgraded builds\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added holding x to anchor\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added unanchor all\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Miscillaneous\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added SUS All\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Background Processes\n<font color=\"rgb(0, 255, 0)\">[+] </font>Upgraded Ownership Service\n<font color=\"rgb(0, 255, 0)\">[+] </font>Upgraded Blobman Service</b>")
+	
+	OV:AddSection({
+		Name = " "
+	})
+
+	OV:AddParagraph(`<font size="20"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V1</font> Existing Abilities</b></font>`,"\n<b><font color=\"rgb(255, 0, 100)\">&lt; </font>Grab Stuff\n<font color=\"rgb(0, 255, 0)\">[+] </font>Strong Grab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Tp Holding\n<font color=\"rgb(0, 255, 0)\">[+] </font>Go to locations\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Player Tab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Walkspeed\n<font color=\"rgb(0, 255, 0)\">[+] </font>Third Person\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Protection\n<font color=\"rgb(0, 255, 0)\">[+] </font>Gucci Antigrab (all types)\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti-Grab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti-Fire\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti-Explosion\n<font color=\"rgb(0, 255, 0)\">[+] </font>Shuriken Antikick\n<font color=\"rgb(0, 255, 0)\">[+] </font>Penis Antikick\n<font color=\"rgb(0, 255, 0)\">[+] </font>Kunai Antikick\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti Ownership Kick\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti-Blob\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti-Banana\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti-Void\n<font color=\"rgb(0, 255, 0)\">[+] </font>Anti-Lag\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ruhub Anti-Grab (super buns)\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Players\n<font color=\"rgb(0, 255, 0)\">[+] </font>Player Selector\n<font color=\"rgb(0, 255, 0)\">[+] </font>View Private Chats\n<font color=\"rgb(0, 255, 0)\">[+] </font>Loop Blobman Kick\n<font color=\"rgb(0, 255, 0)\">[+] </font>Loop Blobman Kill\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ownership Kick V1\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ownership Kill\n<font color=\"rgb(0, 255, 0)\">[+] </font>Tp Player\n<font color=\"rgb(0, 255, 0)\">[+] </font>Type location\n<font color=\"rgb(0, 255, 0)\">[+] </font>Free After Teleporting\n<font color=\"rgb(0, 255, 0)\">[+] </font>Esp Player\n<font color=\"rgb(0, 255, 0)\">[+] </font>Shuriken Anti-Kick Player\n<font color=\"rgb(0, 255, 0)\">[+] </font>Loop Penis Player\n<font color=\"rgb(0, 255, 0)\">[+] </font>Kunai Anti-Kick Player\n<font color=\"rgb(0, 255, 0)\">[+] </font>Destroy Holdables\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Builds\n<font color=\"rgb(0, 255, 0)\">[+] </font>Freeze Item\n<font color=\"rgb(0, 255, 0)\">[+] </font>Auto-Claim Network Ownership\n<font color=\"rgb(0, 255, 0)\">[+] </font>Release All Frozen\n<font color=\"rgb(0, 255, 0)\">[+] </font>Create New Build\n<font color=\"rgb(0, 255, 0)\">[+] </font>Add Anchored Items\n<font color=\"rgb(0, 255, 0)\">[+] </font>Set Build Size\n<font color=\"rgb(0, 255, 0)\">[+] </font>Highlight Build\n<font color=\"rgb(0, 255, 0)\">[+] </font>Auto-Claim Build Ownership\n<font color=\"rgb(0, 255, 0)\">[+] </font>Dismantle Build\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Line Thingys\n<font color=\"rgb(0, 255, 0)\">[+] </font>Line Lag Server\n<font color=\"rgb(0, 255, 0)\">[+] </font>Invis Line\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Map\n<font color=\"rgb(0, 255, 0)\">[+] </font>Private Map\n<font color=\"rgb(0, 255, 0)\">[+] </font>Water Walk\n<font color=\"rgb(0, 255, 0)\">[+] </font>Freeze Ocean\n<font color=\"rgb(0, 255, 0)\">[+] </font>Break Plot Barrier\n<font color=\"rgb(0, 255, 0)\">[+] </font>Plot Barrier Collision\n<font color=\"rgb(0, 255, 0)\">[+] </font>Grab People In Plots (Blobman only)\n<font color=\"rgb(0, 255, 0)\">[+] </font>Plot Item Collision\n<font color=\"rgb(0, 255, 0)\">[+] </font>Boner Items\n<font color=\"rgb(0, 255, 0)\">[+] </font>Foggy Map\n<font color=\"rgb(0, 255, 0)\">[+] </font>Dave Boner Skybox\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Miscillaneous\n<font color=\"rgb(0, 255, 0)\">[+] </font>Player Kick Count\n<font color=\"rgb(0, 255, 0)\">[+] </font>All Private Chats\n<font color=\"rgb(0, 255, 0)\">[+] </font>Blobman Kick All\n<font color=\"rgb(0, 255, 0)\">[+] </font>Blobman Kill All\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ownership Blobman All\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ownership Kick V1 All\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ownership Kill All\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ownership Whitelist Friends\n<font color=\"rgb(0, 255, 0)\">[+] </font>Esp All\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Miscillaneous\n<font color=\"rgb(0, 255, 0)\">[+] </font>Teleportation\n<font color=\"rgb(0, 255, 0)\">[+] </font>Activate Spawn Location\n<font color=\"rgb(0, 255, 0)\">[+] </font>Tp To Mouse\n<font color=\"rgb(0, 255, 0)\">[+] </font>Teleport To All Locations\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Config\n<font color=\"rgb(0, 255, 0)\">[+] </font>Add Players To Whitelist (Broken)\n<font color=\"rgb(0, 255, 0)\">[+] </font>Remove Custom Locations\n<font color=\"rgb(0, 255, 0)\">[+] </font>Infinite Yield\n<font color=\"rgb(0, 255, 0)\">[+] </font>Dex\n<font color=\"rgb(0, 255, 0)\">[+] </font>Rejoin Server\n<font color=\"rgb(0, 255, 0)\">[+] </font>Print Join Logs to Console\n<font color=\"rgb(0, 255, 0)\">[+] </font>Print Kick Logs to Console\n<font color=\"rgb(0, 255, 0)\">[+] </font>View Offline Blackholes\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Background Processes\n<font color=\"rgb(0, 255, 0)\">[+] </font>Automatic Anti-Lag\n<font color=\"rgb(0, 255, 0)\">[+] </font>Binis Pencils Shurikens and Kunais\n<font color=\"rgb(0, 255, 0)\">[+] </font>Set Blobman Walkspeed\n<font color=\"rgb(0, 255, 0)\">[+] </font>Ownership Service\n<font color=\"rgb(0, 255, 0)\">[+] </font>Join Logger\n<font color=\"rgb(0, 255, 0)\">[+] </font>Kick Logger\n<font color=\"rgb(0, 255, 0)\">[+] </font>Exploiter Warning Service\n<font color=\"rgb(0, 255, 0)\">[+] </font>Train Service\n<font color=\"rgb(0, 255, 0)\">[+] </font>Double Injection Protection</b>")
 
 
 
 
 
 	GS:AddSection({
-		Name = "My muscles are getting bigger!"
+		Name = "<b>Fling Strength</b>"
+	})
+
+	local gotitdownPEEN = GS:AddSlider({
+		Name = "Set fling strength <font color='#ff9900'>(MAINTENANCE)</font>",
+		Min = 1,
+		Max = 10000,
+		Default = 50,
+		Color = Color3.fromRGB(255,255,255),
+		Increment = 1,
+		ValueName = " ",
+		Callback = function(Value)
+			FSR = Value
+		end
+	})
+
+	GS:AddTextbox({
+		Name = "Type fling strength <font color='#ff9900'>(MAINTENANCE)</font>",
+		TextDisappear = true,
+		Callback = function(Value)
+			local num = tonumber(Value)
+			if num then
+				gotitdownPEEN:Set(num)
+			end
+		end
+	})
+
+	GS:AddButton({
+		Name = "Set fling strength to default (50) <font color='#ff9900'>(MAINTENANCE)</font>",
+		Callback = function()
+			gotitdownPEEN:Set(50)
+		end    
+	})
+
+	GS:AddSection({
+		Name = "<b>Infinite Extend</b>"
 	})
 
 	GS:AddToggle({
-		Name = "Boi dont tussle with the muscle",
+		Name = "Infinite Extend <font color='#ff9900'>(MAINTENANCE)</font>",
+		Default = true,
+		Callback = function(Value)
+			IXE = Value
+		end   
+	})
+
+	GS:AddSection({
+		Name = "<b>Scroll Multiplier</b>"
+	})
+
+	local gotitdownPEEN2 = GS:AddSlider({
+		Name = "Set scroll multiplier <font color='#ff9900'>(MAINTENANCE)</font>",
+		Min = 1,
+		Max = 50,
+		Default = 3,
+		Color = Color3.fromRGB(255,255,255),
+		Increment = 1,
+		ValueName = " ",
+		Callback = function(Value)
+			SSM = Value
+		end
+	})
+
+	GS:AddTextbox({
+		Name = "Type scroll multiplier <font color='#ff9900'>(MAINTENANCE)</font>",
+		TextDisappear = true,
+		Callback = function(Value)
+			local num = tonumber(Value)
+			if num then
+				gotitdownPEEN2:Set(num)
+			end
+		end
+	})
+
+	GS:AddButton({
+		Name = "Set scroll multiplier to default (3) <font color='#ff9900'>(MAINTENANCE)</font>",
+		Callback = function()
+			gotitdownPEEN2:Set(3)
+		end    
+	})
+
+	GS:AddSection({
+		Name = "<b>Other line mods</b>"
+	})
+
+	GS:AddToggle({
+		Name = "Dont tussle with the muscle",
 		Default = true,
 		Callback = function(Value)
 			BMA = Value
@@ -1728,104 +1961,215 @@ else
 	})
 
 	GS:AddSection({
-		Name = "Teleport Items"
+		Name = "<b>Other Line Mods</b>"
 	})
-
-	local pdd = GS:AddDropdown({
-		Name = "Dropdown",
-		Default = "Prison",
-		Options = locations,
-		Callback = function(Value)
-			locc = tpland[Value]
-			loccc = Value
-		end    
-	})
-
-	prisonactive = false
 
 	GS:AddToggle({
-		Name = "Activate Send To Location",
+		Name = "Invis Line",
 		Default = false,
 		Callback = function(Value)
-			prisonactive = Value
+			game.ReplicatedStorage.GrabEvents.CreateGrabLine:FireServer()
+			ILV = Value
 		end
 	})
 
-	GS:AddBind({
-		Name = "Send To Location",
-		Default = Enum.KeyCode.K,
-		Hold = false,
-		Callback = function()
-			if prisonactive then
-				if workspace:FindFirstChild("GrabParts") then
-					p1 = game:GetService("Workspace"):FindFirstChild("GrabParts")
-					if p1:FindFirstChild("GrabPart") then
-						p2 = p1.GrabPart
-						if p2:FindFirstChild("WeldConstraint") then
-							p3 = p2.WeldConstraint
-							if p3.Part1 then
-								b = p3.Part1
-								if not b:FindFirstAncestor("Plots") and not b:FindFirstAncestor("Slots") and not b:FindFirstAncestor("Map") then
-									OrionLib:MakeNotification({
-										Name = b.Parent.Name.." was sent to "..loccc,
-										Content = "Teleportation",
-										Image = "rbxassetid://4483345998",
-										Time = 2
-									})
-									game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(b,b.CFrame)
-									for _,prt in pairs(b.Parent:GetChildren()) do
-										if prt:IsA("BasePart") then
-											task.spawn(function()
-												cc = prt.CanCollide
-												prt.CanCollide = false
-												local a = Instance.new("Attachment")
-												a.Parent = prt
-												local ap = Instance.new("AlignPosition")
-												ap.Parent = a
-												ap.Attachment0 = a
-												ap.Mode = "OneAttachment"
-												ap.MaxForce = math.huge
-												ap.MaxVelocity = math.huge
-												ap.Responsiveness = 200
-												ap.Position = locc
-												task.wait(2)
-												prt.CanCollide = cc
-												a:Destroy()
-											end)
-										end
-									end
-								end
-							end
-						end
+	GS:AddToggle({
+		Name = "Noclip grab <font color='#ff9900'>(MAINTENANCE)</font>",
+		Default = true,
+		Callback = function(Value)
+		end   
+	})
+
+	GS:AddToggle({
+		Name = "Fling grab <font color='#ff9900'>(MAINTENANCE)</font>",
+		Default = true,
+		Callback = function(Value)
+		end   
+	})
+
+	GS:AddToggle({
+		Name = "Spinny grab <font color='#ff9900'>(MAINTENANCE)</font>",
+		Default = true,
+		Callback = function(Value)
+		end   
+	})
+
+	GS:AddSection({
+		Name = "<b>Line Lag Server</b>"
+	})
+
+	local LAGSE = false
+	local LAGAMM = 100
+
+	GS:AddToggle({
+		Name = "Line Lag Server",
+		Default = false,
+		Callback = function(Value)
+			LAGSE = Value
+			while LAGSE do
+				if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Head") then
+					local myhead = game.Players.LocalPlayer.Character.Head
+					for i=1,LAGAMM do
+						game.ReplicatedStorage.GrabEvents.CreateGrabLine:FireServer(myhead,myhead.CFrame)
 					end
 				end
+				task.wait(1)
 			end
 		end
 	})
 
-	GS:AddButton({
-		Name = "Go to location",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(locc)
-
-				OrionLib:MakeNotification({
-					Name = "Teleported to "..loccc,
-					Content = "Teleportation",
-					Image = "rbxassetid://4483345998",
-					Time = 2
-				})
-			end
-		end    
+	GS:AddSlider({
+		Name = "Line Lag Server",
+		Min = 10,
+		Max = 10000,
+		Default = 100,
+		Color = Color3.fromRGB(255,255,255),
+		Increment = 1,
+		ValueName = "Lines",
+		Callback = function(Value)
+			LAGAMM = Value
+		end
 	})
 
 
-    task.wait(.25)
+
+
+
+
+	AUS:AddSection({
+		Name = "<b>Death Aura</b>"
+	})
+
+	AUS:AddToggle({
+		Name = "Death Aura",
+		Default = false,
+		Callback = function(Value)
+		end   
+	})
+
+	AUS:AddToggle({
+		Name = "Chill On Friends <font color='#62e2ff'>「</font><font color='#91ebff'>FRIENDLY</font><font color='#62e2ff'>」</font>",
+		Default = true,
+		Callback = function(Value)
+		end   
+	})
+
+	AUS:AddSection({
+		Name = "<b>Kick Aura</b>"
+	})
+
+	AUS:AddToggle({
+		Name = "Kick Aura",
+		Default = false,
+		Callback = function(Value)
+		end   
+	})
+
+	AUS:AddToggle({
+		Name = "Chill On Friends <font color='#62e2ff'>「</font><font color='#91ebff'>FRIENDLY</font><font color='#62e2ff'>」</font>",
+		Default = true,
+		Callback = function(Value)
+		end   
+	})
+
+	AUS:AddSection({
+		Name = "<b>Fling Aura</b>"
+	})
+
+	AUS:AddToggle({
+		Name = "Fling Aura",
+		Default = false,
+		Callback = function(Value)
+		end   
+	})
+
+	AUS:AddToggle({
+		Name = "Chill On Friends <font color='#62e2ff'>「</font><font color='#91ebff'>FRIENDLY</font><font color='#62e2ff'>」</font>",
+		Default = true,
+		Callback = function(Value)
+		end   
+	})
+
+	AUS:AddSection({
+		Name = "<b>Sit Aura</b>"
+	})
+
+	AUS:AddToggle({
+		Name = "Sit Aura",
+		Default = false,
+		Callback = function(Value)
+		end   
+	})
+
+	AUS:AddToggle({
+		Name = "Chill On Friends <font color='#62e2ff'>「</font><font color='#91ebff'>FRIENDLY</font><font color='#62e2ff'>」</font>",
+		Default = true,
+		Callback = function(Value)
+		end   
+	})
+
+	AUS:AddSection({
+		Name = "<b>Quicksand Aura</b>"
+	})
+
+	AUS:AddToggle({
+		Name = "Quicksand Aura",
+		Default = false,
+		Callback = function(Value)
+		end   
+	})
+
+	AUS:AddToggle({
+		Name = "Chill On Friends <font color='#62e2ff'>「</font><font color='#91ebff'>FRIENDLY</font><font color='#62e2ff'>」</font>",
+		Default = true,
+		Callback = function(Value)
+		end   
+	})
+
+	AUS:AddSection({
+		Name = "<b>Telekenesis</b>"
+	})
+
+	AUS:AddToggle({
+		Name = "Telekenesis",
+		Default = false,
+		Callback = function(Value)
+		end   
+	})
+
+	AUS:AddToggle({
+		Name = "Chill On Friends <font color='#62e2ff'>「</font><font color='#91ebff'>FRIENDLY</font><font color='#62e2ff'>」</font>",
+		Default = true,
+		Callback = function(Value)
+		end   
+	})
+
+	AUS:AddSection({
+		Name = "<b>Bang Aura</b>"
+	})
+
+	AUS:AddToggle({
+		Name = "Bang Aura",
+		Default = false,
+		Callback = function(Value)
+		end   
+	})
+
+	AUS:AddToggle({
+		Name = "Chill On Friends <font color='#62e2ff'>「</font><font color='#91ebff'>FRIENDLY</font><font color='#62e2ff'>」</font>",
+		Default = true,
+		Callback = function(Value)
+		end   
+	})
+
+
+
+
 
 
 	PT:AddSection({
-		Name = "Walk-Speed"
-	}) -- nigmig add noclip
+		Name = "<b>Walk-Speed</b>"
+	})
 
 	local gotitdownPAT = PT:AddSlider({
 		Name = "Set Walk-Speed",
@@ -1875,7 +2219,7 @@ else
 	})
 
 	PT:AddSection({
-		Name = "No-Clip"
+		Name = "<b>No-Clip</b>"
 	})
 
 	local ncon = false
@@ -1886,7 +2230,6 @@ else
 		Callback = function(Value)
 			ncon = Value
 			while ncon do
-				print(ncon)
 				if game.Players.LocalPlayer.Character then
 					for _,prt in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
 						if prt.ClassName == "Part" then
@@ -1902,7 +2245,6 @@ else
 			if game.Players.LocalPlayer.Character then
 				for _,prt in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
 					if prt.ClassName == "Part" then
-						print(prt)
 						prt.CanCollide = false
 					end
 				end
@@ -1911,7 +2253,7 @@ else
 	})
 
 	PT:AddSection({
-		Name = "Gravity"
+		Name = "<b>Gravity</b>"
 	})
 
 	local gotitdownPAT2 = PT:AddSlider({
@@ -1935,7 +2277,39 @@ else
 	})
 
 	PT:AddSection({
-		Name = "Third Person"
+		Name = "<b>Water Walk</b>"
+	})
+
+	PT:AddToggle({
+		Name = "Water Walk <font color='#FFFDF0'>「</font><font color='#fff9d2'>JESUS</font><font color='#FFFDF0'>」</font>",
+		Default = true,
+		Callback = function(Value)
+			local v1 = game:GetService("Workspace").Map.AlwaysHereTweenedObjects.Ocean.Object.ObjectModel
+			for _,prt in pairs(v1:GetChildren()) do 
+				if prt:IsA("Part") then 
+					prt.CanCollide = Value
+				end
+			end
+			if Value then
+				OrionLib:MakeNotification({
+					Name = "Water Walk has been enabled",
+					Content = "Water Walk",
+					Image = "rbxassetid://4483345998",
+					Time = 2
+				})
+			else
+				OrionLib:MakeNotification({
+					Name = "Water Walk has been enabled",
+					Content = "Water Walk",
+					Image = "rbxassetid://4483345998",
+					Time = 2
+				})
+			end
+		end,
+	})
+
+	PT:AddSection({
+		Name = "<b>Third Person</b>"
 	})
 
 	local tpon = false
@@ -1947,7 +2321,7 @@ else
 			tpon = Value
 			task.spawn(function()
 				while tpon do
-					if (game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character.HumanoidRootPart.LocalTransparencyModifier ~= 1) or game.Players.LocalPlayer.PlayerGui.MenuGui.DisplayOrder == 100 then
+					if (game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character.HumanoidRootPart.LocalTransparencyModifier ~= 1) or OrionLibrary.Visible or game.Players.LocalPlayer.PlayerGui.MenuGui.DisplayOrder == 100 then
 						game.UserInputService.MouseIconEnabled = true
 					else
 						game.UserInputService.MouseIconEnabled = false
@@ -1965,6 +2339,14 @@ else
 					task.wait()
 				end
 				game.Players.LocalPlayer.CameraMode = "LockFirstPerson"
+				while not tpon do
+					if OrionLibrary.Visible or game.Players.LocalPlayer.PlayerGui.MenuGui.DisplayOrder == 100 then
+						game.UserInputService.MouseIconEnabled = true
+					else
+						game.UserInputService.MouseIconEnabled = true
+					end
+					task.wait()
+				end
 			end)
 		end,
 	})
@@ -2202,17 +2584,25 @@ else
 	end)
 
 
-    task.wait(.25)
+
 
 
 	AS:AddSection({
-		Name = "Antigrab"
+		Name = "<b>Antigrabs</b>"
 	})
 	
 	local GUE = false
 	local GUTYPE = "CreatureBlobman"
 
 	local heebyjeeby
+
+	function checkgrab(itm)
+		for _,prt in pairs(itm:GetChildren()) do
+			if prt:IsA("BasePart") and prt:FindFirstChild("PartOwner") and prt.PartOwner.Value == game.Players.LocalPlayer.Name then
+				return true
+			end
+		end
+	end
 
 	function gucciblob()
 		local plott = workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]
@@ -2254,9 +2644,15 @@ else
 				hrp.CFrame = c
 			end
 		else
+			local itm
+			local diddly = false
 			if workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild("Gucci"..GUTYPE) or plott:FindFirstChild("Gucci"..GUTYPE) then
+				itm = workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild("Gucci"..GUTYPE) or plott:FindFirstChild("Gucci"..GUTYPE)
 				if itm:WaitForChild("VehicleSeat",.1) and itm:WaitForChild("HumanoidRootPart",.1) then
 					itm = workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild("Gucci"..GUTYPE) or plott:FindFirstChild("Gucci"..GUTYPE)
+					itm.Name = GUTYPE
+					itm.HumanoidRootPart.CFrame = CFrame.new(0,-10000,0)
+					diddly = true
 				else
 					task.spawn(function()
 						game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild("Gucci"..GUTYPE) or plott:FindFirstChild("Gucci"..GUTYPE))
@@ -2292,6 +2688,10 @@ else
 					end
 					while game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and not game.Players.LocalPlayer.Character.Humanoid.SeatPart and itm.Parent and not guccion do
 						task.wait()
+						if diddly then
+							itm.HumanoidRootPart.CFrame = CFrame.new(0,-10000,0)
+							itm.AssemblyLinearVelocity = Vector3.new(0,0,0)
+						end
 						itm.VehicleSeat:Sit(game.Players.LocalPlayer.Character.Humanoid)
 						game.ReplicatedStorage.CharacterEvents.RagdollRemote:FireServer(game.Players.LocalPlayer.Character.HumanoidRootPart,0.01)
 					end
@@ -2308,6 +2708,10 @@ else
 			if itm then
 				itm.Name = "Gucci"..GUTYPE
 				while itm and (itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart")) and not checkgrab(itm) do
+					if diddly then
+						itm.HumanoidRootPart.CFrame = CFrame.new(0,-10000,0)
+						itm.AssemblyLinearVelocity = Vector3.new(0,0,0)
+					end
 					GrabItemsList[itm] = true
 					task.wait()
 				end
@@ -2324,12 +2728,18 @@ else
 							v.Parent = nil
 							v.Parent = itm
 							patchnograb = false
+							OrionLib:MakeNotification({
+								Name = "Patched Gucci",
+								Content = "-John Gucci",
+								Image = "rbxassetid://4483345998",
+								Time = 2
+							})
 						end
 						task.wait()
 					end
 				end)
 				GrabItemsList[itm] = nil
-				while itm do
+				while not diddly and itm do
 					for _,prt in pairs(itm:GetChildren()) do
 						if prt:IsA("BasePart") then
 							prt.CanCollide = false
@@ -2350,7 +2760,7 @@ else
 			if Value then
 				OrionLib:MakeNotification({
 					Name = "Gucci on Nigga",
-					Content = "John Gucci",
+					Content = "-John Gucci",
 					Image = "rbxassetid://4483345998",
 					Time = 2
 				})
@@ -2358,7 +2768,7 @@ else
 			else
 				OrionLib:MakeNotification({
 					Name = "Gucci on a little bit less than usual Nigga",
-					Content = "John Gucci",
+					Content = "-John Gucci",
 					Image = "rbxassetid://4483345998",
 					Time = 2
 				})
@@ -2369,14 +2779,14 @@ else
 	heebyjeeby = AS:AddDropdown({
 		Name = "Gucci Type",
 		Options = {"CreatureBlobman","SantaSleigh","Train","TractorGreen","TractorOrange","TractorRed"},
-		Default = "CreatureBlobman",
+		Default = "Train",
 		Callback = function(Value)
 			if Value == "Train" then
 				if not (workspace.Map.AlwaysHereTweenedObjects:FindFirstChild("Train") and workspace.Map.AlwaysHereTweenedObjects.Train:FindFirstChild("Object") and workspace.Map.AlwaysHereTweenedObjects.Train.Object:FindFirstChild("ObjectModel") and workspace.Map.AlwaysHereTweenedObjects.Train.Object.ObjectModel:FindFirstChild("Seat")) then
 					heebyjeeby:Set("CreatureBlobman")
 						OrionLib:MakeNotification({
 						Name = "Train does not exist",
-						Content = "John Gucci",
+						Content = "-John Gucci",
 						Image = "rbxassetid://4483345998",
 						Time = 2
 					})
@@ -2393,10 +2803,82 @@ else
 		Name = " "
 	})
 
-	local AGE = false
+	AS:AddToggle({
+		Name = "Anti-Grab <font color='#c900c9'>「</font><font color='#ff00ff'>CHEEKY</font><font color='#c900c9'>」</font>",
+		Default = false,
+		Callback = function(Value)
+			ACGE = Value
+			if Value then
+				OrionLib:MakeNotification({
+					Name = "Anti-Grab on Cheeky Bugger",
+					Content = "Yobro!",
+					Image = "rbxassetid://4483345998",
+					Time = 2
+				})
+			else
+				OrionLib:MakeNotification({
+					Name = "Anti-Grab on a little bit less Cheeky Bugger",
+					Content = "See you latere",
+					Image = "rbxassetid://4483345998",
+					Time = 2
+				})
+			end
+			local st
+			local model
+			while ACGE do
+				model = workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild("FoodMayonnaise")
+				if model then
+					if game.Players.LocalPlayer.Character then
+						for _,prt in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+							if prt:FindFirstChild("PartOwner") and prt.PartOwner.Value ~= "" then
+								if model:FindFirstChild("HoldPart") and game.Players.LocalPlayer.Character then
+									if model.HoldPart:FindFirstChild("HoldItemRemoteFunction") then
+										task.spawn(function()
+											model.HoldPart.HoldItemRemoteFunction:InvokeServer(model,game:GetService("Players").LocalPlayer.Character)
+										end)
+										game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(model)
+										if game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+											game.Players.LocalPlayer.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, true)
+											game.Players.LocalPlayer.Character.Humanoid.AutoRotate = true
+										end
+										game.ContextActionService:UnbindAction("Escape")
+										game.ContextActionService:UnbindAction("JumpRemover")
+										prt.PartOwner.Value = ""
+									end
+								end
+							end
+						end
+					end
+				else
+					if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.CanSpawnToy.Value and not st then
+						st = tick()
+						task.spawn(function()
+							game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("FoodMayonnaise",CFrame.new(1e5,1e5,1e5),Vector3.new(0,0,0))
+						end)
+					elseif st and tick() - st > 1 and not workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild("FoodMayonnaise") then
+						st = nil
+					end
+					local grabbed = false
+					for _,prt in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+						if prt:FindFirstChild("PartOwner") and prt.PartOwner.Value ~= "" then
+							grabbed = true
+						end
+					end
+					if grabbed then
+						game:GetService("ReplicatedStorage").CharacterEvents.Struggle:FireServer(game.Players.LocalPlayer)
+						if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+							game.ReplicatedStorage.CharacterEvents.RagdollRemote:FireServer(game.Players.LocalPlayer.Character.HumanoidRootPart,0.00000000001)
+						end
+						task.wait()
+					end
+				end
+				task.wait()
+			end
+		end,
+	})
 
 	AS:AddToggle({
-		Name = "Anti-Grab",
+		Name = "Anti-Grab <font color='#fff200'>「</font><font color='#fff768'>RAGDOLL</font><font color='#fff200'>」</font>",
 		Default = false,
 		Callback = function(Value)
 			AGE = Value
@@ -2434,25 +2916,24 @@ else
 	local LM = false
 
 	AS:AddToggle({
-		Name = "Loop Microphone",
+		Name = "Loop Mayonaise (Gives train ownership)",
 		Default = false,
 		Callback = function(Value)
 			LM = Value
-			local string = Value and "Enabled" or "Disabled"
 			OrionLib:MakeNotification({
-				Name = "Loop Microphone "..string,
-				Content = "Loop Microphone",
+				Name = "Loop Mayonaise "..(Value and "Enabled" or "Disabled"),
+				Content = "Loop Mayonaise",
 				Image = "rbxassetid://4483345998",
 				Time = 2
 			})
 			local model
 			while LM do
-				model = workspace.SammcsturdySpawnedInToys:FindFirstChild("InstrumentVoiceMicrophone")
+				model = workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild("FoodMayonnaise")
 				if model then
 					if model:FindFirstChild("HoldPart") and game.Players.LocalPlayer.Character then
 						if model.HoldPart:FindFirstChild("DropItemRemoteFunction") then
 							task.spawn(function()
-								model.HoldPart.DropItemRemoteFunction:InvokeServer(model,CFrame.new(0,0,0),Vector3.new(0,-46.05,0))
+								model.HoldPart.DropItemRemoteFunction:InvokeServer(model,CFrame.new(0,1e18,0),Vector3.new(0,-46.05,0))
 							end)
 						end
 						if model.HoldPart:FindFirstChild("HoldItemRemoteFunction") then
@@ -2464,59 +2945,29 @@ else
 				else
 					while not (game.Players.LocalPlayer.Character and game.Players.LocalPlayer.CanSpawnToy.Value) do task.wait() end
 					task.spawn(function()
-						game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("InstrumentVoiceMicrophone",CFrame.new(1e5,1e5,1e5),Vector3.new(0,0,0))
+						game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("FoodMayonnaise",CFrame.new(0,1e18,0),Vector3.new(0,0,0))
 					end)
 					local st = tick()
-					while tick() - st < 1 and not workspace.SammcsturdySpawnedInToys:FindFirstChild("InstrumentVoiceMicrophone") do
+					while tick() - st < 1 and not workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild("FoodMayonnaise") do
 						task.wait()
 					end
 				end
 				task.wait()
 			end
 			if model then
-				game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(model)
-			end
-		end,
-	})
-
-	local RDAAG = false
-
-	AS:AddToggle({
-		Name = "Ruhubs dog ahh antigrab",
-		Default = false,
-		Callback = function(Value)
-			RDAAG = Value
-			if Value then
-				OrionLib:MakeNotification({
-					Name = "Ruhub Anti-Grab has been enabled",
-					Content = "Buns ahh 💀",
-					Image = "rbxassetid://4483345998",
-					Time = 2
-				})
-			else
-				OrionLib:MakeNotification({
-					Name = "Ruhub Anti-Grab has been disabled",
-					Content = "Buns ahh 💀",
-					Image = "rbxassetid://4483345998",
-					Time = 2
-				})
-			end
-			while RDAAG do
-				while game:GetService("Players").LocalPlayer.IsHeld.Value do
-					game:GetService("ReplicatedStorage").CharacterEvents.Struggle:FireServer(plr)
-					if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-						game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
-					end
-					task.wait()
+				if model:FindFirstChild("HoldPart") and model.HoldPart:FindFirstChild("DropItemRemoteFunction") then
+					task.spawn(function()
+						model.HoldPart.DropItemRemoteFunction:InvokeServer(model,CFrame.new(0,1e18,0),Vector3.new(0,-46.05,0))
+					end)
+				else
+					game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(model)
 				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
-				task.wait()
 			end
 		end,
 	})
 
 	AS:AddSection({
-		Name = "Anti-Kick"
+		Name = "<b>Anti-Kick</b>"
 	})
 
 	AST = AS:AddToggle({
@@ -2528,25 +2979,7 @@ else
 			if Value then
 				if loaded then
 					APT:Set(false)
-					AKT:Set(false)
 				end
-			else
-				if workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild(game.Players.LocalPlayer.Name) then
-					game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"][game.Players.LocalPlayer.Name])
-				end
-			end
-		end,
-	})
-
-	AKT = AS:AddToggle({
-		Name = "Anti-Kick",
-		Default = false,
-		Callback = function(Value)
-			AKE = Value
-            AKList[game.Players.LocalPlayer.UserId] = Value
-			if Value then
-				APT:Set(false)
-				AST:Set(false)
 			else
 				if workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild(game.Players.LocalPlayer.Name) then
 					game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"][game.Players.LocalPlayer.Name])
@@ -2562,7 +2995,6 @@ else
 			APKE = Value
             PenisList[game.Players.LocalPlayer.UserId] = Value
 			if Value then
-				AKT:Set(false)
 				AST:Set(false)
 			else
 				if workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild(game.Players.LocalPlayer.Name) then
@@ -2601,7 +3033,7 @@ else
 	})
 	
 	AS:AddSection({
-		Name = "Other Stuff"
+		Name = "<b>Other Antis</b>"
 	})
 
 	alag = AS:AddToggle({
@@ -2753,7 +3185,7 @@ else
 					for _,plot in pairs(game.workspace.PlotItems:GetChildren()) do
 						if plot.Name ~= "PlayersInPlot" then
 							for _,model in pairs(plot:GetChildren()) do
-								if model.Name == "FoodBanana" or model.Name == "PoopPileSparkle" then
+								if model.Name == "FoodBanana" then
 									if model:FindFirstChild("HoldPart") then
 										if model.HoldPart:FindFirstChild("HoldItemRemoteFunction") then
 											task.spawn(function()
@@ -2771,7 +3203,7 @@ else
 					for _,plr in pairs(game.Players:GetChildren()) do
 						if game.workspace:FindFirstChild(plr.Name.."SpawnedInToys") and plr ~= game.Players.LocalPlayer then
 							for _,model in pairs(game.workspace:FindFirstChild(plr.Name.."SpawnedInToys"):GetChildren()) do
-								if model.Name == "FoodBanana" or model.Name == "PoopPileSparkle" then
+								if model.Name == "FoodBanana" then
 									task.spawn(function()
 										if model:FindFirstChild("HoldPart") then
 											if model.HoldPart:FindFirstChild("HoldItemRemoteFunction") then
@@ -2803,6 +3235,7 @@ else
 			antiboid = Value
 			if Value then 
 				workspace.FallenPartsDestroyHeight = 0/0
+				dih = 0/0
 				OrionLib:MakeNotification({
 					Name = "Void has been disabled",
 					Content = "Anti-Void",
@@ -2811,6 +3244,7 @@ else
 				})
 			else
 				workspace.FallenPartsDestroyHeight = -100
+				dih = -100
 				OrionLib:MakeNotification({
 					Name = "Void has been enabled",
 					Content = "Anti-Void",
@@ -2836,26 +3270,228 @@ else
 		end
 	end)
 
+	AS:AddSection({
+		Name = "<b>Spawn Location</b>"
+	})
+
+	AS:AddToggle({
+		Name = "Activate Spawn Location",
+		Default = true,
+		Callback = function(Value)
+			DSL = Value
+		end    
+	})
+
+	diddlefinger = AS:AddDropdown({
+		Name = "Spawn Location",
+		Options = locations,
+		Callback = function(Value)
+			if not Loading then
+				House = Value
+				SL = tpland[Value]
+				OrionLib:MakeNotification({
+					Name = "Spawn Location Set to "..House,
+					Content = "-John Respawn",
+					Image = "rbxassetid://4483345998",
+					Time = 2
+				})
+			end
+		end
+	})
+
 	game.Players.LocalPlayer.Idled:Connect(function(timeSpentIdle)
 		game:GetService("VirtualUser"):CaptureController()
 		game:GetService("VirtualUser"):ClickButton2(Vector2.new(0, 0))
 	end)
 
+	function WaitForPenis(plr)
+		while not game.Players.LocalPlayer.CanSpawnToy.Value do task.wait() end
+		task.spawn(function()
+			game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("ToolPencil",game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame * CFrame.new(0,2,0),Vector3.new(0,0,0))
+		end)
 
-    task.wait(.25)
+		local diddle = game.workspace:FindFirstChild(game.Players.LocalPlayer.Name.."SpawnedInToys"):WaitForChild("ToolPencil",1)
+		
+		if not diddle then return "Nigga" end
 
+		local bill = diddle:WaitForChild("SoundPart",1)
 
-	PL:AddSection({
-		Name = "Select Players"
-	})
+		if not bill then return "Nigga" end
 
-	function checkgrab(itm)
-		for _,prt in pairs(itm:GetChildren()) do
-			if prt:IsA("BasePart") and prt:FindFirstChild("PartOwner") and prt.PartOwner.Value == game.Players.LocalPlayer.Name then
-				return true
+		if plr then
+			diddle.Name = plr.Name
+			return diddle
+		else
+			return "Nigga"
+		end
+	end
+
+	function WaitForBane(plr)
+		while not game.Players.LocalPlayer.CanSpawnToy.Value do task.wait() end
+		task.spawn(function()
+			game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("NinjaShuriken",game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame * CFrame.new(0,2,0),Vector3.new(0,0,0))
+		end)
+		local diddle = game.workspace:FindFirstChild(game.Players.LocalPlayer.Name.."SpawnedInToys"):WaitForChild("NinjaShuriken",1)
+		
+		if not diddle then return "Nigga" end
+
+		local bbg = Instance.new("BillboardGui")
+		bbg.Parent = diddle
+		bbg.Size = UDim2.new(.75, 0, .75, 0)
+		bbg.Adornee = diddle
+
+		local bbl = Instance.new("ImageLabel")
+		bbl.Parent = bbg
+		bbl.BackgroundTransparency = 1
+		bbl.Size = UDim2.new(1, 0, 1, 0)
+		bbl.Position = UDim2.new(0, 0, 0, 0)
+		bbl.AnchorPoint = Vector2.new(0.5, 0.5)
+		bbl.Position = UDim2.new(0.5, 0, 0.5, 0)
+
+		local constraint = Instance.new("UIAspectRatioConstraint")
+		constraint.AspectRatio = 1
+		constraint.Parent = bbl
+		bbl.Image = 'rbxassetid://120974828567943'
+
+		for _,prt in pairs(diddle:GetChildren()) do
+			if prt:IsA("BasePart") then
+				prt.CanQuery = false
+				prt.CanTouch = false
+				prt.Transparency = 1
+			end
+		end
+
+		if plr then
+			diddle.Name = plr.Name
+			return diddle
+		else
+			return "Nigga"
+		end
+	end
+
+	function ticklepenis(diddle)
+		local _ = diddle:WaitForChild("SoundPart",1)
+		while diddle and diddle:FindFirstChild("SoundPart") and not (diddle.SoundPart:FindFirstChild("PartOwner") and diddle.SoundPart.PartOwner.Value == game.Players.LocalPlayer.Name) do
+			game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(diddle.SoundPart,diddle.SoundPart.CFrame)
+			task.wait()
+		end
+	end
+
+	local fondlelist = {}
+
+	function fondle(nimrod,nuggets)
+		if not fondlelist[nuggets] then
+			fondlelist[nuggets] = true
+			if nuggets and nuggets:FindFirstChild("SoundPart") and nuggets.SoundPart:FindFirstChild("PartOwner") and nuggets.SoundPart.PartOwner.Value == game.Players.LocalPlayer.Name then
+				local st = tick()
+				while tick() - st < 0.5 and nuggets and nuggets:FindFirstChild("SoundPart") and nuggets.SoundPart:FindFirstChild("PartOwner") and nuggets.SoundPart.PartOwner.Value == game.Players.LocalPlayer.Name do
+					task.wait()
+				end
+			end
+			if nimrod and nimrod.Character then
+				if nuggets and nuggets:FindFirstChild("StickyPart") and nuggets.StickyPart:FindFirstChild("StickyWeld") and nuggets.StickyPart.StickyWeld.Enabled and nimrod.Character:FindFirstChild("Torso") and nuggets.StickyPart.StickyWeld.Part1 == nimrod.Character.Torso then
+					fondlelist[nuggets] = nil
+					ANKE = true
+					return
+				end
+				if nuggets and nuggets:FindFirstChild("StickyPart") and nuggets.StickyPart:FindFirstChild("StickyWeld") and nuggets.StickyPart.StickyWeld.Enabled and nimrod.Character:FindFirstChild("Left Leg") and nuggets.StickyPart.StickyWeld.Part1 == nimrod.Character["Left Leg"] then
+					fondlelist[nuggets] = nil
+					ANKE = true
+					return
+				end
+				game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(nuggets)
+			else
+				game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(nuggets)
+			end
+			fondlelist[nuggets] = nil
+		end
+	end
+
+	function tickle(plr,diddle)
+		if plr.Character and plr.Character:FindFirstChild("Torso") then
+			ticklepenis(diddle)
+			if plr.Character and plr.Character:FindFirstChild("Torso") then
+				if plr.Character.Parent == workspace and diddle and diddle:FindFirstChild("StickyPart") then 
+					game.ReplicatedStorage.PlayerEvents.StickyPartEvent:FireServer(diddle.StickyPart,plr.Character.Torso,CFrame.new(0,-1,0) * CFrame.Angles(0,math.pi,0))
+				elseif diddle then
+					game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(diddle)
+				end
 			end
 		end
 	end
+
+	function tickletipson(plr,diddle)
+		if plr.Character and plr.Character:FindFirstChild("Left Leg") then
+			ticklepenis(diddle)
+			if plr.Character and plr.Character:FindFirstChild("Left Leg") then
+				if plr.Character.Parent == workspace and diddle:FindFirstChild("StickyPart") then
+					game.ReplicatedStorage.PlayerEvents.StickyPartEvent:FireServer(diddle.StickyPart,plr.Character["Left Leg"],CFrame.new(0,-0.5,0) * CFrame.Angles(0,0,math.pi/2))
+				else
+					game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(diddle)
+				end
+			end
+		end
+	end
+
+	function ticklebane(plr,diddle)
+		if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+			ticklepenis(diddle)
+			if plr.Character and plr.Character:FindFirstChild("Torso") then
+				if plr.Character.Parent == workspace and diddle:FindFirstChild("StickyPart") then
+					game.ReplicatedStorage.PlayerEvents.StickyPartEvent:FireServer(diddle.StickyPart,plr.Character["Torso"],CFrame.new(0,0,0) * CFrame.Angles(0,math.pi/2,math.pi/2))
+				else
+					game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(diddle)
+				end
+			end
+		end
+	end
+
+	function showmeyourpenis(plr,typee)
+		if not game.workspace:FindFirstChild(game.Players.LocalPlayer.Name.."SpawnedInToys"):FindFirstChild(plr.Name) then
+			if plr.Character then
+				if plr.Character and plr.Character.Parent == workspace and plr.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character.Parent == workspace then
+					if typee == 1 then
+						local diddle = WaitForPenis(plr)
+						if diddle ~= "Nigga" then
+							tickle(plr,diddle)
+						end
+					elseif typee == 2 then
+						local diddle = WaitForBane(plr)
+						if diddle ~= "Nigga" then
+							ticklebane(plr,diddle)
+						end
+					end
+				end
+			end
+		else
+			local nuggets = game.workspace:FindFirstChild(game.Players.LocalPlayer.Name.."SpawnedInToys"):FindFirstChild(plr.Name)
+			fondle(plr,nuggets)
+		end
+	end
+
+	task.spawn(function()
+		while true do
+			for id,plr in pairs(PenisList) do
+				if plr and game.Players:GetPlayerByUserId(id) then
+					showmeyourpenis(game.Players:GetPlayerByUserId(id),1)
+				end
+			end
+			for id,plr in pairs(ShurList) do
+				if plr and game.Players:GetPlayerByUserId(id) then
+					showmeyourpenis(game.Players:GetPlayerByUserId(id),2)
+				end
+			end
+			task.wait()
+		end
+	end)
+
+
+    while not ANKE do task.wait() end
+
+
+	PL:AddSection({
+		Name = "<b>Select Players</b>"
+	})
 
 	function BlobKick()
 		while true do
@@ -2878,7 +3514,7 @@ else
 					else
 						if BKA then
 							if BKAWL then
-								if not whitelist[plr.UserId] then
+								if not friendslist[plr.UserId] then
 									continue1 = "Kick"
 								end
 							else
@@ -2887,7 +3523,7 @@ else
 						end
 						if BKLA then
 							if BKLAWL then
-								if not whitelist[plr.UserId] then
+								if not friendslist[plr.UserId] then
 									continue1 = "Kill"
 								end
 							else
@@ -2911,7 +3547,7 @@ else
 							if listtype == 2 then
 								if not BKA and not BKLA then
 									smegma = false
-								elseif whitelist[plr.UserId] then
+								elseif friendslist[plr.UserId] then
 									smegma = false
 								end
 							else
@@ -2948,7 +3584,8 @@ else
 										if continue1 == "Kick" then
 											game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(plr.Character.HumanoidRootPart,plr.Character.HumanoidRootPart.CFrame)
 										else
-											if plr.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid:GetState() ~= Enum.HumanoidStateType.Dead and blob and blob:FindFirstChild("RightDetector") and blob.RightDetector:FindFirstChild("RightWeld") and blob:FindFirstChild("BlobmanSeatAndOwnerScript") and blob.BlobmanSeatAndOwnerScript:FindFirstChild("CreatureGrab") and blob.BlobmanSeatAndOwnerScript:FindFirstChild("CreatureRelease") then
+											if plr.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid.Health ~= 0 and blob and blob:FindFirstChild("RightDetector") and blob.RightDetector:FindFirstChild("RightWeld") and blob:FindFirstChild("BlobmanSeatAndOwnerScript") and blob.BlobmanSeatAndOwnerScript:FindFirstChild("CreatureGrab") and blob.BlobmanSeatAndOwnerScript:FindFirstChild("CreatureRelease") then
+												plr.Character.Humanoid.Sit = false
 												plr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
 												blob:FindFirstChild("BlobmanSeatAndOwnerScript").CreatureGrab:FireServer(blob.RightDetector,plr.Character.HumanoidRootPart,blob.RightDetector.RightWeld)
 												blob:FindFirstChild("BlobmanSeatAndOwnerScript").CreatureRelease:FireServer(blob.RightDetector.RightWeld,plr.Character.HumanoidRootPart)
@@ -2966,6 +3603,7 @@ else
 									end
 								else
 									if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and blob:FindFirstChild("RightDetector") and blob.RightDetector:FindFirstChild("RightWeld") and blob:FindFirstChild("BlobmanSeatAndOwnerScript") and blob.BlobmanSeatAndOwnerScript:FindFirstChild("CreatureGrab") and blob.BlobmanSeatAndOwnerScript:FindFirstChild("CreatureRelease") then
+										plr.Character.Humanoid.Sit = false
 										plr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
 										blob:FindFirstChild("BlobmanSeatAndOwnerScript").CreatureGrab:FireServer(blob.RightDetector,plr.Character.HumanoidRootPart,blob.RightDetector.RightWeld)
 										blob:FindFirstChild("BlobmanSeatAndOwnerScript").CreatureRelease:FireServer(blob.RightDetector.RightWeld,plr.Character.HumanoidRootPart)
@@ -2987,10 +3625,8 @@ else
 											foundblob = true
 											blob = itm
 										elseif itm.Name == "CreatureBlobman" then
-											while itm do
-												game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(itm)
-												task.wait(0.1)
-											end
+											game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(itm)
+											task.wait(0.1)
 										end
 									end
 									if blob and player.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid:GetState() ~= Enum.HumanoidStateType.Dead then
@@ -3006,7 +3642,7 @@ else
 												if listtype == 2 then
 													if not BKA and not BKLA then
 														smegma = false
-													elseif whitelist[plr.UserId] then
+													elseif friendslist[plr.UserId] then
 														smegma = false
 													end
 												else
@@ -3073,16 +3709,19 @@ else
 						end
 						if OKLA then
 							if OKLWF then
-								if whitelist[plr.UserId] then
+								if friendslist[plr.UserId] then
 									satisfied = true
 								end
 							end
 						elseif OKA then
 							if OWF then
-								if whitelist[plr.UserId] then
+								if friendslist[plr.UserId] then
 									satisfied = true
 								end
 							end
+						end
+						if not (LoopKillList[plr.UserId] or LocList[plr.UserId] or OKLA or OKA) then
+							satisfied = true
 						end
 						if plr.Character.Parent ~= workspace or plr.Character.HumanoidRootPart.CFrame.Position.Magnitude > 10000 then
 							satisfied = true
@@ -3097,11 +3736,11 @@ else
 						end
 						if not satisfied and continue then
 							hrp = plr.Character.HumanoidRootPart
-							game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame * CFrame.new(0,-20,10) + (vel / math.pi)
+							game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame * CFrame.new(0,-10,10) + (vel / math.pi)
 							game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = vel
 							if hrp then
 								if plr.Character and hrp then
-									game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(hrp,hrp.CFrame)
+									game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(hrp,hrp.CFrame * CFrame.new(0,-1,-1))
 									if checkgrab(plr.Character) then
 										satisfied = true
 										if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
@@ -3110,6 +3749,11 @@ else
 										end
 										j = nil
 										p = nil
+										local gp
+										if plr.Character:FindFirstChild("GrabParts") then
+											gp = plr.Character.GrabParts
+											gp.Parent = workspace
+										end
 										if OKLA then
 											plr.Character:PivotTo(CFrame.new(0,1e29,0))
 											for _,prt in pairs(plr.Character:GetChildren()) do
@@ -3203,6 +3847,9 @@ else
 												game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(hrp)
 											end
 										end
+										if gp then
+											gp.Parent = plr.Character
+										end
 									end
 								end
 							end
@@ -3216,8 +3863,9 @@ else
 			for itm in GrabItemsList do
 				if itm and itm.Parent and acno then
 					if itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") then
-						while itm and itm.Parent and not checkgrab(itm) and GrabItemsList[itm] do
+						while itm and itm.Parent and not checkgrab(itm) and GrabItemsList[itm] and (itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart")) do
 							if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+								deletedone = true
 								local j
 								local p
 								local prt = itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart")
@@ -3232,7 +3880,7 @@ else
 									end
 									if prt then
 										for _,prt in pairs(itm:GetChildren()) do
-											if prt.Name == "SoundPart" or prt.Name == "HumanoidRootPart" or prt.Name == "1" or prt.Name == "Wedge" then
+											if prt:IsA("BasePart") and prt.CanQuery then
 												game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prt,prt.CFrame)
 											end
 										end
@@ -3251,8 +3899,9 @@ else
 						if itm.Character then
 							local plr = itm
 							itm = itm.Character
-							while itm and itm.Parent and not checkgrab(itm) do
+							while itm and itm.Parent == workspace and not checkgrab(itm) and itm:FindFirstChild("HumanoidRootPart") do
 								if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+									deletedone = true
 									local j
 									local p
 									local prt = itm:FindFirstChild("HumanoidRootPart")
@@ -3308,6 +3957,78 @@ else
 					end
 				end
 			end
+			local deletedone = false
+			for itm in DeleteService do
+				if itm and itm.Parent and acno then
+					if itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") then
+						local prt = itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart")
+						while itm and itm.Parent and not checkgrab(itm) and DeleteService[itm] and prt and prt.CFrame.Position.Magnitude < 1000000 do
+							workspace.FallenPartsDestroyHeight = 0/0
+							if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+								deletedone = true
+								local j
+								local p
+								prt = itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart")
+								if prt and (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 30 then
+									j = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+									p = game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity
+								end
+								if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+									if not itm:FindFirstChild("somebodyshotaloadintomyburger3") then
+										local diddysbiscuit = Instance.new("Attachment")
+										diddysbiscuit.Name = "somebodyshotaloadintomyburger"
+										diddysbiscuit.Parent = prt
+										local diddlysquat = Instance.new("AlignPosition")
+										diddlysquat.Parent = diddysbiscuit
+										diddlysquat.Attachment0 = diddysbiscuit
+										diddlysquat.Mode = "OneAttachment"
+										diddlysquat.MaxForce = math.huge
+										diddlysquat.MaxVelocity = math.huge
+										diddlysquat.Responsiveness = 200
+										diddlysquat.Position = Vector3.new(0,-1e15,0)
+										local gottheblicky = Instance.new("StringValue")
+										gottheblicky.Parent = itm
+										gottheblicky.Name = "somebodyshotaloadintomyburger3"
+									end
+									if (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 30 then
+										game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = prt.CFrame + Vector3.new(0,10,0) + (prt.AssemblyLinearVelocity / math.pi)
+										game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = prt.AssemblyLinearVelocity
+									end
+									if prt then
+										for _,prt in pairs(itm:GetChildren()) do
+											if prt:IsA("BasePart") and prt.CanQuery then
+												game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prt,prt.CFrame)
+											end
+										end
+									end
+								end
+								task.wait()
+								if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and j then
+									game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = j
+									game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = p
+								end
+							else
+								task.wait()
+							end
+						end
+						if itm then
+							for _,prt in pairs(itm:GetChildren()) do
+								if prt:IsA("BasePart") and prt.CanQuery then
+									game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(prt)
+								end
+							end
+						end
+					end
+				end
+			end
+			if deletedone then
+				task.spawn(function()
+					task.wait(.1)
+					workspace.FallenPartsDestroyHeight = -1e12
+					task.wait(.1)
+					workspace.FallenPartsDestroyHeight = dih
+				end)
+			end
 			for itm in BuildItemsList do
 				if itm and (itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart")) then
 					local isgrabbed
@@ -3344,225 +4065,47 @@ else
 		end
 	end)
 
-	function WaitForPenis(plr)
-		while not game.Players.LocalPlayer.CanSpawnToy.Value do task.wait() end
-		task.spawn(function()
-			game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("ToolPencil",game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame * CFrame.new(0,2,0),Vector3.new(0,0,0))
-		end)
-
-		local diddle = game.workspace:FindFirstChild(game.Players.LocalPlayer.Name.."SpawnedInToys"):WaitForChild("ToolPencil",1)
-		
-		if not diddle then return "Nigga" end
-
-		local bill = diddle:WaitForChild("SoundPart",1)
-
-		if not bill then return "Nigga" end
-
-		if plr then
-			diddle.Name = plr.Name
-			return diddle
-		else
-			return "Nigga"
-		end
-	end
-
-	function WaitForNinja(plr)
-		while not game.Players.LocalPlayer.CanSpawnToy.Value do task.wait() end
-		task.spawn(function()
-			game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("NinjaKunai",game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame * CFrame.new(0,2,0),Vector3.new(0,0,0))
-		end)
-		local diddle = game.workspace:FindFirstChild(game.Players.LocalPlayer.Name.."SpawnedInToys"):WaitForChild("NinjaKunai",1)
-		
-		if not diddle then return "Nigga" end
-
-		if plr then
-			diddle.Name = plr.Name
-			return diddle
-		else
-			return "Nigga"
-		end
-	end
-
-	function WaitForBane(plr)
-		while not game.Players.LocalPlayer.CanSpawnToy.Value do task.wait() end
-		task.spawn(function()
-			game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("NinjaShuriken",game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame * CFrame.new(0,2,0),Vector3.new(0,0,0))
-		end)
-		local diddle = game.workspace:FindFirstChild(game.Players.LocalPlayer.Name.."SpawnedInToys"):WaitForChild("NinjaShuriken",1)
-		
-		if not diddle then return "Nigga" end
-
-		local bbg = Instance.new("BillboardGui")
-		bbg.Parent = diddle
-		bbg.Size = UDim2.new(.75, 0, .75, 0)
-		bbg.Adornee = diddle
-
-		local bbl = Instance.new("ImageLabel")
-		bbl.Parent = bbg
-		bbl.BackgroundTransparency = 1
-		bbl.Size = UDim2.new(1, 0, 1, 0)
-		bbl.Position = UDim2.new(0, 0, 0, 0)
-		bbl.AnchorPoint = Vector2.new(0.5, 0.5)
-		bbl.Position = UDim2.new(0.5, 0, 0.5, 0)
-
-		local constraint = Instance.new("UIAspectRatioConstraint")
-		constraint.AspectRatio = 1
-		constraint.Parent = bbl
-		bbl.Image = 'rbxassetid://120974828567943'
-
-		for _,prt in pairs(diddle:GetChildren()) do
-			if prt:IsA("BasePart") then
-				prt.CanQuery = false
-				prt.CanTouch = false
-				prt.Transparency = 1
-			end
-		end
-
-		if plr then
-			diddle.Name = plr.Name
-			return diddle
-		else
-			return "Nigga"
-		end
-	end
-
-	function ticklepenis(diddle)
-		local _ = diddle:WaitForChild("SoundPart",1)
-		while diddle and diddle:FindFirstChild("SoundPart") and not (diddle.SoundPart:FindFirstChild("PartOwner") and diddle.SoundPart.PartOwner.Value == game.Players.LocalPlayer.Name) do
-			game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(diddle.SoundPart,diddle.SoundPart.CFrame)
-			task.wait()
-		end
-	end
-
-	local fondlelist = {}
-
-	function fondle(nimrod,nuggets)
-		if not fondlelist[nuggets] then
-			fondlelist[nuggets] = true
-			if nuggets and nuggets:FindFirstChild("SoundPart") and nuggets.SoundPart:FindFirstChild("PartOwner") and nuggets.SoundPart.PartOwner.Value == game.Players.LocalPlayer.Name then
-				local st = tick()
-				while tick() - st < 0.5 and nuggets and nuggets:FindFirstChild("SoundPart") and nuggets.SoundPart:FindFirstChild("PartOwner") and nuggets.SoundPart.PartOwner.Value == game.Players.LocalPlayer.Name do
-					task.wait()
-				end
-			end
-			if nimrod and nimrod.Character then
-				if nuggets and nuggets:FindFirstChild("StickyPart") and nuggets.StickyPart:FindFirstChild("StickyWeld") and nuggets.StickyPart.StickyWeld.Enabled and nimrod.Character:FindFirstChild("Torso") and nuggets.StickyPart.StickyWeld.Part1 == nimrod.Character.Torso then
-					fondlelist[nuggets] = nil
-					return
-				end
-				if nuggets and nuggets:FindFirstChild("StickyPart") and nuggets.StickyPart:FindFirstChild("StickyWeld") and nuggets.StickyPart.StickyWeld.Enabled and nimrod.Character:FindFirstChild("Left Leg") and nuggets.StickyPart.StickyWeld.Part1 == nimrod.Character["Left Leg"] then
-					fondlelist[nuggets] = nil
-					return
-				end
-				game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(nuggets)
-			else
-				game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(nuggets)
-			end
-			fondlelist[nuggets] = nil
-		end
-	end
-
-	function tickle(plr,diddle)
-		if plr.Character and plr.Character:FindFirstChild("Torso") then
-			ticklepenis(diddle)
-			if plr.Character and plr.Character:FindFirstChild("Torso") then
-				if plr.Character.Parent == workspace and diddle and diddle:FindFirstChild("StickyPart") then 
-					game.ReplicatedStorage.PlayerEvents.StickyPartEvent:FireServer(diddle.StickyPart,plr.Character.Torso,CFrame.new(0,-1,0) * CFrame.Angles(0,math.pi,0))
-				elseif diddle then
-					game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(diddle)
-				end
-			end
-		end
-	end
-
-	function tickletipson(plr,diddle)
-		if plr.Character and plr.Character:FindFirstChild("Left Leg") then
-			ticklepenis(diddle)
-			if plr.Character and plr.Character:FindFirstChild("Left Leg") then
-				if plr.Character.Parent == workspace and diddle:FindFirstChild("StickyPart") then
-					game.ReplicatedStorage.PlayerEvents.StickyPartEvent:FireServer(diddle.StickyPart,plr.Character["Left Leg"],CFrame.new(0,-0.5,0) * CFrame.Angles(0,0,math.pi/2))
-				else
-					game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(diddle)
-				end
-			end
-		end
-	end
-
-	function ticklebane(plr,diddle)
-		if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-			ticklepenis(diddle)
-			if plr.Character and plr.Character:FindFirstChild("Torso") then
-				if plr.Character.Parent == workspace and diddle:FindFirstChild("StickyPart") then
-					game.ReplicatedStorage.PlayerEvents.StickyPartEvent:FireServer(diddle.StickyPart,plr.Character["Torso"],CFrame.new(0,0,0) * CFrame.Angles(0,math.pi/2,math.pi/2))
-				else
-					game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(diddle)
-				end
-			end
-		end
-	end
-
-	function showmeyourpenis(plr,typee)
-		if not game.workspace:FindFirstChild(game.Players.LocalPlayer.Name.."SpawnedInToys"):FindFirstChild(plr.Name) then
-			if plr.Character then
-				if plr.Character and plr.Character.Parent == workspace and plr.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character.Parent == workspace then
-					if typee == 1 then
-						local diddle = WaitForPenis(plr)
-						if diddle ~= "Nigga" then
-							tickle(plr,diddle)
-						end
-					elseif typee == 2 then
-						local diddle = WaitForNinja(plr)
-						if diddle ~= "Nigga" then
-							tickletipson(plr,diddle)
-						end
-					elseif typee == 3 then
-						local diddle = WaitForBane(plr)
-						if diddle ~= "Nigga" then
-							ticklebane(plr,diddle)
-						end
-					end
-				end
-			end
-		else
-			local nuggets = game.workspace:FindFirstChild(game.Players.LocalPlayer.Name.."SpawnedInToys"):FindFirstChild(plr.Name)
-			fondle(plr,nuggets)
-		end
-	end
-
-	task.spawn(function()
-		while true do
-			for id,plr in pairs(PenisList) do
-				if plr and game.Players:GetPlayerByUserId(id) then
-					showmeyourpenis(game.Players:GetPlayerByUserId(id),1)
-				end
-			end
-			for id,plr in pairs(AKList) do
-				if plr and game.Players:GetPlayerByUserId(id) then
-					showmeyourpenis(game.Players:GetPlayerByUserId(id),2)
-				end
-			end
-			for id,plr in pairs(ShurList) do
-				if plr and game.Players:GetPlayerByUserId(id) then
-					showmeyourpenis(game.Players:GetPlayerByUserId(id),3)
-				end
-			end
-			task.wait()
-		end
-	end)
-
 	local lTPE
 
-	plrlist = PL:AddDropdown({
+	plrlist = PL:AddPlayersDropdown({
 		Name = "Select Player",
 		Options = currantplrlist,
 		Callback = function(Value)
-			if loaded then
+			if loaded and not setlist then
 				Changing = true
 				plrlistsel = Value
 				if game.Players:FindFirstChild(Value) then
 					selname = Value
-					sellplr = game.Players[Value]
+					sellplr = game.Players:FindFirstChild(Value)
 					uid = sellplr.UserId
+					playerstring = ""
+					pFriends:Set("<b>\nLoading...</b>","Friends")
+					task.spawn(function()
+						local gotadudde = false
+						for _,plr in pairs(game.Players:GetPlayers()) do
+							task.spawn(function()
+								if plr:IsFriendsWith(uid) then
+									gotadudde = true
+									if inbadboylist(plr.UserId) then
+										playerstring = playerstring..(playerstring ~= "" and "\n" or "").."<font color=\"rgb(200, 0, 0)\">"..plr.DisplayName.." (@"..plr.Name..") UserId: "..plr.UserId.."</font>"
+										pFriends:Set("<b>"..playerstring.."</b>")
+									else
+										playerstring = playerstring..(playerstring ~= "" and "\n" or "").."<font color=\"rgb(0, 200, 0)\">"..plr.DisplayName.." (@"..plr.Name..") UserId: "..plr.UserId.."</font>"
+										pFriends:Set("<b>"..playerstring.."</b>")
+									end
+								end
+							end)
+						end
+						local friendtable = getAllFriendIds(uid,1,selname)
+						for _,id in pairs(friendtable) do
+							if not game.Players:GetPlayerByUserId(id) and inbadboylist(id) then
+								gotadudde = true
+							end
+						end
+						if not gotadudde then
+							pFriends:Set("<b>\nNo friends haha noob!!</b>")
+						end
+					end)
 					niggalog = LocList[uid]
 					local lk = false
 					local otk = false
@@ -3572,8 +4115,8 @@ else
 					local kckwb = false
 					local fattylmao = false
 					local blthdbs = false
+					local wlthdbs = false
                     local PNL = false
-                    local AKL = false
 					local ASL
                     local ESPL = false
 					local NakedVal = false
@@ -3603,11 +4146,11 @@ else
 					if HoldableList[uid] then
 						blthdbs = true
 					end
+					if HoldableWhite[uid] then
+						wlthdbs = true
+					end
 					if PenisList[uid] then
 						PNL = true
-					end
-					if AKList[uid] then
-						AKL = true
 					end
 					if ShurList[uid] then
 						ASL = true
@@ -3626,10 +4169,10 @@ else
 					pBLK:Set(kwb)
 					pBK:Set(kckwb)
 					pBLH:Set(blthdbs)
+					pWAD:Set(wlthdbs)
 					pESP:Set(ESPL)
 					pNK:Set(NakedVal)
 					pPenis:Set(PNL)
-					pAK:Set(AKL)
 					pSK:Set(ASL)
 					local stringmcding = "\nUser has no private chats"
 					local isfelladude = false
@@ -3651,20 +4194,27 @@ else
 							end
 						end
 					end
-					pPCS:Set(stringmcding)
+					pPCS:Set("<b>"..stringmcding.."</b>")
 				end
 				Changing = false
+			elseif not findplr(Value) then
+				pFriends:Set("<b>\nNo-One selected</b>")
+				pPCS:Set("<b>\nNo-One selected</b>")
 			end
 		end
 	})
 
 	PL:AddSection({
-		Name = ""
+		Name = " "
 	})
 
-	pPCS = PL:AddParagraph("Private Chats","No-One selected")
+	pFriends = PL:AddParagraph("<b>Friends</b>","<b>\nNo-One selected</b>")
 
-	pFreinds = PL:AddParagraph("Friends","No-One selected")
+	PL:AddSection({
+		Name = " "
+	})
+
+	pPCS = PL:AddParagraph("<b>Private Chats</b>","<b>\nNo-One selected</b>")
 
 	task.spawn(function()
 		while not MiSPCS do task.wait() end
@@ -3700,7 +4250,7 @@ else
 						end
 					end
 				end
-				pPCS:Set(stringmcding)
+				pPCS:Set("<b>"..stringmcding.."</b>")
 			end
 			local otherstringmcding = "No Active Private Chats"
 			local isfelladudev2
@@ -3722,7 +4272,7 @@ else
 					otherstringmcding = otherstringmcding.."\n"..sender.DisplayName.." (@"..sender.Name..") has a private chat with "..recipient.DisplayName.." (@"..recipient.Name..")"
 				end
 			end
-			MiSPCS:Set(otherstringmcding)
+			MiSPCS:Set("<b>"..otherstringmcding.."</b>")
 		end)
 
 		local otherstringmcding = "No Active Private Chats"
@@ -3745,16 +4295,16 @@ else
 				game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(150, 230, 255)\">"..sender.DisplayName.." (@"..sender.Name..") has a private chat with "..recipient.DisplayName.." (@"..recipient.Name..")</font>")
 				otherstringmcding = otherstringmcding.."\n"..sender.DisplayName.." (@"..sender.Name..") has a private chat with "..recipient.DisplayName.." (@"..recipient.Name..")"
 			end
-			MiSPCS:Set(otherstringmcding)
+			MiSPCS:Set("<b>"..otherstringmcding.."</b>")
 		end
 	end)
 
 	PL:AddSection({
-		Name = "Blobman Shenanigans"
+		Name = "<b>Blobman</b>"
 	})
 
 	pBK = PL:AddToggle({
-		Name = "Loop-kick the cheeky bugger",
+		Name = "Loop Kick <font color='#590505'>「</font><font color='#db0909'>BLOBMAN</font><font color='#590505'>」</font>",
 		Default = false,
 		Callback = function(Value)
 			if not Changing then
@@ -3769,7 +4319,7 @@ else
 	})
 
 	pBLK = PL:AddToggle({
-		Name = "Kill the cheeky bugger",
+		Name = "Loop Kill <font color='#590505'>「</font><font color='#db0909'>BLOBMAN</font><font color='#590505'>」</font>",
 		Default = false,
 		Callback = function(Value)
 			if not Changing then
@@ -3783,12 +4333,38 @@ else
 		end    
 	})
 
+	PL:AddButton({
+		Name = "Bring <font color='#590505'>「</font><font color='#db0909'>BLOBMAN</font><font color='#590505'>」</font><font color='#ff9900'>(MAINTENANCE)</font>",
+		Callback = function()
+		end
+	})
+
+	PL:AddButton({
+		Name = "Lock <font color='#590505'>「</font><font color='#db0909'>BLOBMAN</font><font color='#590505'>」</font><font color='#ff9900'>(MAINTENANCE)</font>",
+		Callback = function()
+		end
+	})
+
 	PL:AddSection({
-		Name = "Ownership stuff"
+		Name = "<b>Ownership</b>"
+	})
+
+	pOK = PL:AddToggle({
+		Name = "Loop Kick <font color='#165905'>「</font><font color='#1edb09'>OWNERSHIP</font><font color='#165905'>」</font>",
+		Default = false,
+		Callback = function(Value)
+			if Value and not Changing then
+				pOTP:Set(false)
+				pLK:Set(false)
+				LocList[uid] = Vector3.new(0,1e29,0)
+			elseif not Changing then
+				LocList[uid] = nil
+			end
+		end
 	})
 
 	pLK = PL:AddToggle({
-		Name = "Loop Kill Player",
+		Name = "Loop Kill <font color='#165905'>「</font><font color='#1edb09'>OWNERSHIP</font><font color='#165905'>」</font>",
 		Default = false,
 		Callback = function(Value)
 			if not Changing then
@@ -3803,17 +4379,9 @@ else
 		end
 	})
 
-	pOK = PL:AddToggle({
-		Name = "Ownership Kick Player",
-		Default = false,
-		Callback = function(Value)
-			if Value and not Changing then
-				pOTP:Set(false)
-				pLK:Set(false)
-				LocList[uid] = Vector3.new(0,1e29,0)
-			elseif not Changing then
-				LocList[uid] = nil
-			end
+	PL:AddButton({
+		Name = "Bring <font color='#165905'>「</font><font color='#1edb09'>OWNERSHIP</font><font color='#165905'>」</font><font color='#ff9900'>(MAINTENANCE)</font>",
+		Callback = function()
 		end
 	})
 
@@ -3904,17 +4472,16 @@ else
 	})
 
 	PL:AddSection({
-		Name = "Third Party Anti-Kick"
+		Name = "<b>Third Party Anti-Kick</b>"
 	})
 
 	pSK = PL:AddToggle({
-		Name = "Shuriken Anti-Kick",
+		Name = "Shuriken Anti-Kick <font color='#62e2ff'>「</font><font color='#91ebff'>FRIENDLY</font><font color='#62e2ff'>」</font>",
 		Default = false,
 		Callback = function(Value)
 			if not Changing and sellplr then
 				ShurList[uid] = Value
 				if Value then
-					pAK:Set(false)
 					pPenis:Set(false)
 				else
 					if workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild(sellplr.Name) then
@@ -3926,31 +4493,12 @@ else
 	})
 
 	pPenis = PL:AddToggle({
-		Name = "Loop Penis Player",
+		Name = "Loop Penis Player <font color='#62e2ff'>「</font><font color='#91ebff'>FRIENDLY</font><font color='#62e2ff'>」</font>",
 		Default = false,
 		Callback = function(Value)
 			if not Changing and sellplr then
 				PenisList[uid] = Value
 				if Value then
-					pAK:Set(false)
-					pSK:Set(false)
-				else
-					if workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild(sellplr.Name) then
-						game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"][sellplr.Name])
-					end
-				end
-			end
-		end    
-	})
-
-	pAK = PL:AddToggle({
-		Name = "Kunai Anti-Kick",
-		Default = false,
-		Callback = function(Value)
-			if not Changing and sellplr then
-				AKList[uid] = Value
-				if Value then
-					pPenis:Set(false)
 					pSK:Set(false)
 				else
 					if workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild(sellplr.Name) then
@@ -3962,11 +4510,11 @@ else
 	})
 
 	PL:AddSection({
-		Name = "SUS Player"
+		Name = "<b>SUS Player</b>"
 	})
 
 	pNK = PL:AddToggle({
-		Name = "Make them NAKED 😳",
+		Name = "Make them NAKED 😳 <font color='#390000'>「</font><font color='#5e0000'>NOT FRIENDLY</font><font color='#390000'>」</font>",
 		Default = false,
 		Callback = function(Value)
 			NakedList[uid] = Value
@@ -3985,7 +4533,7 @@ else
 	})
 
 	PL:AddSection({
-		Name = "ESP Player"
+		Name = "<b>ESP Player</b>"
 	})
 
 	pESP = PL:AddToggle({
@@ -4004,7 +4552,7 @@ else
 	})
 
 	PL:AddSection({
-		Name = "No holdables allowed"
+		Name = "<b>No holdables allowed</b>"
 	})
 
 	pBLH = PL:AddToggle({
@@ -4017,12 +4565,23 @@ else
 		end    
 	})
 
+	pWAD = PL:AddToggle({
+		Name = "Whitelist Auto-Detect",
+		Default = false,
+		Callback = function(Value)
+			if not Changing then
+				pBLH:Set(not Value)
+				HoldableWhite[uid] = Value
+			end
+		end    
+	})
+
 	task.spawn(function()
 		while true do
 			for _,plr in pairs(game.Players:GetPlayers()) do
 				if HoldableList[plr.UserId] and game.workspace:FindFirstChild(plr.Name.."SpawnedInToys") and plr ~= game.Players.LocalPlayer then
 					for _,model in pairs(game.workspace:FindFirstChild(plr.Name.."SpawnedInToys"):GetChildren()) do
-						if model:FindFirstChild("HoldPart") then
+						if modee.Name ~= "FoodBanana" and model:FindFirstChild("HoldPart") then
 							if model.HoldPart:FindFirstChild("HoldItemRemoteFunction") then
 								task.spawn(function()
 									model.HoldPart.HoldItemRemoteFunction:InvokeServer(model,game:GetService("Players").LocalPlayer.Character)
@@ -4077,172 +4636,11 @@ else
 	end)
 
 
-    task.wait(.25)
+
 
 
 	BS:AddSection({
-		Name = "Freeze Item"
-	})
-
-	local holdingx = false
-
-	BS:AddBind({
-		Name = "Freeze Item",
-		Default = Enum.KeyCode.X,
-		Hold = true,
-		Callback = function(Value)
-			holdingx = Value
-			local indexmcgee = {}
-			local gotone = false
-			if Value and workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") and workspace.GrabParts.GrabPart:FindFirstChild("WeldConstraint") and workspace.GrabParts.GrabPart.WeldConstraint.Part1 then
-				local jellyfish = workspace.GrabParts.GrabPart.WeldConstraint
-				local chillonme = workspace.GrabParts.GrabPart.WeldConstraint.Part1
-				if not chillonme:FindFirstAncestor("Plots") and not chillonme:FindFirstAncestor("Slots") and not chillonme:FindFirstAncestor("Map") then
-					if chillonme.Parent:FindFirstChild("somebodyshotaloadintomyburger2") then
-						gotone = true
-						chillonme.Parent.somebodyshotaloadintomyburger2:Destroy()
-						for _,prt in pairs(chillonme.Parent:GetChildren()) do
-							if prt:FindFirstChild("somebodyshotaloadintomyburger") then
-								prt.somebodyshotaloadintomyburger:Destroy()
-							end
-						end
-						frozenlist[chillonme.Parent] = nil
-						if game.Players:GetPlayerFromCharacter(chillonme.Parent) then
-							GrabItemsList[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = nil
-							pusslist[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = nil
-						else
-							GrabItemsList[chillonme.Parent] = nil
-						end
-						game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(chillonme.Parent:FindFirstChild("SoundPart") or chillonme.Parent:FindFirstChild("HumanoidRootPart"))
-						return
-					else
-						gotone = true
-						if chillonme.Parent:FindFirstChild("SoundPart") and chillonme.Parent:FindFirstChild("ThisToysNumber") and not chillonme.Parent:FindFirstAncestor("BinisCreations") then
-							frozenlist[chillonme.Parent] = true
-						end
-						if game.Players:GetPlayerFromCharacter(chillonme.Parent) then
-							GrabItemsList[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = true
-							pusslist[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = {chillonme.CFrame.Position, chillonme.CFrame}
-						else
-							GrabItemsList[chillonme.Parent] = true
-						end
-						local diddysbiscuit = Instance.new("Attachment")
-						diddysbiscuit.Name = "somebodyshotaloadintomyburger"
-						diddysbiscuit.Parent = chillonme
-						local diddlysquat = Instance.new("AlignPosition")
-						diddlysquat.Parent = diddysbiscuit
-						diddlysquat.Attachment0 = diddysbiscuit
-						diddlysquat.Mode = "OneAttachment"
-						diddlysquat.MaxForce = math.huge
-						diddlysquat.MaxVelocity = math.huge
-						diddlysquat.Responsiveness = 200
-						diddlysquat.Position = chillonme.CFrame.Position
-						local penismcandrew = Instance.new("AlignOrientation")
-						penismcandrew.Parent = diddysbiscuit
-						penismcandrew.Mode = "OneAttachment"
-						penismcandrew.Attachment0 = diddysbiscuit
-						penismcandrew.Responsiveness = 200
-						penismcandrew.MaxTorque = math.huge
-						penismcandrew.CFrame = chillonme.CFrame
-						local gottheblicky = Instance.new("Highlight")
-						gottheblicky.Parent = chillonme.Parent
-						gottheblicky.Name = "somebodyshotaloadintomyburger2"
-						gottheblicky.FillTransparency = 0.4
-						gottheblicky.FillColor = Color3.fromRGB(27,126,208)
-						gottheblicky.OutlineColor = Color3.fromRGB(21,97,161)
-						while jellyfish do task.wait() end
-						if chillonme then
-							game:GetService("ReplicatedStorage").GrabEvents.SetNetworkOwner:FireServer(chillonme,chillonme.CFrame)
-						end
-						return
-					end
-				end
-			end
-			if not gotone then
-				while holdingx do
-					local randallsmouse = game.Players.LocalPlayer:GetMouse()
-					local randallsparams = RaycastParams.new()
-					randallsparams.FilterDescendantsInstances = {game.Players.LocalPlayer.Character}
-					randallsparams.FilterType = Enum.RaycastFilterType.Blacklist
-					local randallsresult = workspace:Raycast(workspace.Camera.CFrame.Position,(game.Players.LocalPlayer:GetMouse().Hit.Position - workspace.Camera.CFrame.Position).Unit * 15000,randallsparams)
-					if randallsresult then
-						local chillonme = randallsresult.Instance
-						if not chillonme:FindFirstAncestor("Plots") and not chillonme:FindFirstAncestor("Slots") and not chillonme:FindFirstAncestor("Map") then
-							if not chillonme:FindFirstAncestor("Plots") and not chillonme:FindFirstAncestor("Slots") and not chillonme:FindFirstAncestor("Map") then
-								if not indexmcgee[chillonme.Parent] then
-									indexmcgee[chillonme.Parent] = true
-									if chillonme.Parent:FindFirstChild("somebodyshotaloadintomyburger2") then
-										chillonme.Parent.somebodyshotaloadintomyburger2:Destroy()
-										for _,prt in pairs(chillonme.Parent:GetChildren()) do
-											if prt:FindFirstChild("somebodyshotaloadintomyburger") then
-												prt.somebodyshotaloadintomyburger:Destroy()
-											end
-										end
-										frozenlist[chillonme.Parent] = nil
-										if game.Players:GetPlayerFromCharacter(chillonme.Parent) then
-											GrabItemsList[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = nil
-											pusslist[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = nil
-										else
-											GrabItemsList[chillonme.Parent] = nil
-										end
-										game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(chillonme.Parent:FindFirstChild("SoundPart") or chillonme.Parent:FindFirstChild("HumanoidRootPart"))
-									else
-										if game.Players:GetPlayerFromCharacter(chillonme.Parent) then
-											pusslist[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = {chillonme.CFrame.Position, chillonme.CFrame}
-										end
-										local diddysbiscuit = Instance.new("Attachment")
-										diddysbiscuit.Name = "somebodyshotaloadintomyburger"
-										diddysbiscuit.Parent = chillonme
-										local diddlysquat = Instance.new("AlignPosition")
-										diddlysquat.Parent = diddysbiscuit
-										diddlysquat.Attachment0 = diddysbiscuit
-										diddlysquat.Mode = "OneAttachment"
-										diddlysquat.MaxForce = math.huge
-										diddlysquat.MaxVelocity = math.huge
-										diddlysquat.Responsiveness = 200
-										diddlysquat.Position = chillonme.CFrame.Position
-										local penismcandrew = Instance.new("AlignOrientation")
-										penismcandrew.Parent = diddysbiscuit
-										penismcandrew.Mode = "OneAttachment"
-										penismcandrew.Attachment0 = diddysbiscuit
-										penismcandrew.Responsiveness = 200
-										penismcandrew.MaxTorque = math.huge
-										penismcandrew.CFrame = chillonme.CFrame
-										local gottheblicky = Instance.new("Highlight")
-										gottheblicky.Parent = chillonme.Parent
-										gottheblicky.Name = "somebodyshotaloadintomyburger2"
-										gottheblicky.FillTransparency = 0.4
-										gottheblicky.FillColor = Color3.fromRGB(27,126,208)
-										gottheblicky.OutlineColor = Color3.fromRGB(21,97,161)
-									end
-								end
-							end
-						end
-					end
-					task.wait()
-				end
-				for chillonme,_ in pairs(indexmcgee) do
-					if chillonme:FindFirstChild("somebodyshotaloadintomyburger2") then
-						if chillonme:FindFirstChild("SoundPart") and not chillonme:FindFirstAncestor("BinisCreations") then
-							frozenlist[chillonme] = true
-						end
-						if game.Players:GetPlayerFromCharacter(chillonme) then
-							GrabItemsList[game.Players:GetPlayerFromCharacter(chillonme)] = true
-						else
-							GrabItemsList[chillonme] = true
-						end
-					end
-				end
-			end
-		end
-	})
-
-	BS:AddToggle({
-		Name = "Auto-claim network ownership",
-		Default = true,
-		Callback = function(Value)
-			acno = Value
-		end
+		Name = "<b>Release All Frozen</b>"
 	})
 
 	BS:AddButton({
@@ -4276,7 +4674,7 @@ else
 	})
 
 	BS:AddSection({
-		Name = "Create New Build"
+		Name = "<b>Create New Build</b>"
 	})
 
 	BS:AddButton({
@@ -4287,69 +4685,10 @@ else
 	})
 
 
-    task.wait(.25)
-
-
-	LSD:AddSection({
-		Name = "Line Shit (remind dj to do this)"
-	})
-
-	LSD:AddSection({
-		Name = "Lag Server"
-	})
-
-	local LAGSE = false
-	local LAGAMM = 100
-
-	LSD:AddToggle({
-		Name = "Line Lag Server",
-		Default = false,
-		Callback = function(Value)
-			LAGSE = Value
-			while LAGSE do
-				if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Head") then
-					local myhead = game.Players.LocalPlayer.Character.Head
-					for i=1,LAGAMM do
-						game.ReplicatedStorage.GrabEvents.CreateGrabLine:FireServer(myhead,myhead.CFrame)
-					end
-				end
-				task.wait(1)
-			end
-		end
-	})
-
-	LSD:AddSlider({
-		Name = "Line Lag Server",
-		Min = 10,
-		Max = 10000,
-		Default = 100,
-		Color = Color3.fromRGB(255,255,255),
-		Increment = 1,
-		ValueName = "Lines",
-		Callback = function(Value)
-			LAGAMM = Value
-		end
-	})
-
-	LSD:AddSection({
-		Name = "Invis Line"
-	})
-
-	LSD:AddToggle({
-		Name = "Invis Line",
-		Default = false,
-		Callback = function(Value)
-			game.ReplicatedStorage.GrabEvents.CreateGrabLine:FireServer()
-			ILV = Value
-		end
-	})
-
-
-    task.wait(.25)
 
 
 	MS:AddSection({
-		Name = "Edit Map"
+		Name = "<b>Edit Map</b>"
 	})
 
 	local mapp
@@ -4409,35 +4748,7 @@ else
 	})
 
 	MS:AddSection({
-		Name = "Ocean"
-	})
-
-	MS:AddToggle({
-		Name = "Water Walk",
-		Default = true,
-		Callback = function(Value)
-			local v1 = game:GetService("Workspace").Map.AlwaysHereTweenedObjects.Ocean.Object.ObjectModel
-			for _,prt in pairs(v1:GetChildren()) do 
-				if prt:IsA("Part") then 
-					prt.CanCollide = Value
-				end
-			end
-			if Value then
-				OrionLib:MakeNotification({
-					Name = "Water Walk has been enabled",
-					Content = "Water Walk",
-					Image = "rbxassetid://4483345998",
-					Time = 2
-				})
-			else
-				OrionLib:MakeNotification({
-					Name = "Water Walk has been enabled",
-					Content = "Water Walk",
-					Image = "rbxassetid://4483345998",
-					Time = 2
-				})
-			end
-		end,
+		Name = "<b>Ocean</b>"
 	})
 
 	MS:AddToggle({
@@ -4458,7 +4769,7 @@ else
 	})
 
 	MS:AddSection({
-		Name = "Edit Plots"
+		Name = "<b>Edit Plots</b>"
 	})
 
 	local pbp = false
@@ -4470,28 +4781,33 @@ else
 			bpb = Value
 			while bpb do
 				while not (game.Players.LocalPlayer.Character and game.Players.LocalPlayer.CanSpawnToy.Value) do task.wait() end
-				local _
-				task.spawn(function()
-					if game.Players.LocalPlayer.Character.Parent == workspace then
-						game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("BallSnowball",CFrame.new(355.048615, -5.63270235, 553.709595, -0.995227516, -0.000525230716, 0.0975805596, 0, 0.999985576, 0.00538245682, -0.0975819677, 0.00535676908, -0.995213151),Vector3.new(0,0,0))
-					else
-						game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("BallSnowball",CFrame.new(262.23056, 28.7192783, 322.344788, -0.941351771, -0.0306104273, -0.33603549, 0, 0.995876729, -0.0907172337, 0.337426811, -0.0853968263, -0.937470317),Vector3.new(0,0,0))
-					end
-				end)
 				if game.Players.LocalPlayer.Character.Parent == workspace then
-					_ = workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:WaitForChild("BallSnowball",1)
-				elseif plot then
-					_ = workspace.PlotItems[plot]:WaitForChild("BallSnowball",1)
-				end
-				if _ then
-					bpb = false
-					OrionLib:MakeNotification({
-						Name = "Plot Barrier Shit",
-						Content = "Plot Barrier broken bris",
-						Image = "rbxassetid://4483345998",
-						Time = 2
-					})
-					bpbtog:Set(false)
+					local _
+					task.spawn(function()
+						game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("BallSnowball",CFrame.new(355.048615, -5.63270235, 553.709595, -0.995227516, -0.000525230716, 0.0975805596, 0, 0.999985576, 0.00538245682, -0.0975819677, 0.00535676908, -0.995213151),Vector3.new(0,0,0))
+					end)
+					local pos
+					if game.Players.LocalPlayer.Character.Parent == workspace then
+						_ = workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:WaitForChild("BallSnowball",1)
+					elseif plot then
+						_ = workspace.PlotItems[plot]:WaitForChild("BallSnowball",1)
+					end
+					if _ then
+						pos = _:WaitForChild("SoundPart",1) and _.SoundPart.CFrame.Position
+						while _ and _.Parent do task.wait() end
+						for _,prt in pairs(workspace:GetChildren()) do
+							if prt.Name == "Part" and pos and (prt.CFrame.Position - pos).Magnitude < 10 then
+								bpb = false
+								OrionLib:MakeNotification({
+									Name = "Plot Barrier Shit",
+									Content = "Plot Barrier broken bris",
+									Image = "rbxassetid://4483345998",
+									Time = 2
+								})
+								bpbtog:Set(false)
+							end
+						end
+					end
 				end
 				task.wait()
 			end
@@ -4644,7 +4960,53 @@ else
 	})
 
 	MS:AddSection({
-		Name = "Model Shit"
+		Name = "<b>Tweened Objects</b>"
+	})
+
+	function getcount()
+		local count = 0
+		local list = {}
+		for _,prt in pairs(workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:GetChildren()) do
+			if prt.Name == "NinjaShuriken" then
+				count += 1
+				list[count] = prt
+			end
+		end
+		return {count, list}
+	end
+
+	MS:AddButton({
+		Name = "Grab Outer Ufo",
+		Callback = function()
+			local UFO = workspace.Map.AlwaysHereTweenedObjects.OuterUFO.Object.ObjectModel.Body
+
+			while getcount()[1] < 10 do
+				while not (game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character.Parent == workspace and game.Players.LocalPlayer.CanSpawnToy.Value) do task.wait() end
+				task.spawn(function()
+					game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("NinjaShuriken",game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame,Vector3.new(0,0,0))
+				end)
+				task.wait()
+			end
+
+			for _,prt in pairs(getcount()[2]) do
+				StickyPartEvent:FireServer(prt.StickyPart,UFO,CFrame.Angles(0,0,0))
+			end
+
+			for i = 1,100 do
+				me.Character.HumanoidRootPart.CFrame = UFO.CFrame
+				setowner:FireServer(UFO,UFO.CFrame)
+				task.wait()
+			end
+
+			local obj = w.Map.AlwaysHereTweenedObjects.OuterUFO.Object
+			local body = obj.ObjectModel.Body
+			obj.FollowThisPart.AlignPosition.Attachment0 = nil
+			obj.FollowThisPart.AlignOrientation.Attachment0 = nil
+		end
+	})
+
+	MS:AddSection({
+		Name = "<b>Model Shit</b>"
 	})
 
 	MS:AddToggle({
@@ -4691,7 +5053,7 @@ else
 	})
 
 	MS:AddSection({
-		Name = "Foggy Map"
+		Name = "<b>Foggy Map</b>"
 	})
 
 	MS:AddToggle({
@@ -4743,7 +5105,7 @@ else
 	})
 
 	MS:AddSection({
-		Name = "Dave Boner Skybox"
+		Name = "<b>Dave Boner Skybox</b>"
 	})
 
 	MS:AddToggle({
@@ -4781,119 +5143,19 @@ else
 	})
 
 
-    task.wait(.25)
+
 
 
 	TK = MiS:AddLabel("Total Players Kicked: 0")
 
 	MiS:AddSection({
-		Name = "Private Chats"
+		Name = "<b>Private Chats</b>"
 	})
 
-	MiSPCS = MiS:AddParagraph("All Private Chats","No Active Private Chats")
+	MiSPCS = MiS:AddParagraph("<b>All Private Chats</b>","<b>No Active Private Chats</b>")
 
 	MiS:AddSection({
-		Name = "SUS Mode"
-	})
-
-	MiS:AddToggle({
-		Name = "Toggle SUS Mode 😳",
-		Default = false,
-		Callback = function(Value)
-			GETNAKED = Value
-			if not Value then
-				for _,plr in pairs(game.Players:GetPlayers()) do
-					if plr.Character and not NakedList[plr.UserId] then
-						if plr.Character:FindFirstChild("Pants") and plr.Character.Pants:GetAttribute("NakedValue") then
-							plr.Character.Pants.PantsTemplate = plr.Character.Pants:GetAttribute("NakedValue")
-						end
-						if plr.Character:FindFirstChild("Shirt") and plr.Character.Shirt:GetAttribute("NakedValue") then
-							plr.Character.Shirt.ShirtTemplate = plr.Character.Shirt:GetAttribute("NakedValue")
-						end
-					end
-				end
-			end
-		end    
-	})
-
-	task.spawn(function()
-		while true do
-			for _,plr in pairs(game.Players:GetPlayers()) do
-				if plr.Character and (GETNAKED or NakedList[plr.UserId]) then
-					if plr.Character:FindFirstChild("Pants") then
-						plr.Character.Pants:SetAttribute("NakedValue",plr.Character.Pants.PantsTemplate)
-						plr.Character.Pants.PantsTemplate = ""
-					end
-					if plr.Character:FindFirstChild("Shirt") then
-						plr.Character.Shirt:SetAttribute("NakedValue",plr.Character.Shirt.ShirtTemplate)
-						plr.Character.Shirt.ShirtTemplate = ""
-					end
-				end
-			end
-			task.wait()
-		end
-	end)
-
-	MiS:AddSection({
-		Name = "Blobman All"
-	})
-
-	MiS:AddToggle({
-		Name = "Blobman Kick All",
-		Default = false,
-		Callback = function(Value)
-			BKA = Value
-		end    
-	})
-
-	MiS:AddToggle({
-		Name = "Blobman Kill All",
-		Default = false,
-		Callback = function(Value)
-			BKLA = Value
-		end    
-	})
-
-	MiS:AddToggle({
-		Name = "Use chill on friends",
-		Default = true,
-		Callback = function(Value)
-			BKAWL = Value
-			BKLAWL = Value
-		end    
-	})
-
-	MiS:AddSection({
-		Name = "Ownership Stuff"
-	})
-
-	MiS:AddToggle({
-		Name = "Ownership Kick All",
-		Default = false,
-		Callback = function(Value)
-			OKA = Value
-		end    
-	})
-
-	MiS:AddToggle({
-		Name = "Kill All",
-		Default = false,
-		Callback = function(Value)
-			OKLA = Value
-		end    
-	})
-
-	MiS:AddToggle({
-		Name = "Use chill on friends",
-		Default = true,
-		Callback = function(Value)
-			OWF = Value
-			OKLWF = Value
-		end    
-	})
-
-	MiS:AddSection({
-		Name = "ESP"
+		Name = "<b>ESP</b>"
 	})
 
 	MiS:AddToggle({
@@ -4936,76 +5198,129 @@ else
 		end
 	})
 
-
-    task.wait(.25)
-
-
-	TS:AddSection({
-		Name = "Spawn Location"
+	MiS:AddSection({
+		Name = "<b>Blobman</b>"
 	})
 
-	local SLEE = false
-
-	TS:AddToggle({
-		Name = "Activate Spawn Location",
-		Default = true,
+	MiS:AddToggle({
+		Name = "Kick All <font color='#590505'>「</font><font color='#db0909'>BLOBMAN</font><font color='#590505'>」</font>",
+		Default = false,
 		Callback = function(Value)
-			SLEE = Value
-			DSL = Value
+			BKA = Value
 		end    
 	})
 
-	TS:AddSection({
-		Name = "Tp To Mouse"
+	MiS:AddToggle({
+		Name = "Kill All <font color='#590505'>「</font><font color='#db0909'>BLOBMAN</font><font color='#590505'>」</font>",
+		Default = false,
+		Callback = function(Value)
+			BKLA = Value
+		end    
 	})
 
-	TS:AddBind({
-		Name = "TP To Mouse",
-		Default = Enum.KeyCode.Z,
-		Hold = false,
-		Callback = function(did)
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				local yigger
-				local unitRay = game.Players.LocalPlayer:GetMouse().UnitRay
-				local diddysparams = RaycastParams.new()
-				diddysparams.FilterDescendantsInstances = {game.Players.LocalPlayer.Character}
-				diddysparams.FilterType = Enum.RaycastFilterType.Exclude
-				local brisresult
-				local currentOrigin = unitRay.Origin
-				for i = 1, 7 do
-					local result = workspace:Raycast(currentOrigin, unitRay.Direction * 15000, diddysparams)
-					if result then
-						brisresult = result
-					else
-						currentOrigin = currentOrigin + (unitRay.Direction * 15000)
-					end
-				end
-				if brisresult then
-					yigger = brisresult.Position + Vector3.new(0, 3, 0)
-				else
-					yigger = unitRay.Origin + (unitRay.Direction * 10000)
-				end
+	MiS:AddToggle({
+		Name = "Bring All <font color='#590505'>「</font><font color='#db0909'>BLOBMAN</font><font color='#590505'>」</font> <font color='#ff9900'>(MAINTENANCE)</font>",
+		Default = false,
+		Callback = function(Value)
+		end    
+	})
 
-				local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-				if hrp then
-					hrp.CFrame = (hrp.CFrame - hrp.CFrame.Position) + yigger
-					if brisresult.Instance then
-						hrp.AssemblyLinearVelocity = brisresult.Instance.AssemblyLinearVelocity
-					else
-						hrp.AssemblyLinearVelocity = Vector3.new(0,0,0)
+	MiS:AddToggle({
+		Name = "Use chill on friends <font color='#62e2ff'>「</font><font color='#91ebff'>FRIENDLY</font><font color='#62e2ff'>」</font>",
+		Default = true,
+		Callback = function(Value)
+			BKAWL = Value
+			BKLAWL = Value
+		end    
+	})
+
+	MiS:AddSection({
+		Name = "<b>Ownership</b>"
+	})
+
+	MiS:AddToggle({
+		Name = "Kick All <font color='#165905'>「</font><font color='#1edb09'>OWNERSHIP</font><font color='#165905'>」</font>",
+		Default = false,
+		Callback = function(Value)
+			OKA = Value
+		end    
+	})
+
+	MiS:AddToggle({
+		Name = "Kill All <font color='#165905'>「</font><font color='#1edb09'>OWNERSHIP</font><font color='#165905'>」</font>",
+		Default = false,
+		Callback = function(Value)
+			OKLA = Value
+		end    
+	})
+
+	MiS:AddToggle({
+		Name = "Bring All <font color='#165905'>「</font><font color='#1edb09'>OWNERSHIP</font><font color='#165905'>」</font> <font color='#ff9900'>(MAINTENANCE)</font>",
+		Default = false,
+		Callback = function(Value)
+		end    
+	})
+
+	MiS:AddToggle({
+		Name = "Use chill on friends <font color='#62e2ff'>「</font><font color='#91ebff'>FRIENDLY</font><font color='#62e2ff'>」</font>",
+		Default = true,
+		Callback = function(Value)
+			OWF = Value
+			OKLWF = Value
+		end    
+	})
+
+	MiS:AddSection({
+		Name = "<b>SUS Mode</b>"
+	})
+
+	MiS:AddToggle({
+		Name = "Toggle SUS Mode 😳 <font color='#390000'>「</font><font color='#5e0000'>NOT FRIENDLY</font><font color='#390000'>」</font>",
+		Default = false,
+		Callback = function(Value)
+			GETNAKED = Value
+			if not Value then
+				for _,plr in pairs(game.Players:GetPlayers()) do
+					if plr.Character and not NakedList[plr.UserId] then
+						if plr.Character:FindFirstChild("Pants") and plr.Character.Pants:GetAttribute("NakedValue") then
+							plr.Character.Pants.PantsTemplate = plr.Character.Pants:GetAttribute("NakedValue")
+						end
+						if plr.Character:FindFirstChild("Shirt") and plr.Character.Shirt:GetAttribute("NakedValue") then
+							plr.Character.Shirt.ShirtTemplate = plr.Character.Shirt:GetAttribute("NakedValue")
+						end
 					end
 				end
 			end
-		end
+		end    
 	})
 
-	TS:AddToggle({
-		Name = "Activate TP to mouse",
-		Default = true,
-		Callback = function(Value)
-			ATPTM = Value
+	task.spawn(function()
+		while true do
+			for _,plr in pairs(game.Players:GetPlayers()) do
+				if plr.Character and (GETNAKED or NakedList[plr.UserId]) then
+					if plr.Character:FindFirstChild("Pants") then
+						if plr.Character.Pants:GetAttribute("NakedValue") then
+							plr.Character.Pants.PantsTemplate = ""
+						else
+							plr.Character.Pants:SetAttribute("NakedValue",plr.Character.Pants.PantsTemplate)
+						end
+					end
+					if plr.Character:FindFirstChild("Shirt") then
+						if plr.Character.Shirt:GetAttribute("NakedValue") then
+							plr.Character.Shirt.ShirtTemplate = ""
+						else
+							plr.Character.Shirt:SetAttribute("NakedValue",plr.Character.Shirt.ShirtTemplate)
+						end
+					end
+				end
+			end
+			task.wait(.5)
 		end
-	})
+	end)
+
+
+
+
 
 	local homeless = true
 
@@ -5030,16 +5345,20 @@ else
 								if homeless then task.wait(5) end
 								diddybligga = false
 								plot = house.Name
+								local homeful = House
 								if plot == "Plot1" then
-									SL = tpland["GreenHouse"]
+									House = "GreenHouse"
 								elseif plot == "Plot2" then
-									SL = tpland["PinkHouse"]
+									House = "PinkHouse"
 								elseif plot == "Plot3" then
-									SL = tpland["PurpleHouse"]
+									House = "PurpleHouse"
 								elseif plot == "Plot4" then
-									SL = tpland["BlueHouse"]
+									House = "BlueHouse"
 								elseif plot == "Plot5" then
-									SL = tpland["ChineseHouse"]
+									House = "ChineseHouse"
+								end
+								if not homeful then
+									diddlefinger:Set(House)
 								end
 							end
 						end
@@ -5066,16 +5385,20 @@ else
 						game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = reidn
 					end
 					if plot then
+						local homeful = House
 						if plot == "Plot1" then
-							SL = tpland["GreenHouse"]
+							House = "GreenHouse"
 						elseif plot == "Plot2" then
-							SL = tpland["PinkHouse"]
+							House = "PinkHouse"
 						elseif plot == "Plot3" then
-							SL = tpland["PurpleHouse"]
+							House = "PurpleHouse"
 						elseif plot == "Plot4" then
-							SL = tpland["BlueHouse"]
+							House = "BlueHouse"
 						elseif plot == "Plot5" then
-							SL = tpland["ChineseHouse"]
+							House = "ChineseHouse"
+						end
+						if not homeful then
+							diddlefinger:Set(House)
 						end
 					end
 				end
@@ -5084,341 +5407,413 @@ else
 		end
 	end)
 
-	TS:AddSection({
-		Name = "Teleport"
+
+
+
+
+	LS:AddSection({
+		Name = "<b>Kick List</b>"
 	})
 
-	TS:AddButton({
-		Name = "Go to Spawn",
-		Callback = function()
+
+
+
+
+	KT:AddSection({
+		Name = "<b>Tp To Mouse</b>"
+	})
+
+	KT:AddBind({
+		Name = "TP To Mouse",
+		Default = Enum.KeyCode.Z,
+		Hold = false,
+		Callback = function(did)
 			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(0,-7.35,0)
+				local yigger
+				local unitRay = game.Players.LocalPlayer:GetMouse().UnitRay
+				local diddysparams = RaycastParams.new()
+				diddysparams.FilterDescendantsInstances = {game.Players.LocalPlayer.Character, workspace:FindFirstChild("GrabParts"), workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Map") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Plots") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Slots") and workspace.GrabParts.GrabPart.WeldConstraint.Part1.Parent or nil}
+				diddysparams.FilterType = Enum.RaycastFilterType.Exclude
+				local brisresult
+				local currentOrigin = unitRay.Origin
+				for i = 1, 7 do
+					local result = workspace:Raycast(currentOrigin, unitRay.Direction * 15000, diddysparams)
+					if result then
+						brisresult = result
+					else
+						currentOrigin = currentOrigin + (unitRay.Direction * 15000)
+					end
 				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(0,-7.35,0)
-			end
-		end    
-	})
-
-	TS:AddButton({
-		Name = "Go to Spawn Cave",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(-90,14.6,-314.3)
+				if brisresult then
+					yigger = brisresult.Position + Vector3.new(0, 3, 0)
+				else
+					yigger = unitRay.Origin + (unitRay.Direction * 10000)
 				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-90,14.6,-314.3)
-			end
-		end    
-	})
 
-	TS:AddButton({
-		Name = "Go to The Compartment",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(538.5,65.5,-220)
+				local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+				if hrp then
+					hrp.CFrame = (hrp.CFrame - hrp.CFrame.Position) + yigger
+					if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Map") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Plots") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Slots") then
+						workspace.GrabParts.GrabPart.CFrame = CFrame.new(yigger) + Vector3.new(0,3,0)
+					end
+					if brisresult and brisresult.Instance then
+						hrp.AssemblyLinearVelocity = brisresult.Instance.AssemblyLinearVelocity
+					else
+						hrp.AssemblyLinearVelocity = Vector3.new(0,0,0)
+					end
 				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(538.5,65.5,-220)
 			end
-		end    
+		end
 	})
-
-	TS:AddButton({
-		Name = "Go to The Wedge",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(-73,-6,-265.5)
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-73,-6,-265.5)
-			end
-		end    
-	})
-
-	TS:AddButton({
-		Name = "Go to Green House",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(-538,-7,74)
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-538,-7,74)
-			end
-		end    
-	})
-
-	TS:AddButton({
-		Name = "Go to Pink House",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(-478,-7,-147)
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-478,-7,-147)
-			end
-		end    
-	})
-
-	TS:AddButton({
-		Name = "Go to Barn",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(-228,82,-318)
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-228,82,-318)
-			end
-		end    
-	})
-
-	TS:AddButton({
-		Name = "Go to Blue House",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(496,83,-350)
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(496,83,-350)
-			end
-		end    
-	})
-
-	TS:AddButton({
-		Name = "Go to Chinese House",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(542,123,-93)
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(542,123,-93)
-			end
-		end    
-	})
-
-	TS:AddButton({
-		Name = "Go to Purple House",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(270,-7,448)
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(270,-7,448)
-			end
-		end    
-	})
-
-	TS:AddButton({
-		Name = "Go to Factory",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(134,347,352)
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(134,347,352)
-			end
-		end    
-	})
-
-	TS:AddButton({
-		Name = "Go to Other Green House",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(-359,98,357)
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-359,98,357)
-			end
-		end    
-	})
-
-	TS:AddButton({
-		Name = "Go to Big Cave",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(-245,80,485)
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-245,80,485)
-			end
-		end    
-	})
-
-	TS:AddButton({
-		Name = "Go to Good Prison",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(569.6,-7,176.3)
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(569.6,-7,176.3)
-			end
-		end    
-	})
-
-	TS:AddButton({
-		Name = "Go to ruhubs dog ahh prison",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(564,82.5,210)
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(564,82.5,210)
-			end
-		end    
-	})
-
-	TS:AddButton({
-		Name = "Go to Extremely Good Prison",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(525,76,56)
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(525,76,56)
-			end
-		end    
-	})
-
-	TS:AddButton({
-		Name = "Go to Train Cave",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(536.6,87.5,-169.5)
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(536.6,87.5,-169.5)
-			end
-		end    
-	})
-
-	TS:AddButton({
-		Name = "Go to Island Cave",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(75.8,323,368.5)
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(75.8,323,368.5)
-			end
-		end    
-	})
-
-	TS:AddButton({
-		Name = "Go to Chinese Roof",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(592,153,-100)
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(592,153,-100)
-			end
-		end    
-	})
-
-	TS:AddButton({
-		Name = "Go to Ufo Cave",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(29.6,10.5,-225.8)
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(29.6,10.5,-225.8)
-			end
-		end    
-	})
-
-	TS:AddButton({
-		Name = "Go to Prison",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(195,-7,-561)
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(195,-7,-561)
-			end
-		end    
-	})
-
-	TS:AddButton({
-		Name = "Go to Blue House Slot",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(562.2,85.38,-212.56)
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(562.2,85.38,-212.56)
-			end
-		end    
-	})
-
-	TS:AddButton({
-		Name = "Go to Spawn Slot",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(51.75,-5.3,-121.64)
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(51.75,-5.3,-121.64)
-			end
-		end    
-	})
-
-	TS:AddButton({
-		Name = "Go to Haunted Slot",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(164.57,-5.43,530.97)
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(164.57,-5.43,530.97)
-			end
-		end    
-	})
-
-	TS:AddButton({
-		Name = "Go to Random Slot",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(-211.65,85.7,426.72)
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-211.65,85.7,426.72)
-			end
-		end    
-	})
-
-	TS:AddButton({
-		Name = "Go to Beach Slot",
-		Callback = function()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") then
-					workspace.GrabParts.GrabPart.CFrame = workspace.GrabParts.GrabPart.CFrame - workspace.Camera.CFrame.Position + Vector3.new(-546.97,-5.3,-41.09)
-				end
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-546.97,-5.3,-41.09)
-			end
-		end    
-	})
-
-
-    task.wait(.25)
-
-
-	ST:AddSection({
-		Name = "Whitelist"
-	})
-
-
-	WLL = ST:AddDropdown({
-		Name = "Chill on friends (no workie sorry)",
-		Options = currantplrlist,
+	
+	KT:AddToggle({
+		Name = "Activate TP to mouse",
+		Default = true,
 		Callback = function(Value)
-			WLlistsel = Value
+			ATPTM = Value
 		end
 	})
 
+	
+	KT:AddSection({
+		Name = "<b>Anchor Item</b>"
+	})
+
+	local holdingx = false
+
+	KT:AddBind({
+		Name = "Anchor Item",
+		Default = Enum.KeyCode.X,
+		Hold = true,
+		Callback = function(Value)
+			holdingx = Value
+			local indexmcgee = {}
+			local gotone = false
+			if Value and workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") and workspace.GrabParts.GrabPart:FindFirstChild("WeldConstraint") and workspace.GrabParts.GrabPart.WeldConstraint.Part1 then
+				local jellyfish = workspace.GrabParts.GrabPart.WeldConstraint
+				local chillonme = workspace.GrabParts.GrabPart.WeldConstraint.Part1
+				if not chillonme:FindFirstAncestor("Plots") and not chillonme:FindFirstAncestor("Slots") and not chillonme:FindFirstAncestor("Map") then
+					if chillonme.Parent:FindFirstChild("somebodyshotaloadintomyburger2") then
+						gotone = true
+						chillonme.Parent.somebodyshotaloadintomyburger2:Destroy()
+						for _,prt in pairs(chillonme.Parent:GetChildren()) do
+							if prt:FindFirstChild("somebodyshotaloadintomyburger") then
+								prt.somebodyshotaloadintomyburger:Destroy()
+							end
+						end
+						frozenlist[chillonme.Parent] = nil
+						if game.Players:GetPlayerFromCharacter(chillonme.Parent) then
+							GrabItemsList[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = nil
+							pusslist[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = nil
+						else
+							GrabItemsList[chillonme.Parent] = nil
+						end
+						game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(chillonme.Parent:FindFirstChild("SoundPart") or chillonme.Parent:FindFirstChild("HumanoidRootPart"))
+						return
+					else
+						gotone = true
+						if chillonme.Parent:FindFirstChild("SoundPart") and chillonme.Parent:FindFirstChild("ThisToysNumber") and not chillonme.Parent:FindFirstAncestor("BinisCreations") then
+							frozenlist[chillonme.Parent] = true
+						end
+						if game.Players:GetPlayerFromCharacter(chillonme.Parent) then
+							GrabItemsList[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = true
+							pusslist[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = {chillonme.CFrame.Position, chillonme.CFrame}
+						else
+							GrabItemsList[chillonme.Parent] = true
+						end
+						local diddysbiscuit = Instance.new("Attachment")
+						diddysbiscuit.Name = "somebodyshotaloadintomyburger"
+						diddysbiscuit.Parent = chillonme
+						local diddlysquat = Instance.new("AlignPosition")
+						diddlysquat.Parent = diddysbiscuit
+						diddlysquat.Attachment0 = diddysbiscuit
+						diddlysquat.Mode = "OneAttachment"
+						diddlysquat.MaxForce = math.huge
+						diddlysquat.MaxVelocity = math.huge
+						diddlysquat.Responsiveness = 200
+						diddlysquat.Position = chillonme.CFrame.Position
+						local penismcandrew = Instance.new("AlignOrientation")
+						penismcandrew.Parent = diddysbiscuit
+						penismcandrew.Mode = "OneAttachment"
+						penismcandrew.Attachment0 = diddysbiscuit
+						penismcandrew.Responsiveness = 200
+						penismcandrew.MaxTorque = math.huge
+						penismcandrew.CFrame = chillonme.CFrame
+						local gottheblicky = Instance.new("Highlight")
+						gottheblicky.Parent = chillonme.Parent
+						gottheblicky.Name = "somebodyshotaloadintomyburger2"
+						gottheblicky.FillTransparency = 0.4
+						gottheblicky.FillColor = Color3.fromRGB(27,126,208)
+						gottheblicky.OutlineColor = Color3.fromRGB(21,97,161)
+						while jellyfish do task.wait() end
+						if chillonme then
+							game:GetService("ReplicatedStorage").GrabEvents.SetNetworkOwner:FireServer(chillonme,chillonme.CFrame)
+						end
+						return
+					end
+				end
+			end
+			if not gotone then
+				while holdingx do
+					local randallsmouse = game.Players.LocalPlayer:GetMouse()
+					local randallsparams = RaycastParams.new()
+					randallsparams.FilterDescendantsInstances = {game.Players.LocalPlayer.Character}
+					randallsparams.FilterType = Enum.RaycastFilterType.Blacklist
+					local randallsresult = workspace:Raycast(workspace.Camera.CFrame.Position,(game.Players.LocalPlayer:GetMouse().Hit.Position - workspace.Camera.CFrame.Position).Unit * 15000,randallsparams)
+					if randallsresult then
+						local chillonme = randallsresult.Instance
+						if not chillonme:FindFirstAncestor("Plots") and not chillonme:FindFirstAncestor("Slots") and not chillonme:FindFirstAncestor("Map") then
+							if not chillonme:FindFirstAncestor("Plots") and not chillonme:FindFirstAncestor("Slots") and not chillonme:FindFirstAncestor("Map") then
+								if not indexmcgee[chillonme.Parent] then
+									indexmcgee[chillonme.Parent] = true
+									if chillonme.Parent:FindFirstChild("somebodyshotaloadintomyburger2") then
+										chillonme.Parent.somebodyshotaloadintomyburger2:Destroy()
+										for _,prt in pairs(chillonme.Parent:GetChildren()) do
+											if prt:FindFirstChild("somebodyshotaloadintomyburger") then
+												prt.somebodyshotaloadintomyburger:Destroy()
+											end
+										end
+										frozenlist[chillonme.Parent] = nil
+										if game.Players:GetPlayerFromCharacter(chillonme.Parent) then
+											GrabItemsList[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = nil
+											pusslist[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = nil
+										else
+											GrabItemsList[chillonme.Parent] = nil
+										end
+										game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(chillonme.Parent:FindFirstChild("SoundPart") or chillonme.Parent:FindFirstChild("HumanoidRootPart"))
+									else
+										if game.Players:GetPlayerFromCharacter(chillonme.Parent) then
+											pusslist[game.Players:GetPlayerFromCharacter(chillonme.Parent)] = {chillonme.CFrame.Position, chillonme.CFrame}
+										end
+										local diddysbiscuit = Instance.new("Attachment")
+										diddysbiscuit.Name = "somebodyshotaloadintomyburger"
+										diddysbiscuit.Parent = chillonme
+										local diddlysquat = Instance.new("AlignPosition")
+										diddlysquat.Parent = diddysbiscuit
+										diddlysquat.Attachment0 = diddysbiscuit
+										diddlysquat.Mode = "OneAttachment"
+										diddlysquat.MaxForce = math.huge
+										diddlysquat.MaxVelocity = math.huge
+										diddlysquat.Responsiveness = 200
+										diddlysquat.Position = chillonme.CFrame.Position
+										local penismcandrew = Instance.new("AlignOrientation")
+										penismcandrew.Parent = diddysbiscuit
+										penismcandrew.Mode = "OneAttachment"
+										penismcandrew.Attachment0 = diddysbiscuit
+										penismcandrew.Responsiveness = 200
+										penismcandrew.MaxTorque = math.huge
+										penismcandrew.CFrame = chillonme.CFrame
+										local gottheblicky = Instance.new("Highlight")
+										gottheblicky.Parent = chillonme.Parent
+										gottheblicky.Name = "somebodyshotaloadintomyburger2"
+										gottheblicky.FillTransparency = 0.4
+										gottheblicky.FillColor = Color3.fromRGB(27,126,208)
+										gottheblicky.OutlineColor = Color3.fromRGB(21,97,161)
+									end
+								end
+							end
+						end
+					end
+					task.wait()
+				end
+				for chillonme,_ in pairs(indexmcgee) do
+					if chillonme:FindFirstChild("somebodyshotaloadintomyburger2") then
+						if chillonme:FindFirstChild("SoundPart") and not chillonme:FindFirstAncestor("BinisCreations") then
+							frozenlist[chillonme] = true
+						end
+						if game.Players:GetPlayerFromCharacter(chillonme) then
+							GrabItemsList[game.Players:GetPlayerFromCharacter(chillonme)] = true
+						else
+							GrabItemsList[chillonme] = true
+						end
+					end
+				end
+			end
+		end
+	})
+
+	KT:AddToggle({
+		Name = "Auto-claim network ownership",
+		Default = true,
+		Callback = function(Value)
+			acno = Value
+		end
+	})
+
+	KT:AddButton({
+		Name = "Release all frozen",
+		Callback = function()
+			for prt,_ in pairs(frozenlist) do
+				frozenlist[prt] = nil
+				if prt:FindFirstChild("somebodyshotaloadintomyburger2") then
+					prt.somebodyshotaloadintomyburger2:Destroy()
+					for _,prrt in pairs(prt:GetChildren()) do
+						if prrt:FindFirstChild("somebodyshotaloadintomyburger") then
+							prrt.somebodyshotaloadintomyburger:Destroy()
+						end
+					end
+				end
+			end
+			frozenlist = {}
+			for prt,_ in pairs(GrabItemsList) do
+				GrabItemsList[prt] = nil
+				if prt:FindFirstChild("somebodyshotaloadintomyburger2") then
+					prt.somebodyshotaloadintomyburger2:Destroy()
+					for _,prrt in pairs(prt:GetChildren()) do
+						if prrt:FindFirstChild("somebodyshotaloadintomyburger") then
+							prrt.somebodyshotaloadintomyburger:Destroy()
+						end
+					end
+				end
+			end
+			GrabItemsList = {}
+		end
+	})
+
+	KT:AddSection({
+		Name = "<b>Delete Item</b>"
+	})
+
+	local holdingq = false
+
+	KT:AddBind({
+		Name = "Delete Item",
+		Default = Enum.KeyCode.Q,
+		Hold = true,
+		Callback = function(Value)
+			holdingq = Value
+			local indexmcgee = {}
+			local gotone = false
+			if Value and workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") and workspace.GrabParts.GrabPart:FindFirstChild("WeldConstraint") and workspace.GrabParts.GrabPart.WeldConstraint.Part1 then
+				local jellyfish = workspace.GrabParts.GrabPart.WeldConstraint
+				local chillonme = workspace.GrabParts.GrabPart.WeldConstraint.Part1
+				if not chillonme:FindFirstAncestor("Plots") and not chillonme:FindFirstAncestor("Slots") and not chillonme:FindFirstAncestor("Map") then
+					if chillonme.Parent:FindFirstChild("somebodyshotaloadintomyburger3") then
+						gotone = true
+						chillonme.Parent.somebodyshotaloadintomyburger3:Destroy()
+						if chillonme.Parent:FindFirstChild("somebodyshotaloadintomyburger2") then
+							chillonme.Parent.somebodyshotaloadintomyburger2:Destroy()
+						end
+						for _,prt in pairs(chillonme.Parent:GetChildren()) do
+							if prt:FindFirstChild("somebodyshotaloadintomyburger") then
+								prt.somebodyshotaloadintomyburger:Destroy()
+							end
+						end
+						if not game.Players:GetPlayerFromCharacter(chillonme) then
+							DeleteService[chillonme.Parent] = nil
+						else
+							LoopKillList[game.Players:GetPlayerFromCharacter(chillonme).UserId] = nil
+						end
+						game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(chillonme.Parent:FindFirstChild("SoundPart") or chillonme.Parent:FindFirstChild("HumanoidRootPart"))
+						return
+					else
+						gotone = true
+						local gottheblicky = Instance.new("Highlight")
+						gottheblicky.Parent = chillonme.Parent
+						gottheblicky.Name = "somebodyshotaloadintomyburger2"
+						gottheblicky.FillTransparency = 0.4
+						gottheblicky.FillColor = Color3.fromRGB(0,0,0)
+						gottheblicky.OutlineColor = Color3.fromRGB(25,25,25)
+						local gottheblicky2 = Instance.new("StringValue")
+						gottheblicky2.Parent = chillonme.Parent
+						gottheblicky2.Name = "somebodyshotaloadintomyburger3"
+					end
+					return
+				end
+			end
+			if Value and not gotone then
+				while holdingq do
+					local randallsmouse = game.Players.LocalPlayer:GetMouse()
+					local randallsparams = RaycastParams.new()
+					randallsparams.FilterDescendantsInstances = {game.Players.LocalPlayer.Character}
+					randallsparams.FilterType = Enum.RaycastFilterType.Blacklist
+					local randallsresult = workspace:Raycast(workspace.Camera.CFrame.Position,(game.Players.LocalPlayer:GetMouse().Hit.Position - workspace.Camera.CFrame.Position).Unit * 15000,randallsparams)
+					if randallsresult then
+						local chillonme = randallsresult.Instance
+						if not chillonme:FindFirstAncestor("Plots") and not chillonme:FindFirstAncestor("Slots") and not chillonme:FindFirstAncestor("Map") then
+							if not chillonme:FindFirstAncestor("Plots") and not chillonme:FindFirstAncestor("Slots") and not chillonme:FindFirstAncestor("Map") then
+								if not indexmcgee[chillonme.Parent] then
+									if chillonme.Parent:FindFirstChild("somebodyshotaloadintomyburger3") then
+										indexmcgee[chillonme.Parent] = "bignig"
+										chillonme.Parent.somebodyshotaloadintomyburger3:Destroy()
+										if chillonme.Parent:FindFirstChild("somebodyshotaloadintomyburger2") then
+											chillonme.Parent.somebodyshotaloadintomyburger2:Destroy()
+										end
+										for _,prt in pairs(chillonme.Parent:GetChildren()) do
+											if prt:FindFirstChild("somebodyshotaloadintomyburger") then
+												prt.somebodyshotaloadintomyburger:Destroy()
+											end
+										end
+										if not game.Players:GetPlayerFromCharacter(chillonme) then
+											DeleteService[chillonme.Parent] = nil
+										else
+											LoopKillList[game.Players:GetPlayerFromCharacter(chillonme).UserId] = nil
+										end
+									else
+										indexmcgee[chillonme.Parent] = true
+										local gottheblicky = Instance.new("Highlight")
+										gottheblicky.Parent = chillonme.Parent
+										gottheblicky.Name = "somebodyshotaloadintomyburger2"
+										gottheblicky.FillTransparency = 0.4
+										gottheblicky.FillColor = Color3.fromRGB(0,0,0)
+										gottheblicky.OutlineColor = Color3.fromRGB(25,25,25)
+										local gottheblicky2 = Instance.new("StringValue")
+										gottheblicky2.Parent = chillonme.Parent
+										gottheblicky2.Name = "somebodyshotaloadintomyburger3"
+									end
+								end
+							end
+						end
+					end
+					task.wait()
+				end
+				for chillonme,_ in pairs(indexmcgee) do
+					if _ ~= "bignig" and chillonme:FindFirstChild("somebodyshotaloadintomyburger2") then
+						frozenlist[chillonme] = nil
+						GrabItemsList[chillonme] = nil
+						if game.Players:GetPlayerFromCharacter(chillonme) and not LoopKillList[game.Players:GetPlayerFromCharacter(chillonme).UserId] then
+							local plr = game.Players:GetPlayerFromCharacter(chillonme)
+							local uid = plr.UserId
+							LoopKillList[uid] = "who you loop killin nigga"
+							task.spawn(function()
+								while LoopKillList[uid] and plr and plr.Character and plr.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid:GetState() ~= Enum.HumanoidStateType.Dead do task.wait() end
+								LoopKillList[uid] = nil
+							end)
+						else
+							DeleteService[chillonme] = true
+						end
+					end
+				end
+			end
+		end
+	})
+
+
+
+
+
+	fList = ST:AddParagraph("<b>Whitelist</b>","<b>\nLoading...</b>")
+
+	task.spawn(function()
+		local friendtable = getAllFriendIds(game.Players.LocalPlayer.UserId,2)
+		for _,plr in pairs(game.Players:GetPlayers()) do
+			if game.Players.LocalPlayer:IsFriendsWith(plr.UserId) then
+				if not inbadboylist(plr.UserId) then
+					friendstring = friendstring..(friendstring ~= "" and "\n" or "").."<font color=\"rgb(0, 200, 0)\">"..plr.DisplayName.." (@"..plr.Name..") UserId: "..plr.UserId.."</font>"
+					fList:Set("<b>"..friendstring.."</b>")
+				else
+					friendstring = friendstring..(friendstring ~= "" and "\n" or "").."<font color=\"rgb(200, 0, 0)\">"..plr.DisplayName.." (@"..plr.Name..") UserId: "..plr.UserId.."</font>"
+					fList:Set("<b>"..friendstring.."</b>")
+				end
+			end
+		end
+		if friendstring == "" then
+			fList:Set("<b>\nNo friends haha noob!!</b>")
+		end
+	end)
+
 	ST:AddSection({
-		Name = "Remove Custom Location"
+		Name = "<b>Remove Custom Location</b>"
 	})
 
 	local selting = ""
@@ -5462,7 +5857,44 @@ else
 	})
 
 	ST:AddSection({
-		Name = "Infinite Yield"
+		Name = "<b>Print Deaths</b>"
+	})
+
+	ST:AddToggle({
+		Name = "View Offline BlackHoles",
+		Default = false,
+		Callback = function(Value)
+			VOBBC = Value
+			if VOBBC then
+				for _,diddler in pairs(dick2:GetChildren()) do
+					diddler.Hole.BillboardGui.Enabled = true
+					for _,prt in pairs(diddler:GetDescendants()) do
+						if prt:IsA("BasePart") then
+							prt.Transparency = 0
+							if prt.Name == "HumanoidRootPart" then
+								prt.Transparency = 1
+							end
+							if prt.Name == "Hole" then
+								prt.Transparency = 0.25
+							end
+						end
+					end
+				end
+			else
+				for _,diddler in pairs(dick2:GetChildren()) do
+					diddler.Hole.BillboardGui.Enabled = false
+					for _,prt in pairs(diddler:GetDescendants()) do
+						if prt:IsA("BasePart") then
+							prt.Transparency = 1
+						end
+					end
+				end
+			end
+		end,
+	})
+
+	ST:AddSection({
+		Name = "<b>Other Scripts</b>"
 	})
 
 	ST:AddButton({
@@ -5478,10 +5910,6 @@ else
 		end    
 	})
 
-	ST:AddSection({
-		Name = "Dex"
-	})
-
 	ST:AddButton({
 		Name = "Load Dex",
 		Callback = function()
@@ -5493,10 +5921,6 @@ else
 			})
 			loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))()
 		end    
-	})
-
-	ST:AddSection({
-		Name = "Rejoin"
 	})
 
 	ST:AddButton({
@@ -5514,7 +5938,7 @@ else
 	})
 
 	ST:AddSection({
-		Name = "Join Land"
+		Name = "<b>Join Land</b>"
 	})
 
 	ST:AddButton({
@@ -5555,7 +5979,7 @@ else
 	})
 
 	ST:AddSection({
-		Name = "Kick Land"
+		Name = "<b>Kick Land</b>"
 	})
 
 	ST:AddButton({
@@ -5576,55 +6000,8 @@ else
 		end,
 	})
 
-	ST:AddSection({
-		Name = "Print Deaths"
-	})
-
-	ST:AddToggle({
-		Name = "View Offline BlackHoles",
-		Default = false,
-		Callback = function(Value)
-			VOBBC = Value
-			if VOBBC then
-				for _,diddler in pairs(dick2:GetChildren()) do
-					diddler.Hole.BillboardGui.Enabled = true
-					for _,prt in pairs(diddler:GetDescendants()) do
-						if prt:IsA("BasePart") then
-							prt.Transparency = 0
-							if prt.Name == "HumanoidRootPart" then
-								prt.Transparency = 1
-							end
-							if prt.Name == "Hole" then
-								prt.Transparency = 0.25
-							end
-						end
-					end
-				end
-			else
-				for _,diddler in pairs(dick2:GetChildren()) do
-					diddler.Hole.BillboardGui.Enabled = false
-					for _,prt in pairs(diddler:GetDescendants()) do
-						if prt:IsA("BasePart") then
-							prt.Transparency = 1
-						end
-					end
-				end
-			end
-		end,
-	})
-
-	ST:AddSection({
-		Name = "Destroy BinisJ"
-	})
-
-	ST:AddButton({
-		Name = "Destroy BinisJ nooooooooo",
-		Callback = function()
-			OrionLib:Destroy()
-		end,
-	})
-
 	loaded = true
+	setlist = false
 
 	game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">[BinisJ]</font><font color=\"rgb(255, 255, 255)\"> Niggalink ONLINE bris</font>")
 
