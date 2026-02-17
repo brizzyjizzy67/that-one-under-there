@@ -512,12 +512,6 @@ else
 		end
     end
 
-	if workspace.Map.AlwaysHereTweenedObjects:FindFirstChild("Train") and workspace.Map.AlwaysHereTweenedObjects.Train:FindFirstChild("Object") and workspace.Map.AlwaysHereTweenedObjects.Train.Object:FindFirstChild("FollowThisPart") then
-		local pigger = workspace.Map.AlwaysHereTweenedObjects.Train.Object.FollowThisPart
-		pigger.AlignPosition.Enabled = false
-		pigger.AlignOrientation.Enabled = false
-	end
-
 	local kickland = {}
 	local dplist = {}
 	local uslist = {}
@@ -1112,6 +1106,26 @@ else
 		for _,plr in pairs(game.Players:GetPlayers()) do
 			if plr.DisplayName.." (@"..plr.Name..")" == plrr or plr.DisplayName.." (@"..plr.Name..") UserId: "..plr.UserId == plrr then
 				return plr
+			end
+		end
+	end
+
+	function getcount()
+		local count = 0
+		local list = {}
+		for _,prt in pairs(workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:GetChildren()) do
+			if prt.Name == "NinjaShuriken" then
+				count += 1
+				list[count] = prt
+			end
+		end
+		return {count, list}
+	end
+
+	function findfirst(obj)
+		for _,prt in pairs(obj:GetDescendants()) do
+			if prt.ClassName == "Attachment" then
+				return prt.Parent
 			end
 		end
 	end
@@ -3862,13 +3876,13 @@ else
 			end
 			for itm in GrabItemsList do
 				if itm and itm.Parent and acno then
-					if itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") then
-						while itm and itm.Parent and not checkgrab(itm) and GrabItemsList[itm] and (itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart")) do
+					if itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or (itm:FindFirstAncestor("AlwaysHereTweenedObjects") and findfirst(itm)) then
+						while itm and itm.Parent and not checkgrab(itm) and GrabItemsList[itm] and (itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or (itm:FindFirstAncestor("AlwaysHereTweenedObjects") and findfirst(itm))) do
 							if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
 								deletedone = true
 								local j
 								local p
-								local prt = itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart")
+								local prt = itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or findfirst(itm)
 								if prt and (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 30 then
 									j = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
 									p = game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity
@@ -4963,45 +4977,84 @@ else
 		Name = "<b>Tweened Objects</b>"
 	})
 
-	function getcount()
-		local count = 0
-		local list = {}
-		for _,prt in pairs(workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:GetChildren()) do
-			if prt.Name == "NinjaShuriken" then
-				count += 1
-				list[count] = prt
+	local alignlist = {}
+	local selected = "Train"
+
+	local OS
+
+	local TA
+
+	MS:AddDropdown({
+		Name = "Select location to remove (one at a time)",
+		Options = {"Train","CaveCart","OuterUFO","InnerUFO","LrgDebris","LrgDebris2","SmlDebris","SmlDebris2","Ocean"},
+		Default = "Train",
+		Callback = function(Value)
+			if selected ~= Value then
+				if OS then
+					OS:Set(false)
+				end
+				if TA then
+					TA:Set(not alignlist[selected] and true or false)
+				end
+				selected = Value
 			end
 		end
-		return {count, list}
-	end
+	})
 
-	MS:AddButton({
-		Name = "Grab Outer Ufo",
-		Callback = function()
-			local UFO = workspace.Map.AlwaysHereTweenedObjects.OuterUFO.Object.ObjectModel.Body
+	local diddleskin = false
 
-			while getcount()[1] < 10 do
+	OS = MS:AddToggle({
+		Name = "Ownership Selected",
+		Default = false,
+		Callback = function(Value)
+			diddleskin = Value
+			local prrt = findfirst(workspace.Map.AlwaysHereTweenedObjects[selected].Object.ObjectModel)
+			while diddleskin and getcount()[1] < 10 do
+				for _,prt in pairs(getcount()[2]) do
+					if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and prt:FindFirstChild("SoundPart") and (game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position - prt.SoundPart.CFrame.Position).Magnitude < 28 and not checkgrab(prt) then
+						game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prt.SoundPart,prt.SoundPart.CFrame)
+					end
+					if checkgrab(prt) then
+						prt.SoundPart.AssemblyLinearVelocity = Vector3.new(0,1e9,0)
+					end
+				end
 				while not (game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character.Parent == workspace and game.Players.LocalPlayer.CanSpawnToy.Value) do task.wait() end
 				task.spawn(function()
-					game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("NinjaShuriken",game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame,Vector3.new(0,0,0))
+					game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("NinjaShuriken",game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,2,10),Vector3.new(0,0,0))
 				end)
 				task.wait()
 			end
-
-			for _,prt in pairs(getcount()[2]) do
-				game.ReplicatedStorage.PlayerEvents.StickyPartEvent:FireServer(prt.StickyPart,UFO,CFrame.Angles(0,0,0))
+			if diddleskin then
+				for _,prt in pairs(getcount()[2]) do
+					if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and prt:FindFirstChild("SoundPart") and (game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position - prt.SoundPart.CFrame.Position).Magnitude < 28 and not checkgrab(prt) then
+						game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prt.SoundPart,prt.SoundPart.CFrame)
+					end
+					if checkgrab(prt) then
+						prt.SoundPart.AssemblyLinearVelocity = Vector3.new(0,1e9,0)
+					end
+				end
+				for _,prt in pairs(getcount()[2]) do
+					game.ReplicatedStorage.PlayerEvents.StickyPartEvent:FireServer(prt.StickyPart,prrt,CFrame.Angles(0,0,0))
+				end
+				local st = tick()
+				while tick() - st < 7.5 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and not checkgrab(prrt) do
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = prrt.CFrame
+					game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prrt,prrt.CFrame)
+					task.wait()
+				end
+				OS:Set(false)
 			end
+		end
+	})
 
-			for i = 1,100 do
-				me.Character.HumanoidRootPart.CFrame = UFO.CFrame
-				setowner:FireServer(UFO,UFO.CFrame)
-				task.wait()
-			end
-
-			local obj = w.Map.AlwaysHereTweenedObjects.OuterUFO.Object
-			local body = obj.ObjectModel.Body
-			obj.FollowThisPart.AlignPosition.Attachment0 = nil
-			obj.FollowThisPart.AlignOrientation.Attachment0 = nil
+	TA = MS:AddToggle({
+		Name = "Toggle Alignment",
+		Default = true,
+		Callback = function(Value)
+			alignlist[selected] = not Value
+			local obj = workspace.Map.AlwaysHereTweenedObjects[selected].Object.FollowThisPart
+			obj.AlignOrientation.Enabled = alignlist[selected]
+			obj.AlignPosition.Enabled = alignlist[selected]
 		end
 	})
 
@@ -5492,7 +5545,7 @@ else
 			if Value and workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") and workspace.GrabParts.GrabPart:FindFirstChild("WeldConstraint") and workspace.GrabParts.GrabPart.WeldConstraint.Part1 then
 				local jellyfish = workspace.GrabParts.GrabPart.WeldConstraint
 				local chillonme = workspace.GrabParts.GrabPart.WeldConstraint.Part1
-				if not chillonme:FindFirstAncestor("Plots") and not chillonme:FindFirstAncestor("Slots") and not chillonme:FindFirstAncestor("Map") then
+				if not chillonme:FindFirstAncestor("Plots") and not chillonme:FindFirstAncestor("Slots") and (not chillonme:FindFirstAncestor("Map") or chillonme:FindFirstAncestor("AlwaysHereTweenedObjects")) then
 					if chillonme.Parent:FindFirstChild("somebodyshotaloadintomyburger2") then
 						gotone = true
 						chillonme.Parent.somebodyshotaloadintomyburger2:Destroy()
