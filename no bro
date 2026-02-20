@@ -5999,8 +5999,8 @@ else
 					if not satisfied and continue then
 						local satisfied = false
 						repeat
+							game.RunService.Heartbeat:Wait() 
 							if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-								game.RunService.Heartbeat:Wait() 
 								local character = game.Players.LocalPlayer.Character 
 								local root = character.HumanoidRootPart 
 								local humanoid = character.Humanoid
@@ -6213,8 +6213,8 @@ else
 					if itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or (itm:FindFirstAncestor("AlwaysHereTweenedObjects") and findfirst(itm)) then
 						local satisfied = false
 						repeat
+							game.RunService.Heartbeat:Wait() 
 							if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-								game.RunService.Heartbeat:Wait() 
 								local character = game.Players.LocalPlayer.Character 
 								local root = character.HumanoidRootPart 
 								local humanoid = character.Humanoid
@@ -6284,8 +6284,8 @@ else
 							itm = itm.Character
 							local satisfied = false
 							repeat
+								game.RunService.Heartbeat:Wait() 
 								if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-									game.RunService.Heartbeat:Wait() 
 									local character = game.Players.LocalPlayer.Character 
 									local root = character.HumanoidRootPart 
 									local humanoid = character.Humanoid
@@ -6381,8 +6381,8 @@ else
 						local satisfied = false
 						if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
 							repeat
+								game.RunService.Heartbeat:Wait()
 								if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-									game.RunService.Heartbeat:Wait() 
 									local character = game.Players.LocalPlayer.Character 
 									local root = character.HumanoidRootPart 
 									local humanoid = character.Humanoid
