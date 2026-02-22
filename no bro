@@ -5954,7 +5954,6 @@ else
 		local j = CFrame.new(0,0,0)
 		local p = Vector3.new(0,0,0)
 		while true do
-			game.RunService.Heartbeat:Wait()
 			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
 				j = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
 				p = game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity
@@ -5982,29 +5981,292 @@ else
 							end
 						end
 					end
+					if plr.Character.HumanoidRootPart.Anchored then
+						satisfied = true
+					end
 					if not (LoopKillList[plr.UserId] or LocList[plr.UserId] or OKLA or OKA or LBA) then
 						satisfied = true
 					end
 					if plr.Character.HumanoidRootPart.CFrame.Position.Magnitude > 10000 then
 						satisfied = true
 					end
-					if plr.Character.Parent ~= workspace then
-						BlobBringList[plr.UserId] = CFrame.new(-73,-6,-265.5)
-						satisfied = true
-					end
 					local vel = plr.Character.HumanoidRootPart.AssemblyLinearVelocity
 					if plr.Character.HumanoidRootPart.AssemblyLinearVelocity.Magnitude > 10000 then
 						vel = Vector3.zero
 					end
-					if not satisfied and continue then
+					if not satisfied and plr.Character.Parent ~= workspace then
+						BlobBringList[plr.UserId] = CFrame.new(-73,-6,-265.5)
+						satisfied = true
+					end
+					if not BlobBringList[plr.UserId] and not satisfied and continue then
 						local satisfied = false
-						repeat
+						game.RunService.Heartbeat:Wait() 
+						if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+							local character = game.Players.LocalPlayer.Character 
+							local root = character.HumanoidRootPart 
+							local humanoid = character.Humanoid
+							local vel = nil
+							vel = root.CFrame
+							j = vel
+							p = root.AssemblyLinearVelocity
+							local cameraPart = Instance.new("Part")
+							local trans = 0
+							cameraPart.Transparency = 1
+							cameraPart.CanCollide = false
+							cameraPart.Anchored = true
+							cameraPart.CFrame = vel * CFrame.new(0,1.5,0)
+							cameraPart.Parent = workspace
+							if (workspace.Camera.CFrame.Position - cameraPart.CFrame.Position).Magnitude < 1.5 then
+								trans = 1 - (((workspace.Camera.CFrame.Position - cameraPart.CFrame.Position).Magnitude - .5) / 1.5)
+							end
+							for _,prt in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+								if prt.ClassName == "Part" and prt.Name ~= "HumanoidRootPart" then
+									prt.Transparency = trans
+								elseif prt.ClassName == "Accessory" and prt.Name ~= "TypingKeyboardMyWorld" then
+									prt.Handle.Transparency = trans
+								end
+							end
+							workspace.Camera.CameraSubject = cameraPart
+
+							local vel2 = plr.Character.HumanoidRootPart.AssemblyLinearVelocity
+							if vel2.Magnitude > 10000 then
+								vel2 = Vector3.zero
+							end							
+							hrp = plr.Character.HumanoidRootPart
+							if (hrp.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 28 then
+								game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame * CFrame.new(0,-10,10) + (vel2 / math.pi)
+								game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = vel2
+							end
+							task.spawn(function()
+								task.wait(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 1000)
+								if hrp then
+									if plr.Character and hrp then
+										game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(plr.Character.HumanoidRootPart,plr.Character.HumanoidRootPart.CFrame * CFrame.new(0,-1,1))
+										if checkgrab(plr.Character) then
+											satisfied = true
+											local gp
+											if plr.Character:FindFirstChild("GrabParts") then
+												gp = plr.Character.GrabParts
+												gp.Parent = workspace
+											end
+											if OKLA then
+												plr.Character:PivotTo(CFrame.new(0,1e29,0))
+												for _,prt in pairs(plr.Character:GetChildren()) do
+													if prt.ClassName == "Part" then
+														local bv = Instance.new("BodyPosition")
+														bv.D = 50
+														bv.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
+														bv.P = 10000
+														bv.Position = Vector3.new(0,1e29,0)
+														bv.Parent = prt
+														task.spawn(function()
+															task.wait(1)
+															bv:Destroy()
+														end)
+													end
+												end
+												if plr.Character:FindFirstChild("Humanoid") then
+													plr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
+												end
+												if hrp then
+													game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(hrp)
+												end
+											elseif OKA then
+												plr.Character:PivotTo(CFrame.new(0,1e29,0))
+												for _,prt in pairs(plr.Character:GetChildren()) do
+													if prt.ClassName == "Part" then
+														local bv = Instance.new("BodyPosition")
+														bv.D = 100
+														bv.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
+														bv.P = 10000
+														bv.Position = Vector3.new(0,1e29,0)
+														bv.Parent = prt
+														task.spawn(function()
+															task.wait(1)
+															bv:Destroy()
+														end)
+													end
+												end
+												if plr.Character:FindFirstChild("Humanoid") then
+													plr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Freefall)
+												end
+												if hrp then
+													game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(hrp)
+												end
+											elseif LocList[plr.UserId] then
+												plr.Character:PivotTo(CFrame.new(LocList[plr.UserId]))
+												for _,prt in pairs(plr.Character:GetChildren()) do
+													if prt.ClassName == "Part" then
+														local bv = Instance.new("BodyPosition")
+														bv.D = 50
+														bv.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
+														bv.P = 10000
+														bv.Position = LocList[plr.UserId]
+														bv.Parent = prt
+														if Freelist[plr.UserId] then
+															task.spawn(function()
+																task.wait(1)
+																bv:Destroy()
+															end)
+														else
+															task.spawn(function()
+																while plr.Character and plr.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid.Sit do task.wait() end
+																bv:Destroy()
+															end)
+														end
+													end
+												end
+												if Freelist[plr.UserId] and hrp then
+													game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(hrp)
+												end
+											elseif LBA then
+												plr.Character:PivotTo(CFrame.new(LBP))
+												for _,prt in pairs(plr.Character:GetChildren()) do
+													if prt.ClassName == "Part" then
+														local bv = Instance.new("BodyPosition")
+														bv.D = 50
+														bv.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
+														bv.P = 10000
+														bv.Position = LBP
+														bv.Parent = prt
+														task.spawn(function()
+															task.wait(1)
+															bv:Destroy()
+														end)
+													end
+												end
+												if Freelist[plr.UserId] and hrp then
+													game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(hrp)
+												end
+											else
+												plr.Character:PivotTo(CFrame.new(0,1e29,0))
+												for _,prt in pairs(plr.Character:GetChildren()) do
+													if prt.ClassName == "Part" then
+														local bv = Instance.new("BodyPosition")
+														bv.D = 50
+														bv.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
+														bv.P = 10000
+														bv.Position = Vector3.new(0,1e29,0)
+														bv.Parent = prt
+														task.spawn(function()
+															task.wait(1)
+															bv:Destroy()
+														end)
+													end
+												end
+												if plr.Character:FindFirstChild("Humanoid") then
+													plr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
+												end
+												if hrp then
+													game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(hrp)
+												end
+											end
+											if gp then
+												gp.Parent = plr.Character
+											end
+										end
+									end
+								end
+							end)
+
+							game.RunService.RenderStepped:Wait()
+							if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+								game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = j
+								game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = p
+							end
+							workspace.Camera.CameraSubject = humanoid
+							cameraPart:Destroy()
+						end
+					end
+				end
+			end
+			for itm in GrabItemsList do
+				if itm and itm.Parent and acno then
+					if itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("Main") or itm:FindFirstChild("Balloon") or (itm:FindFirstAncestor("AlwaysHereTweenedObjects") and findfirst(itm)) then
+						local satisfied = false
+						game.RunService.Heartbeat:Wait() 
+						if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+							local character = game.Players.LocalPlayer.Character 
+							local root = character.HumanoidRootPart 
+							local humanoid = character.Humanoid
+							local vel = nil 
+							while not (character and character.Parent and root and root.Parent) do 
+								game.RunService.Heartbeat:Wait() 
+								character = game.Players.LocalPlayer.Character 
+								root = character.HumanoidRootPart 
+							end 
+							vel = root.CFrame
+							j = vel
+							p = root.AssemblyLinearVelocity
+							local cameraPart = Instance.new("Part")
+							local trans = 0
+							cameraPart.Transparency = 1
+							cameraPart.CanCollide = false
+							cameraPart.Anchored = true
+							cameraPart.CFrame = vel * CFrame.new(0,1.5,0)
+							cameraPart.Parent = workspace
+							if (workspace.Camera.CFrame.Position - cameraPart.CFrame.Position).Magnitude < 1.5 then
+								trans = 1 - (((workspace.Camera.CFrame.Position - cameraPart.CFrame.Position).Magnitude - .5) / 1.5)
+							end
+							for _,prt in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+								if prt.ClassName == "Part" and prt.Name ~= "HumanoidRootPart" then
+									prt.Transparency = trans
+								elseif prt.ClassName == "Accessory" and prt.Name ~= "TypingKeyboardMyWorld" then
+									prt.Handle.Transparency = trans
+								end
+							end
+							workspace.Camera.CameraSubject = cameraPart
+
+							if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+								local prt = itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("Main") or itm:FindFirstChild("Balloon") or findfirst(itm)
+								if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+									deletedone = true
+									if (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 30 then
+										game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = prt.CFrame + Vector3.new(0,10,0) + (prt.AssemblyLinearVelocity / math.pi)
+										game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = prt.AssemblyLinearVelocity
+									else
+										j = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+										p = game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity
+									end
+									task.spawn(function()
+										task.wait(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 1000)
+										if prt then
+											for _,prt in pairs(itm:GetChildren()) do
+												if prt:IsA("BasePart") and prt.CanQuery then
+													game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prt,prt.CFrame)
+												end
+											end
+										end
+									end)
+								end
+							else
+								satisfied = true
+							end
+
+							game.RunService.RenderStepped:Wait()
+							if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+								game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = j
+								game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = p
+							end
+							workspace.Camera.CameraSubject = humanoid
+							cameraPart:Destroy()
+						end
+					elseif itm.Parent == game.Players then
+						if itm.Character then
+							local plr = itm
+							itm = itm.Character
+							local satisfied = false
 							game.RunService.Heartbeat:Wait() 
 							if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
 								local character = game.Players.LocalPlayer.Character 
 								local root = character.HumanoidRootPart 
 								local humanoid = character.Humanoid
-								local vel = nil
+								local vel = nil 
+								while not (character and character.Parent and root and root.Parent) do 
+									game.RunService.Heartbeat:Wait() 
+									character = game.Players.LocalPlayer.Character 
+									root = character.HumanoidRootPart 
+								end
 								vel = root.CFrame
 								j = vel
 								p = root.AssemblyLinearVelocity
@@ -6027,170 +6289,47 @@ else
 								end
 								workspace.Camera.CameraSubject = cameraPart
 								
-								if (LoopKillList[plr.UserId] or (LocList[plr.UserId] and OTPList[plr.UserId]) or OKLA or OKA or LBA) and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-									if LocList[plr.UserId] then
-										if not (OKLA or OKA or LBA) then
-											if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and (plr.Character.HumanoidRootPart.CFrame.Position - LocList[plr.UserId]).Magnitude < 50 then
-												satisfied = true
+								if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+									deletedone = true
+									local prt = itm:FindFirstChild("HumanoidRootPart")
+									if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and pusslist[plr] then
+										if not itm:FindFirstChild("somebodyshotaloadintomyburger2") then
+											plr.Character:PivotTo(CFrame.new(pusslist[plr][1]))
+											local diddysbiscuit = Instance.new("Attachment")
+											diddysbiscuit.Name = "somebodyshotaloadintomyburger"
+											diddysbiscuit.Parent = prt
+											local diddlysquat = Instance.new("AlignPosition")
+											diddlysquat.Parent = diddysbiscuit
+											diddlysquat.Attachment0 = diddysbiscuit
+											diddlysquat.Mode = "OneAttachment"
+											diddlysquat.MaxForce = math.huge
+											diddlysquat.MaxVelocity = 1000
+											diddlysquat.Responsiveness = 150
+											diddlysquat.Position = pusslist[plr][1]
+											local penismcandrew = Instance.new("AlignOrientation")
+											penismcandrew.Parent = diddysbiscuit
+											penismcandrew.Mode = "OneAttachment"
+											penismcandrew.Attachment0 = diddysbiscuit
+											penismcandrew.Responsiveness = 150
+											penismcandrew.MaxTorque = math.huge
+											penismcandrew.CFrame = pusslist[plr][2]
+											local gottheblicky = Instance.new("Highlight")
+											gottheblicky.Parent = itm
+											gottheblicky.Name = "somebodyshotaloadintomyburger2"
+											gottheblicky.FillTransparency = 0.4
+											gottheblicky.FillColor = Color3.fromRGB(27,126,208)
+											gottheblicky.OutlineColor = Color3.fromRGB(21,97,161)
+										end
+										if (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 28 then
+											game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = prt.CFrame + Vector3.new(0,10,0) + (prt.AssemblyLinearVelocity / math.pi)
+											game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = prt.AssemblyLinearVelocity
+										end
+										task.spawn(function()
+											task.wait(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 1000)
+											if prt then
+												game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prt,prt.CFrame)
 											end
-										end
-									end
-									if LBA then
-										if OWF and friendslist[plr.UserId] or plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and (plr.Character.HumanoidRootPart.CFrame.Position - LBP).Magnitude < BAR then
-											satisfied = true
-										end
-									end
-									if OKLA or OKA then
-										if OWF then
-											if friendslist[plr.UserId] then
-												satisfied = true
-											end
-										end
-									end
-									if not (LoopKillList[plr.UserId] or LocList[plr.UserId] or OKLA or OKA or LBA) then
-										satisfied = true
-									end
-									if plr.Character.Parent ~= workspace or plr.Character.HumanoidRootPart.CFrame.Position.Magnitude > 10000 then
-										satisfied = true
-									end
-									local vel = plr.Character.HumanoidRootPart.AssemblyLinearVelocity
-									if plr.Character.HumanoidRootPart.AssemblyLinearVelocity.Magnitude > 10000 then
-										vel = Vector3.zero
-									end
-									if not satisfied and continue then
-										hrp = plr.Character.HumanoidRootPart
-										if (hrp.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 28 then
-											game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame * CFrame.new(0,-10,10) + (vel / math.pi)
-											game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = vel
-										end
-										if hrp then
-											if plr.Character and hrp then
-												game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(hrp,hrp.CFrame * CFrame.new(0,-1,-1))
-												if checkgrab(plr.Character) then
-													satisfied = true
-													local gp
-													if plr.Character:FindFirstChild("GrabParts") then
-														gp = plr.Character.GrabParts
-														gp.Parent = workspace
-													end
-													if OKLA then
-														plr.Character:PivotTo(CFrame.new(0,1e29,0))
-														for _,prt in pairs(plr.Character:GetChildren()) do
-															if prt.ClassName == "Part" then
-																local bv = Instance.new("BodyPosition")
-																bv.D = 50
-																bv.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
-																bv.P = 10000
-																bv.Position = Vector3.new(0,1e29,0)
-																bv.Parent = prt
-																task.spawn(function()
-																	task.wait(1)
-																	bv:Destroy()
-																end)
-															end
-														end
-														if plr.Character:FindFirstChild("Humanoid") then
-															plr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
-														end
-														if hrp then
-															game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(hrp)
-														end
-													elseif OKA then
-														plr.Character:PivotTo(CFrame.new(0,1e29,0))
-														for _,prt in pairs(plr.Character:GetChildren()) do
-															if prt.ClassName == "Part" then
-																local bv = Instance.new("BodyPosition")
-																bv.D = 100
-																bv.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
-																bv.P = 10000
-																bv.Position = Vector3.new(0,1e29,0)
-																bv.Parent = prt
-																task.spawn(function()
-																	task.wait(1)
-																	bv:Destroy()
-																end)
-															end
-														end
-														if plr.Character:FindFirstChild("Humanoid") then
-															plr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Freefall)
-														end
-														if hrp then
-															game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(hrp)
-														end
-													elseif LocList[plr.UserId] then
-														plr.Character:PivotTo(CFrame.new(LocList[plr.UserId]))
-														for _,prt in pairs(plr.Character:GetChildren()) do
-															if prt.ClassName == "Part" then
-																local bv = Instance.new("BodyPosition")
-																bv.D = 50
-																bv.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
-																bv.P = 10000
-																bv.Position = LocList[plr.UserId]
-																bv.Parent = prt
-																if Freelist[plr.UserId] then
-																	task.spawn(function()
-																		task.wait(1)
-																		bv:Destroy()
-																	end)
-																else
-																	task.spawn(function()
-																		while plr.Character and plr.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid.Sit do task.wait() end
-																		bv:Destroy()
-																	end)
-																end
-															end
-														end
-														if Freelist[plr.UserId] and hrp then
-															game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(hrp)
-														end
-													elseif LBA then
-														plr.Character:PivotTo(CFrame.new(LBP))
-														for _,prt in pairs(plr.Character:GetChildren()) do
-															if prt.ClassName == "Part" then
-																local bv = Instance.new("BodyPosition")
-																bv.D = 50
-																bv.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
-																bv.P = 10000
-																bv.Position = LBP
-																bv.Parent = prt
-																task.spawn(function()
-																	task.wait(1)
-																	bv:Destroy()
-																end)
-															end
-														end
-														if Freelist[plr.UserId] and hrp then
-															game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(hrp)
-														end
-													else
-														plr.Character:PivotTo(CFrame.new(0,1e29,0))
-														for _,prt in pairs(plr.Character:GetChildren()) do
-															if prt.ClassName == "Part" then
-																local bv = Instance.new("BodyPosition")
-																bv.D = 50
-																bv.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
-																bv.P = 10000
-																bv.Position = Vector3.new(0,1e29,0)
-																bv.Parent = prt
-																task.spawn(function()
-																	task.wait(1)
-																	bv:Destroy()
-																end)
-															end
-														end
-														if plr.Character:FindFirstChild("Humanoid") then
-															plr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
-														end
-														if hrp then
-															game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(hrp)
-														end
-													end
-													if gp then
-														gp.Parent = plr.Character
-													end
-												end
-											end
-										end
+										end)
 									end
 								else
 									satisfied = true
@@ -6204,16 +6343,18 @@ else
 								workspace.Camera.CameraSubject = humanoid
 								cameraPart:Destroy()
 							end
-						until satisfied or not (game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart"))
+						end
 					end
 				end
 			end
-			for itm in GrabItemsList do
+			local deletedone = false
+			for itm in DeleteService do
 				if itm and itm.Parent and acno then
-					if itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or (itm:FindFirstAncestor("AlwaysHereTweenedObjects") and findfirst(itm)) then
+					if itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("Main") or itm:FindFirstChild("Balloon") then
+						local prt = itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("Main") or itm:FindFirstChild("Balloon")
 						local satisfied = false
-						repeat
-							game.RunService.Heartbeat:Wait() 
+						if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+							game.RunService.Heartbeat:Wait()
 							if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
 								local character = game.Players.LocalPlayer.Character 
 								local root = character.HumanoidRootPart 
@@ -6224,7 +6365,7 @@ else
 									character = game.Players.LocalPlayer.Character 
 									root = character.HumanoidRootPart 
 								end 
-								vel = root.CFrame
+								local vel = root.CFrame
 								j = vel
 								p = root.AssemblyLinearVelocity
 								local cameraPart = Instance.new("Part")
@@ -6245,17 +6386,21 @@ else
 									end
 								end
 								workspace.Camera.CameraSubject = cameraPart
-
-								if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-									deletedone = true
-									local prt = itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or findfirst(itm)
-									if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-										if (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 30 then
-											game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = prt.CFrame + Vector3.new(0,10,0) + (prt.AssemblyLinearVelocity / math.pi)
-											game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = prt.AssemblyLinearVelocity
-										else
-											j = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-											p = game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity
+								
+								workspace.FallenPartsDestroyHeight = 0/0
+								deletedone = true
+								prt = itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("Main") or itm:FindFirstChild("Balloon")
+								if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+									if (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 28 then
+										game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = prt.CFrame + (prt.AssemblyLinearVelocity / math.pi)
+										game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = prt.AssemblyLinearVelocity
+									end
+									task.spawn(function()
+										task.wait(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 1000)
+										for _,prt in pairs(itm:GetChildren()) do
+											if prt:IsA("BasePart") and prt.CanQuery then
+												game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(prt)
+											end
 										end
 										if prt then
 											for _,prt in pairs(itm:GetChildren()) do
@@ -6264,9 +6409,7 @@ else
 												end
 											end
 										end
-									end
-								else
-									satisfied = true
+									end)
 								end
 
 								game.RunService.RenderStepped:Wait()
@@ -6277,169 +6420,6 @@ else
 								workspace.Camera.CameraSubject = humanoid
 								cameraPart:Destroy()
 							end
-						until not (not satisfied and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and itm and itm.Parent and not checkgrab(itm) and GrabItemsList[itm] and (itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or (itm:FindFirstAncestor("AlwaysHereTweenedObjects") and findfirst(itm))))
-					elseif itm.Parent == game.Players then
-						if itm.Character then
-							local plr = itm
-							itm = itm.Character
-							local satisfied = false
-							repeat
-								game.RunService.Heartbeat:Wait() 
-								if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-									local character = game.Players.LocalPlayer.Character 
-									local root = character.HumanoidRootPart 
-									local humanoid = character.Humanoid
-									local vel = nil 
-									while not (character and character.Parent and root and root.Parent) do 
-										game.RunService.Heartbeat:Wait() 
-										character = game.Players.LocalPlayer.Character 
-										root = character.HumanoidRootPart 
-									end
-									vel = root.CFrame
-									j = vel
-									p = root.AssemblyLinearVelocity
-									local cameraPart = Instance.new("Part")
-									local trans = 0
-									cameraPart.Transparency = 1
-									cameraPart.CanCollide = false
-									cameraPart.Anchored = true
-									cameraPart.CFrame = vel * CFrame.new(0,1.5,0)
-									cameraPart.Parent = workspace
-									if (workspace.Camera.CFrame.Position - cameraPart.CFrame.Position).Magnitude < 1.5 then
-										trans = 1 - (((workspace.Camera.CFrame.Position - cameraPart.CFrame.Position).Magnitude - .5) / 1.5)
-									end
-									for _,prt in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-										if prt.ClassName == "Part" and prt.Name ~= "HumanoidRootPart" then
-											prt.Transparency = trans
-										elseif prt.ClassName == "Accessory" and prt.Name ~= "TypingKeyboardMyWorld" then
-											prt.Handle.Transparency = trans
-										end
-									end
-									workspace.Camera.CameraSubject = cameraPart
-									
-									if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-										deletedone = true
-										local prt = itm:FindFirstChild("HumanoidRootPart")
-										if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and pusslist[plr] then
-											if not itm:FindFirstChild("somebodyshotaloadintomyburger2") then
-												plr.Character:PivotTo(CFrame.new(pusslist[plr][1]))
-												local diddysbiscuit = Instance.new("Attachment")
-												diddysbiscuit.Name = "somebodyshotaloadintomyburger"
-												diddysbiscuit.Parent = prt
-												local diddlysquat = Instance.new("AlignPosition")
-												diddlysquat.Parent = diddysbiscuit
-												diddlysquat.Attachment0 = diddysbiscuit
-												diddlysquat.Mode = "OneAttachment"
-												diddlysquat.MaxForce = math.huge
-												diddlysquat.MaxVelocity = 1000
-												diddlysquat.Responsiveness = 150
-												diddlysquat.Position = pusslist[plr][1]
-												local penismcandrew = Instance.new("AlignOrientation")
-												penismcandrew.Parent = diddysbiscuit
-												penismcandrew.Mode = "OneAttachment"
-												penismcandrew.Attachment0 = diddysbiscuit
-												penismcandrew.Responsiveness = 150
-												penismcandrew.MaxTorque = math.huge
-												penismcandrew.CFrame = pusslist[plr][2]
-												local gottheblicky = Instance.new("Highlight")
-												gottheblicky.Parent = itm
-												gottheblicky.Name = "somebodyshotaloadintomyburger2"
-												gottheblicky.FillTransparency = 0.4
-												gottheblicky.FillColor = Color3.fromRGB(27,126,208)
-												gottheblicky.OutlineColor = Color3.fromRGB(21,97,161)
-											end
-											if (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 28 then
-												game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = prt.CFrame + Vector3.new(0,10,0) + (prt.AssemblyLinearVelocity / math.pi)
-												game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = prt.AssemblyLinearVelocity
-											end
-											if prt then
-												game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prt,prt.CFrame)
-											end
-										end
-									else
-										satisfied = true
-									end
-
-									game.RunService.RenderStepped:Wait()
-									if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-										game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = j
-										game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = p
-									end
-									workspace.Camera.CameraSubject = humanoid
-									cameraPart:Destroy()
-								end
-                            until not (not satisfied and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and itm and itm.Parent == workspace and not checkgrab(itm) and itm:FindFirstChild("HumanoidRootPart"))
-						end
-					end
-				end
-			end
-			local deletedone = false
-			for itm in DeleteService do
-				if itm and itm.Parent and acno then
-					if itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") then
-						local prt = itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart")
-						local satisfied = false
-						if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-							repeat
-								game.RunService.Heartbeat:Wait()
-								if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-									local character = game.Players.LocalPlayer.Character 
-									local root = character.HumanoidRootPart 
-									local humanoid = character.Humanoid
-									local vel = nil 
-									while not (character and character.Parent and root and root.Parent) do 
-										game.RunService.Heartbeat:Wait() 
-										character = game.Players.LocalPlayer.Character 
-										root = character.HumanoidRootPart 
-									end 
-									local vel = root.CFrame
-									j = vel
-									p = root.AssemblyLinearVelocity
-									local cameraPart = Instance.new("Part")
-									local trans = 0
-									cameraPart.Transparency = 1
-									cameraPart.CanCollide = false
-									cameraPart.Anchored = true
-									cameraPart.CFrame = vel * CFrame.new(0,1.5,0)
-									cameraPart.Parent = workspace
-									if (workspace.Camera.CFrame.Position - cameraPart.CFrame.Position).Magnitude < 1.5 then
-										trans = 1 - (((workspace.Camera.CFrame.Position - cameraPart.CFrame.Position).Magnitude - .5) / 1.5)
-									end
-									for _,prt in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-										if prt.ClassName == "Part" and prt.Name ~= "HumanoidRootPart" then
-											prt.Transparency = trans
-										elseif prt.ClassName == "Accessory" and prt.Name ~= "TypingKeyboardMyWorld" then
-											prt.Handle.Transparency = trans
-										end
-									end
-									workspace.Camera.CameraSubject = cameraPart
-									
-									workspace.FallenPartsDestroyHeight = 0/0
-									deletedone = true
-									prt = itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart")
-									if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-										if (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 28 then
-											game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = prt.CFrame + (prt.AssemblyLinearVelocity / math.pi)
-											game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = prt.AssemblyLinearVelocity
-										end
-										if prt then
-											for _,prt in pairs(itm:GetChildren()) do
-												if prt:IsA("BasePart") and prt.CanQuery then
-													game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prt,prt.CFrame)
-												end
-											end
-										end
-									end
-
-									game.RunService.RenderStepped:Wait()
-									if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-										game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = j
-										game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = p
-									end
-									workspace.Camera.CameraSubject = humanoid
-									cameraPart:Destroy()
-								end
-							until not (not satisfied and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and itm and itm.Parent and not checkgrab(itm) and DeleteService[itm] and prt and prt.CFrame.Position.Magnitude < 1000000)
 						elseif game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
 							DeleteService[itm] = nil
 						end
@@ -6475,7 +6455,7 @@ else
 				end)
 			end
 			for itm in BuildItemsList do
-				if itm and (itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart")) then
+				if itm and (itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("Main")) then
 					local isgrabbed
 					for _,prt in pairs(itm:GetChildren()) do
 						if prt:IsA("BasePart") and prt:FindFirstChild("PartOwner") and prt.PartOwner.Value == game.Players.LocalPlayer.Name then
@@ -6484,7 +6464,7 @@ else
 					end
 					if not isgrabbed then
 						if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-							local prt = itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart")
+							local prt = itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("Main")
 							if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
 								if (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 30 then
 									game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = prt.CFrame + Vector3.new(0,10,0) + (prt.AssemblyLinearVelocity / math.pi)
@@ -6500,6 +6480,7 @@ else
 				end
 			end
 			LBP = j.Position or LBP
+			game.RunService.RenderStepped:Wait()
 		end
 	end)
 
