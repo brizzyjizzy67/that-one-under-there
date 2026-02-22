@@ -5319,6 +5319,7 @@ else
 			if not TLM then
 				LMTMV = Value
 			end
+			print(LM)
 			LM = Value
 			OrionLib:MakeNotification({
 				Name = "Loop Mayonaise "..(Value and "Enabled" or "Disabled"),
@@ -5373,6 +5374,7 @@ else
 	task.spawn(function()
 		while true do
 			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and not game.Players.LocalPlayer.IsHeld.Value and game.Players.LocalPlayer.Character.HumanoidRootPart.ReceiveAge ~= 0 then
+				diddytime = tick()
 				if not LM then
 					TLM = true
 					LMT:Set(true)
@@ -5386,10 +5388,10 @@ else
 					end
 				end
 			else
-				if LM then
+				if diddytime and LM then
 					LMT:Set(LMTMV)
 				end
-				diddytime = tick()
+				diddytime = nil
 			end
 			task.wait()
 		end
@@ -6432,94 +6434,97 @@ else
 							end
 						elseif itm.Parent == game.Players then
 							if itm.Character then
-								local plr = itm
-								itm = itm.Character
-								local satisfied = false
-								game.RunService.Heartbeat:Wait() 
-								if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-									local character = game.Players.LocalPlayer.Character 
-									local root = character.HumanoidRootPart 
-									local humanoid = character.Humanoid
-									local vel = nil 
-									while not (character and character.Parent and root and root.Parent) do 
-										game.RunService.Heartbeat:Wait() 
-										character = game.Players.LocalPlayer.Character 
-										root = character.HumanoidRootPart 
-									end
-									vel = root.CFrame
-									j = vel
-									p = root.AssemblyLinearVelocity
-									local cameraPart = Instance.new("Part")
-									local trans = 0
-									cameraPart.Transparency = 1
-									cameraPart.CanCollide = false
-									cameraPart.Anchored = true
-									cameraPart.CFrame = vel * CFrame.new(0,1.5,0)
-									cameraPart.Parent = workspace
-									if (workspace.Camera.CFrame.Position - cameraPart.CFrame.Position).Magnitude < 1.5 then
-										trans = 1 - (((workspace.Camera.CFrame.Position - cameraPart.CFrame.Position).Magnitude - .5) / 1.5)
-									end
-									for _,prt in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-										if prt.ClassName == "Part" and prt.Name ~= "HumanoidRootPart" then
-											prt.Transparency = trans
-										elseif prt.ClassName == "Accessory" and prt.Name ~= "TypingKeyboardMyWorld" then
-											prt.Handle.Transparency = trans
-										end
-									end
-									workspace.Camera.CameraSubject = cameraPart
-									
+								local prt = itm.Character:FindFirstChild("HumanoidRootPart")
+								if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and pusslist[plr] then
+									local plr = itm
+									itm = itm.Character
+									local satisfied = false
+									game.RunService.Heartbeat:Wait() 
 									if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-										local prt = itm:FindFirstChild("HumanoidRootPart")
-										if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and pusslist[plr] then
-											if not itm:FindFirstChild("somebodyshotaloadintomyburger2") then
-												plr.Character:PivotTo(CFrame.new(pusslist[plr][1]))
-												local diddysbiscuit = Instance.new("Attachment")
-												diddysbiscuit.Name = "somebodyshotaloadintomyburger"
-												diddysbiscuit.Parent = prt
-												local diddlysquat = Instance.new("AlignPosition")
-												diddlysquat.Parent = diddysbiscuit
-												diddlysquat.Attachment0 = diddysbiscuit
-												diddlysquat.Mode = "OneAttachment"
-												diddlysquat.MaxForce = math.huge
-												diddlysquat.MaxVelocity = 1000
-												diddlysquat.Responsiveness = 150
-												diddlysquat.Position = pusslist[plr][1]
-												local penismcandrew = Instance.new("AlignOrientation")
-												penismcandrew.Parent = diddysbiscuit
-												penismcandrew.Mode = "OneAttachment"
-												penismcandrew.Attachment0 = diddysbiscuit
-												penismcandrew.Responsiveness = 150
-												penismcandrew.MaxTorque = math.huge
-												penismcandrew.CFrame = pusslist[plr][2]
-												local gottheblicky = Instance.new("Highlight")
-												gottheblicky.Parent = itm
-												gottheblicky.Name = "somebodyshotaloadintomyburger2"
-												gottheblicky.FillTransparency = 0.4
-												gottheblicky.FillColor = Color3.fromRGB(27,126,208)
-												gottheblicky.OutlineColor = Color3.fromRGB(21,97,161)
+										local character = game.Players.LocalPlayer.Character 
+										local root = character.HumanoidRootPart 
+										local humanoid = character.Humanoid
+										local vel = nil 
+										while not (character and character.Parent and root and root.Parent) do 
+											game.RunService.Heartbeat:Wait() 
+											character = game.Players.LocalPlayer.Character 
+											root = character.HumanoidRootPart 
+										end
+										vel = root.CFrame
+										j = vel
+										p = root.AssemblyLinearVelocity
+										local cameraPart = Instance.new("Part")
+										local trans = 0
+										cameraPart.Transparency = 1
+										cameraPart.CanCollide = false
+										cameraPart.Anchored = true
+										cameraPart.CFrame = vel * CFrame.new(0,1.5,0)
+										cameraPart.Parent = workspace
+										if (workspace.Camera.CFrame.Position - cameraPart.CFrame.Position).Magnitude < 1.5 then
+											trans = 1 - (((workspace.Camera.CFrame.Position - cameraPart.CFrame.Position).Magnitude - .5) / 1.5)
+										end
+										for _,prt in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+											if prt.ClassName == "Part" and prt.Name ~= "HumanoidRootPart" then
+												prt.Transparency = trans
+											elseif prt.ClassName == "Accessory" and prt.Name ~= "TypingKeyboardMyWorld" then
+												prt.Handle.Transparency = trans
 											end
-											if (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 28 then
-												game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = prt.CFrame + Vector3.new(0,10,0) + (prt.AssemblyLinearVelocity / math.pi)
-												game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = prt.AssemblyLinearVelocity
-											end
-											task.spawn(function()
-												task.wait(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 1000)
-												if prt then
-													game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prt,prt.CFrame)
+										end
+										workspace.Camera.CameraSubject = cameraPart
+										
+										if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+											local prt = itm:FindFirstChild("HumanoidRootPart")
+											if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and pusslist[plr] then
+												if not itm:FindFirstChild("somebodyshotaloadintomyburger2") then
+													plr.Character:PivotTo(CFrame.new(pusslist[plr][1]))
+													local diddysbiscuit = Instance.new("Attachment")
+													diddysbiscuit.Name = "somebodyshotaloadintomyburger"
+													diddysbiscuit.Parent = prt
+													local diddlysquat = Instance.new("AlignPosition")
+													diddlysquat.Parent = diddysbiscuit
+													diddlysquat.Attachment0 = diddysbiscuit
+													diddlysquat.Mode = "OneAttachment"
+													diddlysquat.MaxForce = math.huge
+													diddlysquat.MaxVelocity = 1000
+													diddlysquat.Responsiveness = 150
+													diddlysquat.Position = pusslist[plr][1]
+													local penismcandrew = Instance.new("AlignOrientation")
+													penismcandrew.Parent = diddysbiscuit
+													penismcandrew.Mode = "OneAttachment"
+													penismcandrew.Attachment0 = diddysbiscuit
+													penismcandrew.Responsiveness = 150
+													penismcandrew.MaxTorque = math.huge
+													penismcandrew.CFrame = pusslist[plr][2]
+													local gottheblicky = Instance.new("Highlight")
+													gottheblicky.Parent = itm
+													gottheblicky.Name = "somebodyshotaloadintomyburger2"
+													gottheblicky.FillTransparency = 0.4
+													gottheblicky.FillColor = Color3.fromRGB(27,126,208)
+													gottheblicky.OutlineColor = Color3.fromRGB(21,97,161)
 												end
-											end)
+												if (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 28 then
+													game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = prt.CFrame + Vector3.new(0,10,0) + (prt.AssemblyLinearVelocity / math.pi)
+													game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = prt.AssemblyLinearVelocity
+												end
+												task.spawn(function()
+													task.wait(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 1000)
+													if prt then
+														game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prt,prt.CFrame)
+													end
+												end)
+											end
+										else
+											satisfied = true
 										end
-									else
-										satisfied = true
-									end
 
-									game.RunService.RenderStepped:Wait()
-									if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-										game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = j
-										game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = p
+										game.RunService.RenderStepped:Wait()
+										if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+											game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = j
+											game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = p
+										end
+										workspace.Camera.CameraSubject = humanoid
+										cameraPart:Destroy()
 									end
-									workspace.Camera.CameraSubject = humanoid
-									cameraPart:Destroy()
 								end
 							end
 						end
