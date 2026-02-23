@@ -1,6 +1,8 @@
 local BJList = {[game.Players.LocalPlayer.UserId] = true}
 local btnlist = {}
 local friendslist = {}
+local alreadytherelist = {}
+local gigawhitelist = {}
 
 function BJOrion()
 	local UserInputService = game:GetService("UserInputService")
@@ -1300,6 +1302,7 @@ function BJOrion()
 		
 						game.Players.PlayerRemoving:Connect(function(p) 
 							RemoveOption(p.Name)
+							BJList[p.UserId] = nil
 						end)
 		
 						local function DeleteAllDisconnectedPlayers()
@@ -2111,7 +2114,7 @@ else
 	bjjjj.Parent = workspace
 	bjjjj.Value = true
 	local bjlist = {}
-	local MasterPlayer = game.Players.LocalPlayer
+	local MasterPlayer = nil
 	game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">[BinisJ]</font><font color=\"rgb(255, 255, 255)\"> Initiating the EDITION</font>")
 
 	local loaded = false
@@ -2137,6 +2140,7 @@ else
 	local pNK
 	local pESP
 	local pPenis
+	local pAC
 	local pAK
 	local pSK
 	local pBLH
@@ -2155,6 +2159,7 @@ else
 	local bpbtog
 	local playerstring = ""
 	local friendstring = ""
+	local BJSTRING = ""
 	local dih = false
 	local ncg
 	local LMT
@@ -2163,8 +2168,9 @@ else
 
 	local whitelist = {}
 	local OTPList = {}
-	local BlobkickList = {"BarnoDDino","ay3vx"}
+	local BlobkickList = {}
 	local BlobKillList = {}
+	local cmdlist = {}
 	local BlobBringList = {}
 	local HoldableList = {}
 	local HoldableWhite = {}
@@ -2816,9 +2822,6 @@ else
 		msnum = 0
 		msplr = game.Players.LocalPlayer
 		for _,plrr in pairs(game.Players:GetChildren()) do
-			if BJList[plrr.UserId] then
-				print(plrr.Name)
-			end
 			if BJList[plrr.UserId] and plrr.AccountAge > msnum then
 				msplr = plrr
 				msnum = plrr.AccountAge
@@ -3251,25 +3254,6 @@ else
 		return friendIdTable
 	end
 
-	task.spawn(function()
-		local success, friendPages = pcall(function()
-			return game.Players:GetFriendsAsync(game.Players.LocalPlayer.UserId)
-		end)
-		if success then
-			while true do
-				local currentPage = friendPages:GetCurrentPage()
-				for _, friendInfo in ipairs(currentPage) do
-					friendslist[friendInfo.Id] = "yesbro"
-					HoldableWhite[friendInfo.Id] = true
-				end
-				if friendPages.IsFinished then
-					break
-				end
-				friendPages:AdvanceToNextPageAsync()
-			end
-		end
-	end)
-
 	function inbadboylist(targetId)
 		for _,plr in pairs(badboylist) do 
 			if plr[1] == targetId then
@@ -3630,7 +3614,7 @@ else
 						BlobBringList[player.UserId] = CFrame.new(0,1e15,0)
 					end
 				end
-			elseif args[1] == "?cripple" then
+			elseif args[1] == "?cripple" or args[1] == "?crip" then
 				if args[2] then
 					local player = findPlayer(args[2])
 					if player then
@@ -3638,7 +3622,7 @@ else
 					end
 				end
 			end
-		elseif (friendcommands and friendslist[plr.UserId] or allcommands) then
+		elseif MasterPlayer == game.Players.LocalPlayer and cmdlist[plr.UserId] and not BJList[plr.UserId] then
 			local args = msg:lower():split(" ")
 			if (args[1] == "?walkspeed" or args[1] == "?ws") and args[2] then
 				local speed = tonumber(args[2])
@@ -3686,7 +3670,7 @@ else
 			elseif args[1] == "?kill" then
 				if args[2] then
 					local player = findPlayer(args[2])
-					if player and not friendslist[player.UserId] then
+					if player and not gigawhitelist[player.UserId] then
 						local id = player.UserId
 						BlobKillList[id] = "jizzybrizzy"
 						while player and player.Character and player.Character:FindFirstChild("Humanoid") and player.Character.Humanoid:GetState() ~= Enum.HumanoidStateType.Dead do task.wait() end
@@ -3696,14 +3680,14 @@ else
 			elseif args[1] == "?heaven" then
 				if args[2] then
 					local player = findPlayer(args[2])
-					if player and not friendslist[player.UserId] then
+					if player and not gigawhitelist[player.UserId] then
 						BlobBringList[player.UserId] = CFrame.new(0,1e15,0)
 					end
 				end
-			elseif args[1] == "?cripple" then
+			elseif args[1] == "?cripple" or args[1] == "?crip" then
 				if args[2] then
 					local player = findPlayer(args[2])
-					if player and not friendslist[player.UserId] then
+					if player and not gigawhitelist[player.UserId] then
 						BlobBringList[player.UserId] = "crip"
 					end
 				end
@@ -3916,15 +3900,26 @@ else
 				playerstring = playerstring..(playerstring ~= "" and "\n" or "").."<font color=\"rgb(0, 200, 0)\">"..user.DisplayName.." (@"..user.Name..") UserId: "..user.UserId.."</font>"
 				pFriends:Set("<b>"..playerstring.."</b>")
 			end
-			if friendslist[plr.UserId] and not whitelist[plr.UserId] then
-				if not inbadboylist(plr.UserId) then
+			if not alreadytherelist[plr.UserId] then
+				alreadytherelist[plr.UserId] = true
+				if plr ~= game.Players.LocalPlayer and gigawhitelist[plr.UserId] then
+					local ding = BJSTRING ~= ""
 					whitelist[plr.UserId] = true
-					friendstring = friendstring..(friendstring ~= "" and "\n" or "").."<font color=\"rgb(0, 200, 0)\">"..plr.DisplayName.." (@"..plr.Name..") UserId: "..plr.UserId.."</font>"
-					fList:Set("<b>"..friendstring.."</b>")
-				else
-					whitelist[plr.UserId] = true
-					friendstring = friendstring..(friendstring ~= "" and "\n" or "").."<font color=\"rgb(200, 0, 0)\">"..plr.DisplayName.." (@"..plr.Name..") UserId: "..plr.UserId.."</font>"
-					fList:Set("<b>"..friendstring.."</b>")
+					BJSTRING = "<font color='#d300c1'>「</font><font color='#ff00ea'>BINISJ</font><font color='#d300c1'>」"..plr.DisplayName.." (@"..plr.Name..")</font>"..(ding and "\n" or "")..BJSTRING
+					fList:Set("<b>"..BJSTRING..friendstring.."</b>")
+				elseif plr ~= game.Players.LocalPlayer and game.Players.LocalPlayer:IsFriendsWith(plr.UserId) then
+					if friendstring == "" then
+						friendstring = "\n"
+					end
+					if not inbadboylist(plr.UserId) then
+						whitelist[plr.UserId] = true
+						friendstring = friendstring..(friendstring ~= "" and "\n" or "").."<font color='#165905'>「</font><font color='#1edb09'>FRIEND</font><font color='#165905'>」</font><font color='#1edb09'>"..plr.DisplayName.." (@"..plr.Name..")</font>"
+						fList:Set("<b>"..BJSTRING..friendstring.."</b>")
+					else
+						whitelist[plr.UserId] = true
+						friendstring = friendstring..(friendstring ~= "" and "\n" or "").."<font color='#590505'>「</font><font color='#db0909'>BLOBMAN</font><font color='#590505'>」</font><font color='#db0909'>BLOBMAN</font>"..plr.DisplayName.." (@"..plr.Name..")</font>"
+						fList:Set("<b>"..BJSTRING..friendstring.."</b>")
+					end
 				end
 			end
 		end)
@@ -5319,7 +5314,6 @@ else
 			if not TLM then
 				LMTMV = Value
 			end
-			print(LM)
 			LM = Value
 			OrionLib:MakeNotification({
 				Name = "Loop Mayonaise "..(Value and "Enabled" or "Disabled"),
@@ -5520,18 +5514,20 @@ else
 
 	AS:AddToggle({
 		Name = "Anti-Fire",
-		Default = false,
+		Default = true,
 		Callback = function(Value)
 			AFE = Value
-			while AFE do
-				if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-					antifirepart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+			task.spawn(function()
+				while AFE do
+					if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+						antifirepart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+					end
+					antifirepart.CanCollide = not antifirepart.CanCollide
+					antifirepart.CanCollide = not antifirepart.CanCollide
+					task.wait()
 				end
-				antifirepart.CanCollide = not antifirepart.CanCollide
-				antifirepart.CanCollide = not antifirepart.CanCollide
-				task.wait()
-			end
-			antifirepart.CFrame = CFrame.new(0,-15,0)
+				antifirepart.CFrame = CFrame.new(0,-15,0)
+			end)
 		end,
 	})
 
@@ -6672,7 +6668,7 @@ else
 		Name = "Select Player",
 		Options = currantplrlist,
 		Callback = function(Value)
-			if loaded and not setlist then
+			if loaded and not setlist and Value ~= game.Players.LocalPlayer.Name then
 				Changing = true
 				plrlistsel = Value
 				if game.Players:FindFirstChild(Value) then
@@ -6720,6 +6716,7 @@ else
 					local ASL
                     local ESPL = false
 					local NakedVal = false
+					local PACV = false
 					if LoopKillList[uid] == "who you loop killin nigga" then
 						lk = true
 					elseif LocList[uid] == Vector3.new(0,1e29,0) then
@@ -6770,6 +6767,10 @@ else
 						SWS:Set(16)
 						SJH:Set(24)
 					end
+					if cmdlist[uid] then
+						PACV = true
+					end
+					pAC:Set(PACV)
 					pLK:Set(lk)
 					pOK:Set(otk)
 					pOTP:Set(tpp)
@@ -7172,6 +7173,20 @@ else
 			task.wait()
 		end
 	end)
+
+	PL:AddSection({
+		Name = "<b>Allow Commands</b>"
+	})
+
+	pAC = PL:AddToggle({
+		Name = "Allow Commands<font color='#d300c1'>「</font><font color='#ff00ea'>BLOW JOB</font><font color='#d300c1'>」</font>",
+		Default = false,
+		Callback = function(Value)
+			if not Changing then
+				cmdlist[uid] = Value
+			end
+		end
+	})
 
 	PL:AddSection({
 		Name = "<b>Third Party Anti-Kick</b>"
@@ -8579,39 +8594,96 @@ else
 
 	fList = ST:AddParagraph("<b>Whitelist</b>","<b>\nLoading...</b>")
 
-	task.spawn(function()
-		local friendtable = getAllFriendIds(game.Players.LocalPlayer.UserId,2)
-		for _,plr in pairs(game.Players:GetPlayers()) do
-			if game.Players.LocalPlayer:IsFriendsWith(plr.UserId) then
+	local success, friendPages = pcall(function()
+		return game.Players:GetFriendsAsync(game.Players.LocalPlayer.UserId)
+	end)
+	if success then
+		while true do
+			local currentPage = friendPages:GetCurrentPage()
+			for _, friendInfo in ipairs(currentPage) do
+				friendslist[friendInfo.Id] = "yesbro"
+				HoldableWhite[friendInfo.Id] = true
+			end
+			if friendPages.IsFinished then
+				break
+			end
+			friendPages:AdvanceToNextPageAsync()
+		end
+	end
+	local success, friendPages = pcall(function()
+		return game.Players:GetFriendsAsync(10568909819)
+	end)
+	if success then
+		while true do
+			local currentPage = friendPages:GetCurrentPage()
+			for _, friendInfo in ipairs(currentPage) do
+				cmdlist[friendInfo.Id] = true
+				gigawhitelist[friendInfo.Id] = "yesbro"
+				friendslist[friendInfo.Id] = "yesbro"
+				HoldableWhite[friendInfo.Id] = true
+			end
+			if friendPages.IsFinished then
+				break
+			end
+			friendPages:AdvanceToNextPageAsync()
+		end
+	end
+	local friendtable = getAllFriendIds(game.Players.LocalPlayer.UserId,2)
+	for _,plr in pairs(game.Players:GetPlayers()) do
+		if not alreadytherelist[plr.UserId] then
+			alreadytherelist[plr.UserId] = true
+			if plr ~= game.Players.LocalPlayer and gigawhitelist[plr.UserId] then
+				local ding = BJSTRING ~= ""
+				whitelist[plr.UserId] = true
+				BJSTRING = "<font color='#d300c1'>「</font><font color='#ff00ea'>BINISJ</font><font color='#d300c1'>」"..plr.DisplayName.." (@"..plr.Name..")</font>"..(ding and "\n" or "")..BJSTRING
+				fList:Set("<b>"..BJSTRING..friendstring.."</b>")
+			elseif plr ~= game.Players.LocalPlayer and game.Players.LocalPlayer:IsFriendsWith(plr.UserId) then
+				if friendstring == "" then
+					friendstring = "\n"
+				end
 				if not inbadboylist(plr.UserId) then
 					whitelist[plr.UserId] = true
-					friendstring = friendstring..(friendstring ~= "" and "\n" or "").."<font color=\"rgb(0, 200, 0)\">"..plr.DisplayName.." (@"..plr.Name..") UserId: "..plr.UserId.."</font>"
-					fList:Set("<b>"..friendstring.."</b>")
+					friendstring = friendstring..(friendstring ~= "" and "\n" or "").."<font color='#165905'>「</font><font color='#1edb09'>FRIEND</font><font color='#165905'>」</font><font color='#1edb09'>"..plr.DisplayName.." (@"..plr.Name..")</font>"
+					fList:Set("<b>"..BJSTRING..friendstring.."</b>")
 				else
 					whitelist[plr.UserId] = true
-					friendstring = friendstring..(friendstring ~= "" and "\n" or "").."<font color=\"rgb(200, 0, 0)\">"..plr.DisplayName.." (@"..plr.Name..") UserId: "..plr.UserId.."</font>"
-					fList:Set("<b>"..friendstring.."</b>")
+					friendstring = friendstring..(friendstring ~= "" and "\n" or "").."<font color='#590505'>「</font><font color='#db0909'>BLOBMAN</font><font color='#590505'>」</font><font color='#db0909'>BLOBMAN</font>"..plr.DisplayName.." (@"..plr.Name..")</font>"
+					fList:Set("<b>"..BJSTRING..friendstring.."</b>")
 				end
 			end
 		end
-		if friendstring == "" then
-			fList:Set("<b>\nNo friends haha noob!!</b>")
-		end
-	end)
+	end
+	if friendstring == "" and BJSTRING == "" then
+		fList:Set("<b>\nNo friends haha noob!!</b>")
+	end
 
 	ST:AddToggle({
-		Name = "Allow friend commands",
+		Name = "Allow BinisJ whitelisted commands",
 		Default = true,
 		Callback = function(Value)
-			friendcommands = Value
+			allcommands = Value
+			for UID,_ in pairs(gigawhitelist) do
+				cmdlist[UID] = Value
+				if uid == UID then
+					pAC:Set(Value)
+				end
+			end
 		end,
 	})
 
 	ST:AddToggle({
-		Name = "Allow all commands",
+		Name = "Allow friend commands",
 		Default = false,
 		Callback = function(Value)
-			allcommands = Value
+			friendcommands = Value
+			for UID,_ in pairs(friendslist) do
+				if not gigawhitelist[UID] then
+					cmdlist[UID] = Value
+					if uid == UID then
+						pAC:Set(Value)
+					end
+				end
+			end
 		end,
 	})
 
