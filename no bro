@@ -32,16 +32,7 @@ function BJOrion()
 		SaveCfg = false
 	}
 
-	--Feather Icons https://github.com/evoincorp/lucideblox/tree/master/src/modules/util - Created by 7kayoh
 	local Icons = {}
-
-	local Success, Response = pcall(function()
-		Icons = HttpService:JSONDecode(game:HttpGetAsync("https://raw.githubusercontent.com/evoincorp/lucideblox/master/src/modules/util/icons.json")).icons
-	end)
-
-	if not Success then
-		warn("\nOrion Library - Failed to load Feather Icons. Error code: " .. Response .. "\n")
-	end	
 
 	local function GetIcon(IconName)
 		if Icons[IconName] ~= nil then
@@ -1098,8 +1089,9 @@ function BJOrion()
 					end)
 
 					function Slider:Set(Value)
-						self.Value = math.clamp(Round(Value, SliderConfig.Increment), SliderConfig.Min, SliderConfig.Max)
-						TweenService:Create(SliderDrag,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{Size = UDim2.fromScale((self.Value - SliderConfig.Min) / (SliderConfig.Max - SliderConfig.Min), 1)}):Play()
+						self.Value = Round(Value, SliderConfig.Increment)
+						self.DValue = math.clamp(Round(Value, SliderConfig.Increment), SliderConfig.Min, SliderConfig.Max)
+						TweenService:Create(SliderDrag,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{Size = UDim2.fromScale((self.DValue - SliderConfig.Min) / (SliderConfig.Max - SliderConfig.Min), 1)}):Play()
 						SliderBar.Value.Text = tostring(self.Value) .. " " .. SliderConfig.ValueName
 						SliderDrag.Value.Text = tostring(self.Value) .. " " .. SliderConfig.ValueName
 						SliderConfig.Callback(self.Value)
@@ -2107,7 +2099,7 @@ function BJOrion()
 end
 
 if workspace:FindFirstChild("Boiyoubuiltlikeanigger") and workspace.Boiyoubuiltlikeanigger.Value then
-	game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">BinisJ Already Started Nigga</font>")
+	game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font><font color='#c8c8c8'>Already Started Nigga</font>")
 else
     local bjjjj = Instance.new("BoolValue")
 	bjjjj.Name = "Boiyoubuiltlikeanigger"
@@ -2115,7 +2107,7 @@ else
 	bjjjj.Value = true
 	local bjlist = {}
 	local MasterPlayer = nil
-	game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">[BinisJ]</font><font color=\"rgb(255, 255, 255)\"> Initiating the EDITION</font>")
+	game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font><font color='#c8c8c8'>Initiating the EDITION</font>")
 
 	local loaded = false
 	local setlist = true
@@ -2157,6 +2149,10 @@ else
 	local fList
 	local MiSPCS
 	local bpbtog
+	FSR = 50
+	IXE = false
+	SSM = 3
+	FG = false
 	local playerstring = ""
 	local friendstring = ""
 	local BJSTRING = ""
@@ -2566,7 +2562,7 @@ else
 	local locc = tpland["Prison"]
 	local loccc = "Prison"
 
-	local SL = tpland["Spawn"]
+	local SL = tpland["ChineseHouse"]
 	local House = nil
 
 	local plot = nil
@@ -2671,7 +2667,7 @@ else
 	local poslist = {}
 	local gettingkicked = {}
 
-	local WS = 1
+	local WS = 16
 	local SS = 1
 
 	local WSE = false
@@ -2830,9 +2826,9 @@ else
 		task.wait()
 		if msplr ~= MasterPlayer then
 			if msplr == game.Players.LocalPlayer then
-				game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(200,200,200)\">You are the muscle tustler</font>")
+				game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font><font color='#ff00ea'>You are the muscle tustler</font>")
 			else
-				game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(200,200,200)\">"..msplr.DisplayName.." (@"..msplr.Name..") is the muscle tustler</font>")
+				game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font><font color='#ff00ea'>"..msplr.DisplayName.." (@"..msplr.Name..") is the muscle tustler</font>")
 			end
 			MasterPlayer = msplr
 		end
@@ -2877,34 +2873,40 @@ else
 	locations = {"Spawn","Prison","ChineseRoof","SpawnCave","TheWedge","TheCompartment","SmegmmaArea","GreenHouse","PinkHouse","Barn","BlueHouse","ChineseHouse","PurpleHouse","Factory","OtherGreenHouse","BigCave","GoodPrison","RuhubsDogAhhPrison","ExtremelyGoodPrison","TrainCave","IslandCave","UfoCave","BlueHouseSlot","SpawnSlot","HauntedSlot","RandomSlot","BeachSlot"}
 	newlocations = {}
 
+	function findmsg(msg)
+		for _,ting in pairs(game.CoreGui.ExperienceChat.appLayout.chatWindow.scrollingView.bottomLockedScrollView.RCTScrollView.RCTScrollContentView:GetChildren()) do
+			if ting.ClassName == "Frame" then
+				if ting.TextMessage:FindFirstChild("BodyText") and string.find(ting.TextMessage.BodyText.ContentText,msg) then
+					return true
+				end
+			end
+		end
+		return false
+	end
+
 	game.ReplicatedStorage.GrabEvents.ExtendGrabLine.OnClientEvent:Connect(function(plr,arg1,arg2)
 		if type(arg1) == "table" and arg1[1] == "BinisJ" then
 			if plr ~= game.Players.LocalPlayer then
 				if arg1[2] == "Starting" then
-					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">[BinisJ] "..plr.DisplayName.." (@"..plr.Name..") is using poor mans binisj</font>")
+					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font><font color='#ff00ea'>"..plr.DisplayName.." (@"..plr.Name..") is using poor mans binisj</font>")
 					PoorBJList[plr.UserId] = "lmao pooron"
 				end
 				if arg1[2] == "BigBjChat" then
-					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">[BinisJ] </font>"..arg1[3])
+					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font>"..arg1[3])
 				end
 				if arg1[2] == "BigBjStarting" then
 					task.spawn(BJEvent)
 					game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","BigBjNotStarting"})
-					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">[BinisJ] "..plr.DisplayName.." (@"..plr.Name..") is a good boy</font>")
+					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font><font color='#ff00ea'>"..plr.DisplayName.." (@"..plr.Name..") is a good boy</font>")
 					if not BJList[plr.UserId] then
 						BJList[plr.UserId] = true
 						HoldableList[plr.UserId] = nil
 						HoldableWhite[plr.UserId] = true
-						while not btnlist[plr.UserId] do
-							--print(plr.Name)
-							task.wait()
-						end
-						btnlist[plr.UserId].Text = "<b>"..plr.DisplayName..(BJList[UId] and " <font color='#d300c1'>「</font><font color='#ff00ea'>BINISJ</font><font color='#d300c1'>」</font> " or " ")..(game.Players.LocalPlayer:IsFriendsWith(UId) and "<font color='#62e2ff'>「</font><font color='#91ebff'>FRIEND</font><font color='#62e2ff'>」</font>" or "").."</b>"
 					end
 				end
 				if arg1[2] == "NotStarting" then
 					if not PoorBJList[plr.UserId] then
-						game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">[BinisJ] "..plr.DisplayName.." (@"..plr.Name..") is using poor mans binisj</font>")
+						game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font><font color='#ff00ea'>"..plr.DisplayName.." (@"..plr.Name..") is using poor mans binisj</font>")
 						PoorBJList[plr.UserId] = "lmao pooron"
 					end
 				end
@@ -2912,16 +2914,17 @@ else
 				if arg1[2] == "BigBjNotStarting" then
 					task.spawn(BJEvent)
 					if not BJList[plr.UserId] then
-						game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">[BinisJ] "..plr.DisplayName.." (@"..plr.Name..") is a good boy</font>")
+						game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font><font color='#ff00ea'>"..plr.DisplayName.." (@"..plr.Name..") is a good boy</font>")
 						BJList[plr.UserId] = true
 						HoldableList[plr.UserId] = nil
 						HoldableWhite[plr.UserId] = true
-						while not btnlist[plr.UserId] do
-							--print(plr.Name)
-							task.wait()
-						end
-						btnlist[plr.UserId].Text = "<b>"..plr.DisplayName..(BJList[UId] and " <font color='#d300c1'>「</font><font color='#ff00ea'>BINISJ</font><font color='#d300c1'>」</font> " or " ")..(game.Players.LocalPlayer:IsFriendsWith(UId) and "<font color='#62e2ff'>「</font><font color='#91ebff'>FRIEND</font><font color='#62e2ff'>」</font>" or "").."</b>"
 					end
+				end
+			end
+			if arg1[2] == "msgreq" then
+				print(findmsg(arg1[4]))
+				if not findmsg(arg1[4]) then
+					print(arg1[3],arg1[4])
 				end
 			end
 			if arg1[2] == "Print" then
@@ -3167,42 +3170,6 @@ else
 				end)
 				buildnum += 1
 			end
-		else
-			if not currantlagpeoplelist[plr.Name] then
-				currantlagpeoplelist[plr.Name] = 0
-			end
-			if arg1 and plr ~= game.Players.LocalPlayer then
-				currantlagpeoplelist[plr.Name] += 1
-				if currantlagpeoplelist[plr.Name] > 50 then
-					if not ALAGE then
-						alag:Set(true)
-					end
-					local timeval = timesincelastlist[plr.Name]
-					if not timeval or tick() - timeval > 10 then
-						game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(150, 0, 0)\">[BinisJ] "..plr.DisplayName.." (@"..plr.Name..") is lagging the server</font>")
-						OrionLib:MakeNotification({
-							Name = "Anti-Lag",
-							Content = plr.DisplayName.." (@"..plr.Name..") is lagging the server",
-							Image = "rbxassetid://4483345998",
-							Time = 2
-						})
-						timesincelastlist[plr.Name] = tick()
-					end
-					timesincelast = tick()
-					task.wait(2.5)
-					if tick() - timesincelast > 2.25 and ALAGE then
-						alag:Set(false)
-					end
-				end
-			end
-		end
-	end)
-
-	task.spawn(function()
-		while true do
-			currantlagpeoplelist = {}
-			timeeeee = tick()
-			task.wait()
 		end
 	end)
 
@@ -3284,7 +3251,7 @@ else
 
 	function findfirst(obj)
 		for _,prt in pairs(obj:GetDescendants()) do
-			if prt.ClassName == "Attachment" then
+			if prt.Name == "ObjectModelAttachment" then
 				return prt.Parent
 			end
 		end
@@ -3294,6 +3261,8 @@ else
 	game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","BigBjStarting"})
 
 	local ILV = false
+
+	local dist = 0
 
 	game.workspace.ChildAdded:Connect(function(model)
 		if model.Name == "BlackHoleKick" then
@@ -3395,9 +3364,41 @@ else
 			if ILV then
 				game.ReplicatedStorage.GrabEvents.CreateGrabLine:FireServer()
 			end
+			local obj = workspace:WaitForChild("GrabParts"):WaitForChild("GrabPart"):WaitForChild("WeldConstraint").Part1.Parent
+			local prttt = obj:FindFirstChild("SoundPart") or obj:FindFirstChild("HumanoidRootPart") or obj:FindFirstChild("Main") or obj:FindFirstChild("Balloon")
+			local con1
+			local con2
+			con1 = game.UserInputService.InputChanged:Connect(function(input, gameProcessed)
+				if input.UserInputType == Enum.UserInputType.MouseWheel then
+					dist += input.Position.Z * SSM
+					if dist < 3 then
+						dist = 3
+					elseif dist > IXE then
+						dist = IXE
+					end
+					game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer(dist)
+				end
+			end)
+			con2 = game.UserInputService.InputBegan:Connect(function(input, gameProcessed)
+				if prttt and input.UserInputType == Enum.UserInputType.MouseButton2 then
+					con1:Disconnect()
+					con2:Disconnect()
+					prttt.AssemblyLinearVelocity = workspace.Camera.CFrame.LookVector * FSR
+					prttt = nil
+				end
+			end)
+			model:GetPropertyChangedSignal("Parent"):Connect(function()
+				if not model.Parent then
+					game.RunService.RenderStepped:Wait()
+					if con1 then
+						con1:Disconnect()
+						con2:Disconnect()
+					end
+				end
+			end)
+			local obj = workspace.GrabParts.GrabPart.WeldConstraint.Part1.Parent
 			if ncg then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts.GrabPart.WeldConstraint.Part1 then
-					local obj = workspace.GrabParts.GrabPart.WeldConstraint.Part1.Parent
+				if workspace.GrabParts.GrabPart.WeldConstraint.Part1 then
 					if not obj:FindFirstAncestor("Plots") and not obj:FindFirstAncestor("Slots") and (not obj:FindFirstAncestor("Map") or obj:FindFirstAncestor("AlwaysHereTweenedObjects")) then
 						ncgo = obj
 						for _,prt in pairs(obj:GetChildren()) do
@@ -3425,6 +3426,30 @@ else
 						end)
 					end
 				end
+			end
+            model:WaitForChild("DragPart",1)
+			dist = (model.DragPart.CFrame.Position - workspace.Camera.CFrame.Position).Magnitude
+			if model and model:FindFirstChild("DragPart") then
+				local lastcframe = model.DragPart.CFrame
+				model.DragPart:GetPropertyChangedSignal("CFrame"):Connect(function()
+					if model.DragPart.CFrame ~= lastcframe then
+						model.DragPart.CFrame = (model.DragPart.CFrame - model.DragPart.CFrame.Position) + workspace.Camera.CFrame.Position + (workspace.Camera.CFrame.LookVector * dist)
+						lastcframe = model.DragPart.CFrame
+					end
+				end)
+			end
+			if prttt and not prttt:FindFirstAncestor("Plots") and not prttt:FindFirstAncestor("Slots") and not prttt:FindFirstAncestor("Map") then
+				repeat
+					game.RunService.Heartbeat:Wait()
+					local ussy = prttt.AssemblyLinearVelocity
+					
+					prttt.AssemblyLinearVelocity = prttt.AssemblyLinearVelocity * 100000
+
+					game.RunService.RenderStepped:Wait()
+					if prttt then
+						prttt.AssemblyLinearVelocity = ussy
+					end
+				until not FG or not prttt or not model
 			end
 		end
 	end)
@@ -3509,7 +3534,7 @@ else
 					prt.CollisionGroup = "PlotItems"
 				end
 			end
-		elseif not BJList[plr.UserId] and model:WaitForChild("HoldPart",1) then
+		elseif not whitelist[plr.UserId] and model:WaitForChild("HoldPart",1) then
 			local lasttime = tick()
 			task.wait(.5)
 			model.HoldPart:WaitForChild("RigidConstraint"):GetPropertyChangedSignal("Attachment1"):Connect(function()
@@ -3741,6 +3766,7 @@ else
 
 	for _,plr in pairs(game.Players:GetChildren()) do
 		plr.Chatted:Connect(function(msg)
+			game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","msgreq",plr,msg})
 			commandfunction(msg,plr)
 		end)
 		table.insert(joinland,plr.UserId)
@@ -3826,19 +3852,23 @@ else
 						dingdong = "flagged for: "..dude[2]
 					end
 				end
+				local pplayerRank = nil
+				local bplayerRank = nil
 				task.spawn(function()
-					local _,bplayerRank = pcall(function()
-						return plr:GetRankInGroup(16168861)
+					pcall(function()
+						bplayerRank = plr:GetRankInGroup(16168861)
 					end)
 					if not bplayerRank then bplayerRank = 0 end
 				end)
 				task.spawn(function()
-					local _,pplayerRank = pcall(function()
-						plr:GetRankInGroup(1082151871)
+					pcall(function()
+						pplayerRank = plr:GetRankInGroup(1082151871)
 					end)
 					if not pplayerRank then pplayerRank = 0 end
 				end)
-				while not (pplayerRank and bplayerRank) do task.wait() end
+				while not (pplayerRank and bplayerRank) do
+					task.wait()
+				end
 				local blizrank = ""
 				local patorank = ""
 				if bplayerRank == 255 then
@@ -3890,6 +3920,7 @@ else
 
 	game.Players.ChildAdded:Connect(function(plr)
 		plr.Chatted:Connect(function(msg)
+			game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","msgreq",plr,msg})
 			commandfunction(msg,plr)
 		end)
 		task.spawn(function()
@@ -3989,22 +4020,25 @@ else
 				if plr.UserId == dude[1] then
 					ishebadornahh = true
 					dingdong = "flagged for: "..dude[2]
-					return
 				end
 			end
+			local bplayerRank = nil
+			local pplayerRank = nil
 			task.spawn(function()
-				local _,bplayerRank = pcall(function()
-					return plr:GetRankInGroup(16168861)
+				pcall(function()
+					bplayerRank = plr:GetRankInGroup(16168861)
 				end)
 				if not bplayerRank then bplayerRank = 0 end
 			end)
 			task.spawn(function()
-				local _,pplayerRank = pcall(function()
-					plr:GetRankInGroup(1082151871)
+				pcall(function()
+					pplayerRank = plr:GetRankInGroup(1082151871)
 				end)
 				if not pplayerRank then pplayerRank = 0 end
 			end)
-			while not (pplayerRank and bplayerRank) do task.wait() end
+			while not (pplayerRank and bplayerRank) do
+				task.wait()
+			end
 			local blizrank = ""
 			local patorank = ""
 			if bplayerRank == 255 then
@@ -4094,7 +4128,7 @@ else
 		house.PlotArea.CanCollide = false
 		house.PlotArea.CanQuery = false
 	end
-    local Window = OrionLib:MakeWindow({Name = "BinisJ - Ultra Nigga Edition", IntroEnabled = false, FreeMouse = true})
+    local Window = OrionLib:MakeWindow({Name = "BinisJ - Nigga Deluxe Edition", IntroEnabled = false, FreeMouse = true})
 
 	local OrionLibrary
 
@@ -4169,7 +4203,13 @@ else
 
 
 	OV:AddSection({
-		Name = `<font size="40"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V3</font></b></font>`
+		Name = `<font size="40"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V4</font></b></font>`
+	})
+
+	OV:AddParagraph(`<font size="20"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V4</font> Additions</b></font>`,"<b></b>")
+	
+	OV:AddSection({
+		Name = " "
 	})
 
 	OV:AddParagraph(`<font size="20"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V3</font> Additions</b></font>`,"<b>\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Library\n<font color=\"rgb(0, 255, 0)\">[+] </font>Window toggle is now LeftAlt\n<font color=\"rgb(0, 255, 0)\">[+] </font>Menu boots up instantly now\n<font color=\"rgb(0, 255, 0)\">[+] </font>Library now in the same script\n<font color=\"rgb(0, 255, 0)\">[+] </font>Made all dropdown options bold\n<font color=\"rgb(0, 255, 0)\">[+] </font>Made all section names options bold\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added player selector\n<font color=\"rgb(0, 255, 0)\">[+] </font>Menu now unlocks mouse\n<font color=\"rgb(0, 255, 0)\">[+] </font>Made GUI Look Better\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Local Player\n<font color=\"rgb(0, 255, 0)\">[+] </font>Renamed from Player to Local Player\n<font color=\"rgb(0, 255, 0)\">[+] </font>Moved water walk to Local Player\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Protection\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Cheeky Antigrab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Gucci is now train by default\n<font color=\"rgb(0, 255, 0)\">[+] </font>Loop microphone is now mayonaise\n<font color=\"rgb(255, 0, 0)\">[-] </font>Removed Kunai Anti-Kick\n<font color=\"rgb(0, 255, 0)\">[+] </font>You can change your spawn location\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Players\n<font color=\"rgb(0, 255, 0)\">[+] </font>Player selector shows friends and other BinisJ users\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added friend checker\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added blobman bring\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added ownership bring\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added destroy holdables whitelist\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Grab Options (wait for next update bris)\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Grab Options\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added fling strength\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added infinite extend\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added scroll multiplier\n<font color=\"rgb(0, 255, 0)\">[+] </font>Moved dont tustle with the muscle\n<font color=\"rgb(0, 255, 0)\">[+] </font>Moved invis line\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Noclip grab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added fling grab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Spinny grab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Moved line lag server\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Auras (wait for next update bris)\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Auras\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Death aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Kick aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Fling aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Sit aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Quicksand aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Bang aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Telekenesis aura\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Misc\n<font color=\"rgb(0, 255, 0)\">[+] </font>Renamed to Misc\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Blobman bring all\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Loop Ownership bring all\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Clear Server and Player items\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Loop Lists (wait for next update bris)\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Loop Lists\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Line Thingys\n<font color=\"rgb(255, 0, 0)\">[-] </font>Removed Line Thingys\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Map\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Break Plot Barrier\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added ownership tweened objects\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Toggle tweened alignment\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Keybinds\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Keybinds\n<font color=\"rgb(0, 255, 0)\">[+] </font>Moved TP To Mouse\n<font color=\"rgb(0, 255, 0)\">[+] </font>Moved Anchor Item\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added delete / kill item\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Config\n<font color=\"rgb(0, 255, 0)\">[+] </font>\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Background Processes\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added delete service\n<font color=\"rgb(0, 255, 0)\">[+] </font>Made every service better\n<font color=\"rgb(0, 255, 0)\">[+] </font>Any Ownership method for players will use blobman in plots</b>")
@@ -4195,8 +4235,8 @@ else
 	})
 
 	local gotitdownPEEN = GS:AddSlider({
-		Name = "Set fling strength <font color='#ff9900'>(MAINTENANCE)</font>",
-		Min = 1,
+		Name = "Set fling strength",
+		Min = 0,
 		Max = 10000,
 		Default = 50,
 		Color = Color3.fromRGB(255,255,255),
@@ -4208,7 +4248,7 @@ else
 	})
 
 	GS:AddTextbox({
-		Name = "Type fling strength <font color='#ff9900'>(MAINTENANCE)</font>",
+		Name = "Type fling strength",
 		TextDisappear = true,
 		Callback = function(Value)
 			local num = tonumber(Value)
@@ -4219,7 +4259,7 @@ else
 	})
 
 	GS:AddButton({
-		Name = "Set fling strength to default (50) <font color='#ff9900'>(MAINTENANCE)</font>",
+		Name = "Set fling strength to default (50)",
 		Callback = function()
 			gotitdownPEEN:Set(50)
 		end    
@@ -4229,12 +4269,34 @@ else
 		Name = "<b>Infinite Extend</b>"
 	})
 
-	GS:AddToggle({
-		Name = "Infinite Extend <font color='#ff9900'>(MAINTENANCE)</font>",
-		Default = true,
+	local gotitdownPEEN3
+
+	gotitdownPEEN3 = GS:AddSlider({
+		Name = "Set scroll limit",
+		Min = 0,
+		Max = 100,
+		Default = math.huge,
+		Color = Color3.fromRGB(255,255,255),
+		Increment = 1,
+		ValueName = " ",
 		Callback = function(Value)
-			IXE = Value
-		end   
+			if Value == 100 then
+				gotitdownPEEN3:Set(math.huge)
+			else
+				IXE = Value
+			end
+		end
+	})
+
+	GS:AddTextbox({
+		Name = "Type scroll limit (default 30)",
+		TextDisappear = true,
+		Callback = function(Value)
+			local num = tonumber(Value)
+			if num then
+				gotitdownPEEN3:Set(num)
+			end
+		end
 	})
 
 	GS:AddSection({
@@ -4242,12 +4304,12 @@ else
 	})
 
 	local gotitdownPEEN2 = GS:AddSlider({
-		Name = "Set scroll multiplier <font color='#ff9900'>(MAINTENANCE)</font>",
-		Min = 1,
-		Max = 50,
-		Default = 3,
+		Name = "Set scroll multiplier",
+		Min = 0,
+		Max = 5,
+		Default = 2,
 		Color = Color3.fromRGB(255,255,255),
-		Increment = 1,
+		Increment = 0.1,
 		ValueName = " ",
 		Callback = function(Value)
 			SSM = Value
@@ -4255,7 +4317,7 @@ else
 	})
 
 	GS:AddTextbox({
-		Name = "Type scroll multiplier <font color='#ff9900'>(MAINTENANCE)</font>",
+		Name = "Type scroll multiplier",
 		TextDisappear = true,
 		Callback = function(Value)
 			local num = tonumber(Value)
@@ -4266,9 +4328,9 @@ else
 	})
 
 	GS:AddButton({
-		Name = "Set scroll multiplier to default (3) <font color='#ff9900'>(MAINTENANCE)</font>",
+		Name = "Set scroll multiplier to default (2)",
 		Callback = function()
-			gotitdownPEEN2:Set(3)
+			gotitdownPEEN2:Set(2)
 		end    
 	})
 
@@ -4330,9 +4392,10 @@ else
 		Callback = function(Value)
 			ncg = Value
 			if Value then
-				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts.GrabPart.WeldConstraint.Part1 then
+				if workspace:FindFirstChild("GrabParts") then
 					local obj = workspace.GrabParts.GrabPart.WeldConstraint.Part1.Parent
-					if not chillonme:FindFirstAncestor("Plots") and not chillonme:FindFirstAncestor("Slots") and (not chillonme:FindFirstAncestor("Map") or chillonme:FindFirstAncestor("AlwaysHereTweenedObjects")) then
+					if not obj:FindFirstAncestor("Plots") and not obj:FindFirstAncestor("Slots") and (not obj:FindFirstAncestor("Map") or obj:FindFirstAncestor("AlwaysHereTweenedObjects")) then
+						print('sussy')
 						ncgo = obj
 						for _,prt in pairs(obj:GetChildren()) do
 							if prt:IsA("BasePart") then
@@ -4357,9 +4420,30 @@ else
 	})
 
 	GS:AddToggle({
-		Name = "Fling grab <font color='#ff9900'>(MAINTENANCE)</font>",
+		Name = "Fling grab",
 		Default = false,
 		Callback = function(Value)
+			FG = Value
+			if Value then
+				if workspace:FindFirstChild("GrabParts") then
+					local gp = workspace.GrabParts
+					local obj = workspace.GrabParts.GrabPart.WeldConstraint.Part1.Parent
+					local prttt = obj:FindFirstChild("SoundPart") or obj:FindFirstChild("HumanoidRootPart") or obj:FindFirstChild("Main") or obj:FindFirstChild("Balloon")
+					if prttt and not obj:FindFirstAncestor("Plots") and not obj:FindFirstAncestor("Slots") and (not obj:FindFirstAncestor("Map") or obj:FindFirstAncestor("AlwaysHereTweenedObjects")) then
+						repeat
+							game.RunService.Heartbeat:Wait()
+							local ussy = prttt.AssemblyLinearVelocity
+							
+							prttt.AssemblyLinearVelocity = prttt.AssemblyLinearVelocity * 100000
+
+							game.RunService.RenderStepped:Wait()
+							if prttt then
+								prttt.AssemblyLinearVelocity = ussy
+							end
+						until not FG or not gp
+					end
+				end
+			end
 		end   
 	})
 
@@ -4386,7 +4470,7 @@ else
 				if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Head") then
 					local myhead = game.Players.LocalPlayer.Character.Head
 					for i=1,LAGAMM do
-						game.ReplicatedStorage.GrabEvents.CreateGrabLine:FireServer(myhead,myhead.CFrame)
+						game.ReplicatedStorage.GrabEvents.CreateGrabLine:FireServer(myhead,CFrame.new(0,0,0))
 					end
 				end
 				task.wait(1)
@@ -4690,9 +4774,11 @@ else
 
 	local tpon = false
 
-	PT:AddToggle({
+	local thirdp
+
+	thirdp = PT:AddToggle({
 		Name = "Third Person",
-		Default = true,
+		Default = false,
 		Callback = function(Value)
 			tpon = Value
 			task.spawn(function()
@@ -4754,7 +4840,9 @@ else
 				elseif flying then
 					game.Players.LocalPlayer.Character.Humanoid.UseJumpPower = false
 				else
+					game.Players.LocalPlayer.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping,true)
 					game.Players.LocalPlayer.Character.Humanoid.UseJumpPower = true
+					game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS
 				end
 			end
 			task.wait()
@@ -5460,36 +5548,374 @@ else
 	AS:AddSection({
 		Name = "<b>Other Antis</b>"
 	})
+	
+	game:GetService("Players").LocalPlayer.PlayerScripts.CharacterAndBeamMove.Disabled = true
+	for _,plr in pairs(game:GetService("Players"):GetChildren()) do
+		if plr.Character and plr.Character:FindFirstChild("GrabParts") then
+			plr.Character.GrabParts:Destroy()
+		end
+	end
 
-	alag = AS:AddToggle({
-		Name = "Anti-Lag",
-		Default = false,
-		Callback = function(Value)
-			ALAGE = Value
-			if Value then 
-				game:GetService("Players").LocalPlayer.PlayerScripts.CharacterAndBeamMove.Disabled = true
-				for _,plr in pairs(game:GetService("Players"):GetChildren()) do
-					if plr.Character and plr.Character:FindFirstChild("GrabParts") then
-						plr.Character.GrabParts:Destroy()
+	function antilag()
+		local ReplicatedStorage = game:GetService("ReplicatedStorage")
+		local script = game.Players.LocalPlayer.PlayerScripts.CharacterAndBeamMove
+		local Players = game:GetService("Players")
+		local TweenService = game:GetService("TweenService")
+		local RunService = game:GetService("RunService")
+		local ReplicatedFirst = game:GetService("ReplicatedFirst")
+
+		local LocalPlayer = Players.LocalPlayer
+		local LookEvent = ReplicatedStorage.CharacterEvents.Look
+		local CurrentCamera = workspace.CurrentCamera
+
+		local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+		local torso = character:WaitForChild("Torso")
+		local hrp = character:WaitForChild("HumanoidRootPart")
+		local neck = torso:WaitForChild("Neck")
+		local humanoid = character:WaitForChild("Humanoid")
+		local rootJoint = hrp:WaitForChild("RootJoint")
+		local rightShoulder = torso:WaitForChild("Right Shoulder")
+
+		local grabAnim = script:WaitForChild("GrabAnimation")
+		local animator = humanoid:WaitForChild("Animator")
+		local grabTrack = animator:LoadAnimation(grabAnim)
+
+		local defaultNeckC0 = neck.C0
+		local neckYOffset = neck.C0.Y
+
+		-- Character respawn handling
+		LocalPlayer.CharacterAdded:Connect(function(newChar)
+			character = newChar
+			torso = newChar:WaitForChild("Torso")
+			hrp = newChar:WaitForChild("HumanoidRootPart")
+			neck = torso:WaitForChild("Neck")
+			humanoid = newChar:WaitForChild("Humanoid")
+			rootJoint = hrp:WaitForChild("RootJoint")
+			rightShoulder = torso:WaitForChild("Right Shoulder")
+			
+			neckYOffset = neck.C0.Y
+			defaultNeckC0 = neck.C0
+			
+			animator = humanoid:WaitForChild("Animator")
+			grabTrack = animator:LoadAnimation(grabAnim)
+		end)
+
+		LocalPlayer.CharacterRemoving:Connect(function()
+			character = nil
+			torso = nil
+			hrp = nil
+			neck = nil
+			humanoid = nil
+			rootJoint = nil
+			rightShoulder = nil
+			animator = nil
+			grabTrack = nil
+		end)
+
+		-- Head tracking / look system (server sync)
+		LookEvent.OnClientEvent:Connect(function(player, neckC0, rootC0, shoulderC0, priority)
+			if not player or not player.Character then return end
+			
+			local char = player.Character
+			local t = char:FindFirstChild("Torso")
+			if not t then return end
+			
+			local n = t:FindFirstChild("Neck")
+			local rj = char:FindFirstChild("HumanoidRootPart") and char.HumanoidRootPart:FindFirstChild("RootJoint")
+			local rs = t:FindFirstChild("Right Shoulder")
+			
+			if not n or not rj then return end
+			
+			local ti = TweenInfo.new(1, Enum.EasingStyle.Linear)
+			
+			if priority == "high" then
+				ti = TweenInfo.new(0.1, Enum.EasingStyle.Linear)
+			elseif priority == "medium" then
+				ti = TweenInfo.new(0.5, Enum.EasingStyle.Linear)
+			elseif priority == "low" or priority == "lowest" then
+				ti = TweenInfo.new(0.25, Enum.EasingStyle.Linear)
+			end
+			
+			TweenService:Create(n, ti, {C0 = neckC0}):Play()
+			TweenService:Create(rj, ti, {C0 = rootC0}):Play()
+			
+			if shoulderC0 and rs then
+				TweenService:Create(rs, ti, {C0 = shoulderC0}):Play()
+			end
+		end)
+
+		-- Grab line visuals (for other players)
+		local lowQuality = false
+		script.LowQualityMode.Event:Connect(function()
+			lowQuality = true
+		end)
+
+		local linelist = {}
+
+		ReplicatedStorage.GrabEvents.CreateGrabLine.OnClientEvent:Connect(function(player, targetPart, offset)
+			if player == LocalPlayer then return end
+			linelist[player.UserId] = {targetPart, offset, linelist[player.UserId] and linelist[player.UserId][3] + 1 or 1}
+		end)
+
+		local alertlist = {}
+
+		RunService.RenderStepped:Connect(function(dt)
+			for _,player in pairs(game.Players:GetPlayers()) do
+				if linelist[player.UserId] then
+					task.spawn(function()
+						targetPart, offset, times = unpack(linelist[player.UserId])
+						linelist[player.UserId] = nil
+						if times * dt > .75 then
+							if player.Character and player.Character:FindFirstChild("GrabParts") then
+								player.Character.GrabParts:Destroy()
+							end
+							if not alertlist[player.UserId] then
+								alertlist[player.UserId] = true
+								game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font><font color='#ff00ea'>"..player.DisplayName.." (@"..player.Name..") is lagging the server</font>")
+								OrionLib:MakeNotification({
+									Name = "Anti-Lag",
+									Content = player.DisplayName.." (@"..player.Name..") is lagging the server",
+									Image = "rbxassetid://4483345998",
+									Time = 2
+								})
+								task.wait(10)
+								alertlist[player.UserId] = nil
+							end
+						elseif targetPart and offset then
+							if not player.Character then return end
+							
+							local existing = player.Character:FindFirstChild("GrabParts")
+							if existing then existing:Destroy() end
+							
+							local template = ReplicatedFirst:WaitForChild("GrabParts")
+							local grabParts = template:Clone()
+							
+							local beamColor = player:WaitForChild("BeamColor")
+							local color = beamColor:WaitForChild("BallColorHolder").Value
+							local seq = beamColor:WaitForChild("ColorSequenceHolder").Color
+							
+							local pos = (targetPart.CFrame * offset).Position
+							
+							if lowQuality then
+								grabParts.GrabPart.LowQualityGrabPartBall.Transparency = 0
+								grabParts.GrabPart.Transparency = 1
+								grabParts.BeamPart.GrabBeam.Segments = 20
+							end
+							
+							local farther = player:FindFirstChild("FartherReach")
+							if farther and farther.Value then
+								grabParts.BeamPart.GrabBeam.Texture = "rbxassetid://8933355899"
+							end
+							
+							for _, v in grabParts:GetDescendants() do
+								if v:IsA("BasePart") then
+									v.Color = color
+								elseif v:IsA("Beam") then
+									v.Color = seq
+								end
+							end
+							
+							grabParts.DragPart.AlignOrientation:Destroy()
+							grabParts.DragPart.AlignPosition:Destroy()
+							
+							local head = player.Character:WaitForChild("Head", 5)
+							if not head then grabParts:Destroy() return end
+							
+							grabParts.DragPart.WeldConstraint.Part0 = grabParts.DragPart
+							grabParts.DragPart.WeldConstraint.Part1 = head
+							grabParts.DragPart.Position = head.Position + head.CFrame.LookVector * 10
+							
+							grabParts.BeamPart.GrabBeam.Attachment0 = player.Character:WaitForChild("Right Arm"):WaitForChild("RightGripAttachment")
+							grabParts.BeamPart.Position = pos
+							grabParts.GrabPart.WeldConstraint.Part1 = targetPart
+							grabParts.GrabPart.Position = pos
+							
+							grabParts.Parent = player.Character
+							
+							grabParts.GrabPart.AttachSound:Play()
+							grabParts.GrabPart.BeamSound:Play()
+							
+							local bodyFront = player.Character.Torso:WaitForChild("BodyFrontAttachment")
+							
+							local conn
+							conn = RunService.RenderStepped:Connect(function()
+								if not grabParts:IsDescendantOf(workspace) then
+									conn:Disconnect()
+									return
+								end
+								
+								grabParts.BeamPart.CFrame = CFrame.lookAt(
+									grabParts.GrabPart.Position,
+									grabParts.DragPart.Position,
+									Vector3.new(0,0,1)
+								)
+								
+								grabParts.DragPart.DragAttach.WorldOrientation = bodyFront.WorldOrientation
+								
+								local dist = (grabParts.GrabPart.Position - grabParts.DragPart.Position).Magnitude
+								grabParts.BeamPart.GrabBeam.CurveSize1 = dist * 1.5
+								grabParts.GrabPart.BeamSound.PlaybackSpeed = dist / 2 + 2.5
+							end)
+							
+							grabParts.AncestryChanged:Connect(function()
+								if not grabParts:IsDescendantOf(workspace) then
+									conn:Disconnect()
+								end
+							end)
+						end
+					end)
+				end
+			end
+		end)
+
+		ReplicatedStorage.GrabEvents.ExtendGrabLine.OnClientEvent:Connect(function(player, distance)
+			if player == LocalPlayer then return end
+			local gp = player.Character and player.Character:FindFirstChild("GrabParts")
+			if gp then
+				local head = player.Character:FindFirstChild("Head")
+				if head then
+					gp.DragPart.Position = head.Position + head.CFrame.LookVector * distance
+				end
+			end
+		end)
+
+		ReplicatedStorage.GrabEvents.DestroyGrabLine.OnClientEvent:Connect(function(player)
+			if player == LocalPlayer then return end
+			local gp = player.Character and player.Character:FindFirstChild("GrabParts")
+			if gp then gp:Destroy() end
+		end)
+
+		-- Input direction helper
+		local function GetMoveVector()
+			local UIS = game.UserInputService
+			local move = Vector3.new(0,0,0)
+
+			if UIS:IsKeyDown(Enum.KeyCode.W) or UIS:IsKeyDown(Enum.KeyCode.Up)    then move += Vector3.new( 0,0,-1) end
+			if UIS:IsKeyDown(Enum.KeyCode.S) or UIS:IsKeyDown(Enum.KeyCode.Down)  then move += Vector3.new( 0,0, 1) end
+			if UIS:IsKeyDown(Enum.KeyCode.A) or UIS:IsKeyDown(Enum.KeyCode.Left)  then move += Vector3.new(-1,0, 0) end
+			if UIS:IsKeyDown(Enum.KeyCode.D) or UIS:IsKeyDown(Enum.KeyCode.Right) then move += Vector3.new( 1,0, 0) end
+
+			-- Gamepad (optional – remove if you only care about keyboard)
+			for _, gp in UIS:GetConnectedGamepads() do
+				for _, i in UIS:GetGamepadState(gp) do
+					if i.KeyCode == Enum.KeyCode.Thumbstick1 then
+						move += Vector3.new(i.Position.X, 0, -i.Position.Y)
+						break
 					end
 				end
-				OrionLib:MakeNotification({
-					Name = "Anti-Lag has ben enabled",
-					Content = "Anti-Lag",
-					Image = "rbxassetid://4483345998",
-					Time = 2
-				})
-			else
-				game:GetService("Players").LocalPlayer.PlayerScripts.CharacterAndBeamMove.Enabled = true
-				OrionLib:MakeNotification({
-					Name = "Anti-Lag has been disabled",
-					Content = "Anti-lag",
-					Image = "rbxassetid://4483345998",
-					Time = 2
-				})	
 			end
-		end   
-	})
+
+			local m = move.Magnitude
+			return m > 1 and move/m or (m < 0.01 and Vector3.zero or move)
+		end
+
+		local function getInputDirection()
+			local move = GetMoveVector()
+			if move.X == 0 and move.Z == 0 then
+				return 0, 0
+			end
+			local angle = math.atan2(move.Z, move.X)
+			local x = math.cos(angle)
+			local z = math.sin(angle)
+			if math.abs(x) < 0.001 then x = 0 end
+			if math.abs(z) < 0.001 then z = 0 end
+			return x, z
+		end
+
+		-- Grab state
+		local isGrabbing = false
+		script.GrabNotifyEvent.Event:Connect(function(state)
+			isGrabbing = state
+			if not state and grabTrack then
+				grabTrack:Stop()
+			end
+		end)
+
+		-- Constant head tilt / look-at camera (client)
+		RunService.RenderStepped:Connect(function()
+			if hrp and neck then
+				local look = hrp.CFrame:ToObjectSpace(CurrentCamera.CFrame).LookVector
+				neck.C0 = CFrame.new(0, neckYOffset, 0)
+					* CFrame.Angles(math.rad(270), 0, math.rad(180))
+					* CFrame.Angles(-math.asin(look.Y), 0, 0)
+			end
+		end)
+
+		-- Main loop – sends look updates to server
+		local lastAngle = 0
+		local tickCounter = 1
+
+		spawn(function()
+			while true do
+				wait(0.05)
+				if not neck or not hrp or not humanoid then continue end
+				
+				local x, z = getInputDirection()
+				
+				local look = hrp.CFrame:ToObjectSpace(CurrentCamera.CFrame).LookVector
+				local baseNeck = CFrame.new(0, neckYOffset, 0)
+					* CFrame.Angles(math.rad(270), 0, math.rad(180))
+					* CFrame.Angles(-math.asin(look.Y), 0, 0)
+				
+				local extraAngle = 0
+				
+				if x ~= 0 or z ~= 0 then
+					local deg = math.deg(math.atan2(-z, -x)) - 90
+					if math.abs(deg) > 90 then deg -= 180 end
+					extraAngle = deg
+					lastAngle = deg
+				else
+					if lastAngle < 0 then
+						lastAngle = math.min(lastAngle + 10, 0)
+					elseif lastAngle > 0 then
+						lastAngle = math.max(lastAngle - 10, 0)
+					end
+					extraAngle = lastAngle
+				end
+				
+				local neckCF = baseNeck
+					* CFrame.Angles(0, math.rad(extraAngle) * look.Y * 0.8, 0)
+					* CFrame.Angles(0, 0, -math.rad(extraAngle) * (1 - math.abs(look.Y)))
+				
+				neck.C0 = neckCF
+				
+				-- Send to server periodically (anti-lag spam protection)
+				tickCounter += 1
+				if tickCounter > 20 then tickCounter = 1 end
+				
+				local rootCF = CFrame.new(rootJoint.C0.X, rootJoint.C0.Y, rootJoint.C0.Z)
+					* CFrame.Angles(math.rad(270), 0, math.rad(180))
+					* CFrame.Angles(0, 0, math.rad(extraAngle))
+				
+				local shoulderCF = CFrame.new(rightShoulder.C0.X, rightShoulder.C0.Y, rightShoulder.C0.Z)
+					* CFrame.Angles(0, math.rad(90), math.rad(90))
+					* CFrame.Angles(0, 0, math.asin(look.Y))
+					* CFrame.Angles(-math.rad(extraAngle) * (1 - math.abs(look.Y)), 0, 0)
+				
+				if humanoid.Sit or humanoid.SeatPart then
+					LookEvent:FireServer(defaultNeckC0, rootJoint.C0, rightShoulder.C0, "high")
+				else
+					if tickCounter % 20 == 5 or tickCounter % 20 == 15 then
+						LookEvent:FireServer(neckCF, rootCF, shoulderCF, "high")
+						LookEvent:FireServer(neckCF, rootCF, shoulderCF, "medium")
+					elseif tickCounter % 20 == 10 then
+						LookEvent:FireServer(neckCF, rootCF, shoulderCF, "high")
+						LookEvent:FireServer(neckCF, rootCF, shoulderCF, "medium")
+						LookEvent:FireServer(neckCF, rootCF, shoulderCF, "low")
+					elseif tickCounter % 20 == 0 then
+						LookEvent:FireServer(neckCF, rootCF, shoulderCF, "high")
+						LookEvent:FireServer(neckCF, rootCF, shoulderCF, "medium")
+						LookEvent:FireServer(neckCF, rootCF, shoulderCF, "low")
+						LookEvent:FireServer(neckCF, rootCF, shoulderCF, "lowest")
+					else
+						LookEvent:FireServer(neckCF, rootCF, shoulderCF, "high")
+					end
+				end
+			end
+		end)
+	end
+
+	task.spawn(antilag)
 
 	local antifirepart
 
@@ -5709,11 +6135,14 @@ else
 		end    
 	})
 
+	local vro = true
+
 	diddlefinger = AS:AddDropdown({
 		Name = "Spawn Location",
+		Default = "ChineseHouse",
 		Options = locations,
 		Callback = function(Value)
-			if not Loading then
+			if not vro and not Loading then
 				House = Value
 				SL = tpland[Value]
 				OrionLib:MakeNotification({
@@ -5725,6 +6154,8 @@ else
 			end
 		end
 	})
+
+	vro = false
 
 	game.Players.LocalPlayer.Idled:Connect(function(timeSpentIdle)
 		game:GetService("VirtualUser"):CaptureController()
@@ -5936,15 +6367,30 @@ else
 			end
 			blobbin = false
 			for _,plr in pairs(game.Players:GetPlayers()) do
-				if BlobkickList[plr.UserId] or BlobKillList[plr.UserId] or BlobBringList[plr.UserId] or BKA or BKLA then
+				if BlobBringList[plr.UserId] and plr.Character and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and checkgrab(plr.Character) then
+					if BlobBringList[plr.UserId] == "none" or BlobBringList[plr.UserId] == "crip" or not BlobBringList[plr.UserId] or BlobBringList[plr.UserId] == "bris" then
+						plr.Character.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(0,0,0)
+						if BlobBringList[plr.UserId] == "crip" then
+							plr.Character.Humanoid.WalkSpeed = 0
+						end
+						BlobBringList[plr.UserId] = nil
+					else
+						plr.Character.HumanoidRootPart.CFrame = BlobBringList[plr.UserId]
+						plr.Character.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(0,0,0)
+						BlobBringList[plr.UserId] = nil
+						if BlobkickList[plr.UserId] or (BKA and (BKAWL and not game.Players.LocalPlayer:IsFriendsWith(plr.UserId) or not BKAWL)) then
+							continue1 = "Kick"
+						end
+					end
+				elseif BlobkickList[plr.UserId] or BlobKillList[plr.UserId] or BlobBringList[plr.UserId] or BKA or BKLA then
 					if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
 						j = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
 						h = game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity
 					end
 					local continue1 = nil
-					if BlobBringList[plr.UserId] then
+					if BlobBringList[plr.UserId] and BlobBringList[plr.UserId] ~= "bris" then
 						continue1 = "Bring"
-					elseif BlobKillList[plr.UserId] then
+					elseif BlobKillList[plr.UserId] or BlobBringList[plr.UserId] == "bris" then
 						continue1 = "Kill"
 					elseif BlobkickList[plr.UserId] then
 						continue1 = "Kick"
@@ -6035,13 +6481,17 @@ else
 												plr.Character.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(0,10^10,0)
 												game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(plr.Character.HumanoidRootPart)
 												blob.BlobmanSeatAndOwnerScript.CreatureGrab:FireServer(blob.RightDetector,plr.Character.HumanoidRootPart,blob.RightDetector.RightWeld)
+												blob.BlobmanSeatAndOwnerScript.CreatureGrab:FireServer(blob.RightDetector,game.Players.LocalPlayer.Character.HumanoidRootPart,blob.RightDetector.RightWeld)
+												blob.BlobmanSeatAndOwnerScript.CreatureDrop:FireServer(blob.RightDetector["RightWeld"],game.Players.LocalPlayer.Character.HumanoidRootPart)
 											else
 												BlobBringList[plr.UserId] = CFrame.new(-73,-6,-265.5)
 												smegma = false
 											end
 										else
 											if plr.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid.Health ~= 0 and blob and blob:FindFirstChild("RightDetector") and blob.RightDetector:FindFirstChild("RightWeld") and blob:FindFirstChild("BlobmanSeatAndOwnerScript") and blob.BlobmanSeatAndOwnerScript:FindFirstChild("CreatureGrab") and blob.BlobmanSeatAndOwnerScript:FindFirstChild("CreatureRelease") then
-												plr.Character.Humanoid.Sit = false
+												if BlobBringList[plr.UserId] == "bris" then
+													BlobBringList[plr.UserId] = nil
+												end
 												plr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
 												blob:FindFirstChild("BlobmanSeatAndOwnerScript").CreatureGrab:FireServer(blob.RightDetector,plr.Character.HumanoidRootPart,blob.RightDetector.RightWeld)
 												blob:FindFirstChild("BlobmanSeatAndOwnerScript").CreatureRelease:FireServer(blob.RightDetector.RightWeld,plr.Character.HumanoidRootPart)
@@ -6152,7 +6602,7 @@ else
 				for line,plr in pairs(game.Players:GetPlayers()) do
 					local satisfied = false
 					local continue = true
-					if not blobbin and plr ~= game.Players.LocalPlayer and (LoopKillList[plr.UserId] or (LocList[plr.UserId] and OTPList[plr.UserId]) or OKLA or OKA or LBA) and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+					if not blobbin and plr ~= game.Players.LocalPlayer and (LoopKillList[plr.UserId] or LocList[plr.UserId] == Vector3.new(0,1e29,0) or (LocList[plr.UserId] and OTPList[plr.UserId]) or OKLA or OKA or LBA) and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
 						if LocList[plr.UserId] then
 							if not (OKLA or OKA or LBA) then
 								if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and (plr.Character.HumanoidRootPart.CFrame.Position - LocList[plr.UserId]).Magnitude < 50 then
@@ -6186,7 +6636,11 @@ else
 							vel = Vector3.zero
 						end
 						if not satisfied and plr.Character.Parent ~= workspace then
-							BlobBringList[plr.UserId] = CFrame.new(-73,-6,-265.5)
+							if OKA or LocList[plr.UserId] or LBA then
+								BlobBringList[plr.UserId] = CFrame.new(-73,-6,-265.5)
+							else
+								BlobBringList[plr.UserId] = "bris"
+							end
 							satisfied = true
 						end
 						if not BlobBringList[plr.UserId] and not satisfied and continue then
@@ -6201,15 +6655,12 @@ else
 								j = vel
 								p = root.AssemblyLinearVelocity
 								local cameraPart = Instance.new("Part")
-								local trans = 0
+								local trans = root.LocalTransparencyModifier
 								cameraPart.Transparency = 1
 								cameraPart.CanCollide = false
 								cameraPart.Anchored = true
 								cameraPart.CFrame = vel * CFrame.new(0,1.5,0)
 								cameraPart.Parent = workspace
-								if (workspace.Camera.CFrame.Position - cameraPart.CFrame.Position).Magnitude < 1.5 then
-									trans = 1 - (((workspace.Camera.CFrame.Position - cameraPart.CFrame.Position).Magnitude - .5) / 1.5)
-								end
 								for _,prt in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
 									if prt.ClassName == "Part" and prt.Name ~= "HumanoidRootPart" then
 										prt.Transparency = trans
@@ -6373,9 +6824,9 @@ else
 				end
 				for itm in GrabItemsList do
 					if not blobbin and itm and itm.Parent and acno then
-						if itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("Main") or itm:FindFirstChild("Balloon") or (itm:FindFirstAncestor("AlwaysHereTweenedObjects") and findfirst(itm)) then
+						local prt = itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("Main") or itm:FindFirstChild("Balloon") or findfirst(itm)
+						if prt and not checkgrab(itm) then
 							game.RunService.Heartbeat:Wait()
-							local prt = itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("Main") or itm:FindFirstChild("Balloon") or findfirst(itm)
 							if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
 								local character = game.Players.LocalPlayer.Character 
 								local root = character.HumanoidRootPart 
@@ -6384,15 +6835,12 @@ else
 								j = vel
 								p = root.AssemblyLinearVelocity
 								local cameraPart = Instance.new("Part")
-								local trans = 0
+								local trans = root.LocalTransparencyModifier
 								cameraPart.Transparency = 1
 								cameraPart.CanCollide = false
 								cameraPart.Anchored = true
 								cameraPart.CFrame = vel * CFrame.new(0,1.5,0)
 								cameraPart.Parent = workspace
-								if (workspace.Camera.CFrame.Position - cameraPart.CFrame.Position).Magnitude < 1.5 then
-									trans = 1 - (((workspace.Camera.CFrame.Position - cameraPart.CFrame.Position).Magnitude - .5) / 1.5)
-								end
 								for _,prt in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
 									if prt.ClassName == "Part" and prt.Name ~= "HumanoidRootPart" then
 										prt.Transparency = trans
@@ -6414,12 +6862,12 @@ else
 									if prt then
 										for _,prt in pairs(itm:GetChildren()) do
 											if prt:IsA("BasePart") and prt.CanQuery then
+												game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(prt)
 												game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prt,prt.CFrame)
 											end
 										end
 									end
 								end)
-
 								game.RunService.RenderStepped:Wait()
 								if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
 									game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = j
@@ -6431,95 +6879,94 @@ else
 						elseif itm.Parent == game.Players then
 							if itm.Character then
 								local prt = itm.Character:FindFirstChild("HumanoidRootPart")
-								if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and pusslist[plr] then
+								if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and pusslist[itm] then
 									local plr = itm
 									itm = itm.Character
-									local satisfied = false
-									game.RunService.Heartbeat:Wait() 
-									if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-										local character = game.Players.LocalPlayer.Character 
-										local root = character.HumanoidRootPart 
-										local humanoid = character.Humanoid
-										local vel = nil 
-										while not (character and character.Parent and root and root.Parent) do 
-											game.RunService.Heartbeat:Wait() 
-											character = game.Players.LocalPlayer.Character 
-											root = character.HumanoidRootPart 
-										end
-										vel = root.CFrame
-										j = vel
-										p = root.AssemblyLinearVelocity
-										local cameraPart = Instance.new("Part")
-										local trans = 0
-										cameraPart.Transparency = 1
-										cameraPart.CanCollide = false
-										cameraPart.Anchored = true
-										cameraPart.CFrame = vel * CFrame.new(0,1.5,0)
-										cameraPart.Parent = workspace
-										if (workspace.Camera.CFrame.Position - cameraPart.CFrame.Position).Magnitude < 1.5 then
-											trans = 1 - (((workspace.Camera.CFrame.Position - cameraPart.CFrame.Position).Magnitude - .5) / 1.5)
-										end
-										for _,prt in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-											if prt.ClassName == "Part" and prt.Name ~= "HumanoidRootPart" then
-												prt.Transparency = trans
-											elseif prt.ClassName == "Accessory" and prt.Name ~= "TypingKeyboardMyWorld" then
-												prt.Handle.Transparency = trans
-											end
-										end
-										workspace.Camera.CameraSubject = cameraPart
-										
+									if not checkgrab(itm) then
+										local satisfied = false
+										game.RunService.Heartbeat:Wait() 
 										if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-											local prt = itm:FindFirstChild("HumanoidRootPart")
-											if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and pusslist[plr] then
-												if not itm:FindFirstChild("somebodyshotaloadintomyburger2") then
-													plr.Character:PivotTo(CFrame.new(pusslist[plr][1]))
-													local diddysbiscuit = Instance.new("Attachment")
-													diddysbiscuit.Name = "somebodyshotaloadintomyburger"
-													diddysbiscuit.Parent = prt
-													local diddlysquat = Instance.new("AlignPosition")
-													diddlysquat.Parent = diddysbiscuit
-													diddlysquat.Attachment0 = diddysbiscuit
-													diddlysquat.Mode = "OneAttachment"
-													diddlysquat.MaxForce = math.huge
-													diddlysquat.MaxVelocity = 1000
-													diddlysquat.Responsiveness = 150
-													diddlysquat.Position = pusslist[plr][1]
-													local penismcandrew = Instance.new("AlignOrientation")
-													penismcandrew.Parent = diddysbiscuit
-													penismcandrew.Mode = "OneAttachment"
-													penismcandrew.Attachment0 = diddysbiscuit
-													penismcandrew.Responsiveness = 150
-													penismcandrew.MaxTorque = math.huge
-													penismcandrew.CFrame = pusslist[plr][2]
-													local gottheblicky = Instance.new("Highlight")
-													gottheblicky.Parent = itm
-													gottheblicky.Name = "somebodyshotaloadintomyburger2"
-													gottheblicky.FillTransparency = 0.4
-													gottheblicky.FillColor = Color3.fromRGB(27,126,208)
-													gottheblicky.OutlineColor = Color3.fromRGB(21,97,161)
+											local character = game.Players.LocalPlayer.Character 
+											local root = character.HumanoidRootPart 
+											local humanoid = character.Humanoid
+											local vel = nil
+											vel = root.CFrame
+											j = vel
+											p = root.AssemblyLinearVelocity
+											local cameraPart = Instance.new("Part")
+											local trans = root.LocalTransparencyModifier
+											cameraPart.Transparency = 1
+											cameraPart.CanCollide = false
+											cameraPart.Anchored = true
+											cameraPart.CFrame = vel * CFrame.new(0,1.5,0)
+											cameraPart.Parent = workspace
+											for _,prt in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+												if prt.ClassName == "Part" and prt.Name ~= "HumanoidRootPart" then
+													prt.Transparency = trans
+												elseif prt.ClassName == "Accessory" and prt.Name ~= "TypingKeyboardMyWorld" then
+													prt.Handle.Transparency = trans
 												end
-												if (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 28 then
-													game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = prt.CFrame + Vector3.new(0,10,0) + (prt.AssemblyLinearVelocity / math.pi)
-													game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = prt.AssemblyLinearVelocity
-												end
-												task.spawn(function()
-													task.wait(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 1000)
-													if prt then
-														game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prt,prt.CFrame)
+											end
+											workspace.Camera.CameraSubject = cameraPart
+											
+											if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+												local prt = itm:FindFirstChild("HumanoidRootPart")
+												if prt and prt.CFrame.Position.Magnitude < 1000000 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and pusslist[plr] then
+													if not itm:FindFirstChild("somebodyshotaloadintomyburger2") then
+														local diddysbiscuit = Instance.new("Attachment")
+														diddysbiscuit.Name = "somebodyshotaloadintomyburger"
+														diddysbiscuit.Parent = prt
+														local diddlysquat = Instance.new("AlignPosition")
+														diddlysquat.Parent = diddysbiscuit
+														diddlysquat.Attachment0 = diddysbiscuit
+														diddlysquat.Mode = "OneAttachment"
+														diddlysquat.MaxForce = math.huge
+														diddlysquat.MaxVelocity = 1000
+														diddlysquat.Responsiveness = 150
+														diddlysquat.Position = pusslist[plr][1]
+														local penismcandrew = Instance.new("AlignOrientation")
+														penismcandrew.Parent = diddysbiscuit
+														penismcandrew.Mode = "OneAttachment"
+														penismcandrew.Attachment0 = diddysbiscuit
+														penismcandrew.Responsiveness = 150
+														penismcandrew.MaxTorque = math.huge
+														penismcandrew.CFrame = pusslist[plr][2]
+														local gottheblicky = Instance.new("Highlight")
+														gottheblicky.Parent = itm
+														gottheblicky.Name = "somebodyshotaloadintomyburger2"
+														gottheblicky.FillTransparency = 0.4
+														gottheblicky.FillColor = Color3.fromRGB(27,126,208)
+														gottheblicky.OutlineColor = Color3.fromRGB(21,97,161)
 													end
-												end)
+													if (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 28 then
+														game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = prt.CFrame + Vector3.new(0,10,0) + (prt.AssemblyLinearVelocity / math.pi)
+														game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = prt.AssemblyLinearVelocity
+													end
+													task.spawn(function()
+														task.wait(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 1000)
+														if prt then
+															game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prt,prt.CFrame)
+														end
+													end)
+												end
+											else
+												satisfied = true
 											end
-										else
-											satisfied = true
-										end
 
-										game.RunService.RenderStepped:Wait()
-										if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-											game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = j
-											game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = p
+											game.RunService.RenderStepped:Wait()
+											if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+												game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = j
+												game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = p
+											end
+											workspace.Camera.CameraSubject = humanoid
+											cameraPart:Destroy()
 										end
-										workspace.Camera.CameraSubject = humanoid
-										cameraPart:Destroy()
+									elseif itm:FindFirstChild("HumanoidRootPart") and pusslist[plr] and (itm.HumanoidRootPart.CFrame.Position - pusslist[plr][1]).Magnitude > 50 then
+										for _,prt in pairs(itm:GetChildren()) do
+											if prt.ClassName == "Part" then
+												prt.CFrame = CFrame.new(pusslist[plr][1])
+											end
+										end
 									end
 								end
 							end
@@ -6548,15 +6995,12 @@ else
 									j = vel
 									p = root.AssemblyLinearVelocity
 									local cameraPart = Instance.new("Part")
-									local trans = 0
+									local trans = root.LocalTransparencyModifier
 									cameraPart.Transparency = 1
 									cameraPart.CanCollide = false
 									cameraPart.Anchored = true
 									cameraPart.CFrame = vel * CFrame.new(0,1.5,0)
 									cameraPart.Parent = workspace
-									if (workspace.Camera.CFrame.Position - cameraPart.CFrame.Position).Magnitude < 1.5 then
-										trans = 1 - (((workspace.Camera.CFrame.Position - cameraPart.CFrame.Position).Magnitude - .5) / 1.5)
-									end
 									for _,prt in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
 										if prt.ClassName == "Part" and prt.Name ~= "HumanoidRootPart" then
 											prt.Transparency = trans
@@ -6986,8 +7430,15 @@ else
 	})
 
 	PL:AddButton({
-		Name = "Bring <font color='#165905'>「</font><font color='#1edb09'>OWNERSHIP</font><font color='#165905'>」</font><font color='#ff9900'>(MAINTENANCE)</font>",
+		Name = "Bring <font color='#165905'>「</font><font color='#1edb09'>OWNERSHIP</font><font color='#165905'>」</font>",
 		Callback = function()
+			if not Changing then
+				if Value then
+					--[uid] = "who you loop killin huh big guy??"
+				else
+					--[uid] = nil
+				end
+			end
 		end
 	})
 
@@ -7083,7 +7534,7 @@ else
 	local setthat = false
 
 	AAS = PL:AddToggle({
-		Name = "Automatic Ownership <font color='#590505'>「</font><font color='#db0909'>BLOBMAN</font><font color='#590505'>」</font>",
+		Name = "Js walk it off  💔<font color='#590505'>「</font><font color='#db0909'>BLOBMAN</font><font color='#590505'>」</font>",
 		Default = false,
 		Callback = function(Value)
 			SOT = Value
@@ -7116,7 +7567,7 @@ else
 		Name = "Set Walk-Speed (default 16)",
 		Min = 0,
 		Max = 160,
-		Default = 1,
+		Default = 16,
 		Color = Color3.fromRGB(255,255,255),
 		Increment = 1,
 		ValueName = "Speed",
@@ -7714,11 +8165,11 @@ else
 			local prrt = findfirst(workspace.Map.AlwaysHereTweenedObjects[selected].Object.ObjectModel)
 			while diddleskin and getcount()[1] < 10 do
 				for _,prt in pairs(getcount()[2]) do
-					if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and prt:FindFirstChild("SoundPart") and (game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position - prt.SoundPart.CFrame.Position).Magnitude < 28 and not checkgrab(prt) then
+					if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and prt:FindFirstChild("SoundPart") and (game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position - prt.SoundPart.CFrame.Position).Magnitude < 28 then
 						game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prt.SoundPart,prt.SoundPart.CFrame)
-					end
-					if checkgrab(prt) then
-						prt.SoundPart.AssemblyLinearVelocity = Vector3.new(0,1e9,0)
+						if checkgrab(prt) then
+							prt.SoundPart.AssemblyLinearVelocity = Vector3.new(0,1e9,0)
+						end
 					end
 				end
 				while not (game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character.Parent == workspace and game.Players.LocalPlayer.CanSpawnToy.Value) do task.wait() end
@@ -7740,7 +8191,7 @@ else
 					game.ReplicatedStorage.PlayerEvents.StickyPartEvent:FireServer(prt.StickyPart,prrt,CFrame.Angles(0,0,0))
 				end
 				local st = tick()
-				while tick() - st < 7.5 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and not checkgrab(prrt) do
+				while tick() - st < 7.5 and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") do
 					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = prrt.CFrame
 					game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prrt,prrt.CFrame)
 					task.wait()
@@ -7758,6 +8209,79 @@ else
 			local obj = workspace.Map.AlwaysHereTweenedObjects[selected].Object.FollowThisPart
 			obj.AlignOrientation.Enabled = not alignlist[selected]
 			obj.AlignPosition.Enabled = not alignlist[selected]
+		end
+	})
+
+	MS:AddSection({
+		Name = "<b>Customise Looks</b>"
+	})
+
+	MS:AddDropdown({
+		Name = "Set Skybox",
+		Options = {"Default","Foggy","Boner"},
+		Default = "Default",
+		Callback = function(Value)
+			local l = game.Lighting
+			if Value == "Default" then
+				l.Sky.SkyboxBk = "rbxassetid://8995816670"
+				l.Sky.SkyboxDn = "rbxassetid://8995686153"
+				l.Sky.SkyboxFt = "rbxassetid://8995816670"
+				l.Sky.SkyboxLf = "rbxassetid://8995816670"
+				l.Sky.SkyboxRt = "rbxassetid://8995816670"
+				l.Sky.SkyboxUp = "rbxassetid://8995814929"
+			elseif Value == "Foggy" then
+				l.Sky.SkyboxBk = "rbxassetid://10491933248"
+				l.Sky.SkyboxDn = "rbxassetid://10491933248"
+				l.Sky.SkyboxFt = "rbxassetid://10491933248"
+				l.Sky.SkyboxLf = "rbxassetid://10491933248"
+				l.Sky.SkyboxRt = "rbxassetid://10491933248"
+				l.Sky.SkyboxUp = "rbxassetid://10491933248"
+			elseif Value == "Boner" then
+				l.Sky.SkyboxBk = "rbxassetid://120974828567943"
+				l.Sky.SkyboxDn = "rbxassetid://120974828567943"
+				l.Sky.SkyboxFt = "rbxassetid://120974828567943"
+				l.Sky.SkyboxLf = "rbxassetid://120974828567943"
+				l.Sky.SkyboxRt = "rbxassetid://120974828567943"
+				l.Sky.SkyboxUp = "rbxassetid://120974828567943"
+			end
+		end
+	})
+
+	MS:AddDropdown({
+		Name = "Set Ambience",
+		Options = {"Default","Magestic","Foggy"},
+		Default = "Magestic",
+		Callback = function(Value)
+			local l = game.Lighting
+			if Value == "Default" then
+				workspace.Terrain.Clouds.Density = 0.57
+				workspace.Terrain.Clouds.Cover = 0.57
+				l.Brightness = 2
+				l.FogColor = Color3.fromRGB(192,192,192)
+				l.OutdoorAmbient = Color3.fromRGB(200,200,200)
+				l.TimeOfDay = "14:00:00"
+				l.FogEnd = 100000
+				l.FogStart = 0
+			elseif Value == "Magestic" then
+				workspace.Terrain.Clouds.Density = 0.57
+				workspace.Terrain.Clouds.Cover = 0.57
+				l.Brightness = 100
+				l.FogColor = Color3.fromRGB(194,171,134)
+				l.OutdoorAmbient = Color3.new(0,0,0)
+				l.TimeOfDay = "17:50:00"
+				l.FogStart = 0
+				l.FogEnd = 7500
+				l.FogStart = 0
+			elseif Value == "Foggy" then
+				workspace.Terrain.Clouds.Density = 0.8
+				workspace.Terrain.Clouds.Cover = 0.8
+				l.Brightness = 1.5
+				l.FogColor = Color3.fromRGB(255,255,255)
+				l.OutdoorAmbient = Color3.fromRGB(200,200,200)
+				l.TimeOfDay = "16:30:00"
+				l.FogEnd = 5000
+				l.FogStart = 200
+			end
 		end
 	})
 
@@ -7804,96 +8328,6 @@ else
 						end
 					end
 				end
-			end
-		end,
-	})
-
-	MS:AddSection({
-		Name = "<b>Foggy Map</b>"
-	})
-
-	MS:AddToggle({
-		Name = "Foggy Map",
-		Default = true,
-		Callback = function(Value)
-			if Value then
-				game:GetService("Workspace").Terrain.Clouds.Density = 0.8009999990463257
-				game:GetService("Workspace").Terrain.Clouds.Cover = 0.8009999990463257
-				game:GetService("Lighting").Brightness = 1.5
-				game:GetService("Lighting").FogColor = Color3.fromRGB(255,255,255)
-				game:GetService("Lighting").ClockTime = 16.5
-				game:GetService("Lighting").FogEnd = 5000
-				game:GetService("Lighting").FogStart = 200
-				game:GetService("Lighting").Sky.SkyboxBk = "rbxassetid://10491933248"
-				game:GetService("Lighting").Sky.SkyboxDn = "rbxassetid://10491933248"
-				game:GetService("Lighting").Sky.SkyboxFt = "rbxassetid://10491933248"
-				game:GetService("Lighting").Sky.SkyboxLf = "rbxassetid://10491933248"
-				game:GetService("Lighting").Sky.SkyboxRt = "rbxassetid://10491933248"
-				game:GetService("Lighting").Sky.SkyboxUp = "rbxassetid://10491933248"
-				OrionLib:MakeNotification({
-					Name = "Fog Enabled",
-					Content = "Foggy Map",
-					Image = "rbxassetid://4483345998",
-					Time = 2
-				})
-			else
-				game:GetService("Workspace").Terrain.Clouds.Density = 0.5709999799728394
-				game:GetService("Workspace").Terrain.Clouds.Cover = 0.5709999799728394
-				game:GetService("Lighting").Brightness = 2
-				game:GetService("Lighting").FogColor = Color3.fromRGB(192,192,192)
-				game:GetService("Lighting").ClockTime = 14
-				game:GetService("Lighting").FogEnd = 100000
-				game:GetService("Lighting").FogStart = 0
-				game:GetService("Lighting").Sky.SkyboxBk = "rbxassetid://8995816670"
-				game:GetService("Lighting").Sky.SkyboxDn = "rbxassetid://8995686153"
-				game:GetService("Lighting").Sky.SkyboxFt = "rbxassetid://8995816670"
-				game:GetService("Lighting").Sky.SkyboxLf = "rbxassetid://8995816670"
-				game:GetService("Lighting").Sky.SkyboxRt = "rbxassetid://8995816670"
-				game:GetService("Lighting").Sky.SkyboxUp = "rbxassetid://8995814929"
-				OrionLib:MakeNotification({
-					Name = "Fog Disabled",
-					Content = "Foggy Map",
-					Image = "rbxassetid://4483345998",
-					Time = 2
-				})
-			end
-		end,
-	})
-
-	MS:AddSection({
-		Name = "<b>Dave Boner Skybox</b>"
-	})
-
-	MS:AddToggle({
-		Name = "Dave Boner Skybox",
-		Default = false,
-		Callback = function(Value)
-			if Value then
-				game:GetService("Lighting").Sky.SkyboxBk = "rbxassetid://120974828567943"
-				game:GetService("Lighting").Sky.SkyboxDn = "rbxassetid://120974828567943"
-				game:GetService("Lighting").Sky.SkyboxFt = "rbxassetid://120974828567943"
-				game:GetService("Lighting").Sky.SkyboxLf = "rbxassetid://120974828567943"
-				game:GetService("Lighting").Sky.SkyboxRt = "rbxassetid://120974828567943"
-				game:GetService("Lighting").Sky.SkyboxUp = "rbxassetid://120974828567943"
-				OrionLib:MakeNotification({
-					Name = "Dave Boner lol",
-					Content = "- Dave Boner Himself",
-					Image = "rbxassetid://4483345998",
-					Time = 2
-				})
-			else
-				game:GetService("Lighting").Sky.SkyboxBk = "rbxassetid://8995816670"
-				game:GetService("Lighting").Sky.SkyboxDn = "rbxassetid://8995686153"
-				game:GetService("Lighting").Sky.SkyboxFt = "rbxassetid://8995816670"
-				game:GetService("Lighting").Sky.SkyboxLf = "rbxassetid://8995816670"
-				game:GetService("Lighting").Sky.SkyboxRt = "rbxassetid://8995816670"
-				game:GetService("Lighting").Sky.SkyboxUp = "rbxassetid://8995814929"
-				OrionLib:MakeNotification({
-					Name = "Bye Bye Boner",
-					Content = "- Dave Boner Himself",
-					Image = "rbxassetid://4483345998",
-					Time = 2
-				})
 			end
 		end,
 	})
@@ -8254,6 +8688,24 @@ else
 
 
 
+
+	KT:AddSection({
+		Name = "<b>Home Button</b>"
+	})
+
+	KT:AddBind({
+		Name = "Home Button",
+		Default = Enum.KeyCode.H,
+		Hold = false,
+		Callback = function(did)
+			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(SL)
+				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Map") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Plots") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Slots") then
+					workspace.GrabParts.GrabPart.CFrame = CFrame.new(SL) + Vector3.new(0,3,0)
+				end
+			end
+		end
+	})
 
 	KT:AddSection({
 		Name = "<b>Tp To Mouse</b>"
@@ -8878,7 +9330,9 @@ else
 	loaded = true
 	setlist = false
 
-	game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(255, 0, 255)\">[BinisJ]</font><font color=\"rgb(255, 255, 255)\"> Niggalink ONLINE bris</font>")
+	thirdp:Set(true)
+
+	game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font><font color=\"rgb(255, 255, 255)\"> Niggalink ONLINE bris</font>")
 
 	OrionLib:Init()
 end
