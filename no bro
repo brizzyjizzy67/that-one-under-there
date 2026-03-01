@@ -2169,6 +2169,7 @@ else
 	BlobKillList = {}
 	cmdlist = {}
 	BlobBringList = {}
+	Sizelist = {}
 	HoldableList = {}
 	HoldableWhite = {}
 	GrabItemsList = {}
@@ -3094,11 +3095,18 @@ else
 				if arg1[2] == "BigBjStarting" then
 					task.spawn(BJEvent)
 					game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","BigBjNotStarting"})
+					game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","ResizePlr",Value})
 					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font><font color='#ff00ea'>"..plr.DisplayName.." (@"..plr.Name..") is a good boy</font>")
 					if not BJList[plr.UserId] then
 						BJList[plr.UserId] = true
 						HoldableList[plr.UserId] = nil
 						HoldableWhite[plr.UserId] = true
+					end
+				end
+				if arg1[2] == "ResizePlr" and plr ~= game.Players.LocalPlayer then
+					Sizelist[plr.UserId] = arg1[3]
+					if plr.Character then
+						plr.Character:ScaleTo(arg1[3])
 					end
 				end
 				if arg1[2] == "NotStarting" then
@@ -3780,6 +3788,7 @@ else
 
 	local gotitdownPAT
 	local gotitdownPAT2
+	local gotitdownPAT3
 
 	local friendcommands
 	local allcommands
@@ -3822,9 +3831,14 @@ else
 			-- plrlist:Set(plrlistsel)
 			setlist = false
 		end
-
-		if plr ~= game.Players.LocalPlayer then
-			plr.CharacterAdded:Connect(function(char)
+		plr.CharacterAppearanceLoaded:Connect(function(char)
+			char:ScaleTo(Sizelist[plr.UserId] or 1)
+			if plr == game.Players.LocalPlayer and char:FindFirstChild("HumanoidRootPart") then
+				char.HumanoidRootPart.CFrame += Vector3.new(0,3 * (Sizelist[plr.UserId] or 1 - 1),0)
+			end
+		end)
+		plr.CharacterAdded:Connect(function(char)
+			if plr ~= game.Players.LocalPlayer then
 				if ESPList[plr.UserId] or ESPA then
 					ESPP(plr)
 				end
@@ -3850,10 +3864,16 @@ else
 						end
 					end
 				end)
+			end
+			local neck = char:WaitForChild("Torso"):WaitForChild("Neck")
+			neck:GetPropertyChangedSignal("C0"):Connect(function()
+				neck.C0 = CFrame.new(neck.C0.X, Sizelist[plr.UserId] or 1, neck.C0.Z) * neck.C0.Rotation
 			end)
-			local char = plr.Character
-			if char then
-				task.spawn(function()
+		end)
+		local char = plr.Character
+		if char then
+			task.spawn(function()
+				if plr ~= game.Players.LocalPlayer then
 					char:GetPropertyChangedSignal("Parent"):Connect(function()
 						for _,prt in pairs(char:GetChildren()) do
 							if prt:IsA("BasePart") then
@@ -3877,8 +3897,15 @@ else
 							end
 						end)
 					end
+				end
+				local neck = char:WaitForChild("Torso"):WaitForChild("Neck")
+				neck:GetPropertyChangedSignal("C0"):Connect(function()
+					neck.C0 = CFrame.new(neck.C0.X, Sizelist[plr.UserId] or 1, neck.C0.Z) * neck.C0.Rotation
 				end)
-			end
+				char:ScaleTo(Sizelist[plr.UserId] or 1)
+			end)
+		end
+		if plr ~= game.Players.LocalPlayer then
 			task.spawn(function()
 				local ishebadornahh = false
 				local dingdong = ""
@@ -3990,11 +4017,14 @@ else
 				end
 			end
 		end)
+		plr.CharacterAppearanceLoaded:Connect(function(char)
+			char:ScaleTo(Sizelist[plr.UserId] or 1)
+		end)
 		plr.CharacterAdded:Connect(function(char)
 			if ESPList[plr.UserId] or ESPA then
 				ESPP(plr)
 			end
-			local _ = char:WaitForChild("Head")
+			char:WaitForChild("Head")
 			char:GetPropertyChangedSignal("Parent"):Connect(function()
 				for _,prt in pairs(char:GetChildren()) do
 					if prt:IsA("BasePart") then
@@ -4005,8 +4035,7 @@ else
 					end
 				end
 			end)
-			_ = char.Head:WaitForChild("BallSocketConstraint")
-			char.Head.BallSocketConstraint:GetPropertyChangedSignal("Enabled"):Connect(function()
+			char.Head:WaitForChild("BallSocketConstraint"):GetPropertyChangedSignal("Enabled"):Connect(function()
 				for _,prt in pairs(char:GetChildren()) do
 					if prt:IsA("BasePart") then
 						prt.CollisionGroup = "PlotPlayers"
@@ -4015,6 +4044,10 @@ else
 						end
 					end
 				end
+			end)
+			local neck = char:WaitForChild("Torso"):WaitForChild("Neck")
+			neck:GetPropertyChangedSignal("C0"):Connect(function()
+				neck.C0 = CFrame.new(neck.C0.X, Sizelist[plr.UserId] or 1, neck.C0.Z) * neck.C0.Rotation
 			end)
 		end)
 
@@ -4763,9 +4796,12 @@ else
 									for _,prt in pairs(plr.Character:GetChildren()) do
 										if prt.ClassName == "Part" and prt.CanCollide then
 											task.spawn(function()
-												prt.CanCollide = false
 												while QAT and plr.Character and prt and checkgrab(plr.Character) do
 													prt.AssemblyLinearVelocity = Vector3.new(0,-10,0)
+													prt.CanCollide = false
+													if prt:FindFirstChild("RagdollLimbPart") then
+														prt.RagdollLimbPart.CanCollide = false
+													end
 													task.wait()
 												end
 												if prt then
@@ -4870,6 +4906,44 @@ else
 		Callback = function()
 			gotitdownPAT:Set(16)
 		end    
+	})
+
+	PT:AddSection({
+		Name = "<b>Size</b>"
+	})
+
+	gotitdownPAT3 = PT:AddSlider({
+		Name = "Set Size",
+		Min = 0.1,
+		Max = 10,
+		Default = 1,
+		Color = Color3.fromRGB(255,255,255),
+		Increment = 0.1,
+		ValueName = " ",
+		Callback = function(Value)
+			lastval = Sizelist[game.Players.LocalPlayer.UserId] or 1
+			Sizelist[game.Players.LocalPlayer.UserId] = Value
+			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Torso") and game.Players.LocalPlayer.Character.Torso:FindFirstChild("Neck") then
+				local char = game.Players.LocalPlayer.Character
+				char.Torso.Neck.C0 = CFrame.new(char.Torso.Neck.C0.X, Sizelist[game.Players.LocalPlayer.UserId] or 1, char.Torso.Neck.C0.Z) * char.Torso.Neck.C0.Rotation
+				char:ScaleTo(Value)
+				if char:FindFirstChild("HumanoidRootPart") then
+					char.HumanoidRootPart.CFrame += Vector3.new(0,3 * (Value - lastval),0)
+				end
+				game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","ResizePlr",Value})
+			end
+		end
+	})
+
+	PT:AddTextbox({
+		Name = "Type Size (default 1)",
+		TextDisappear = true,
+		Callback = function(Value)
+			local num = tonumber(Value)
+			if num then
+				gotitdownPAT3:Set(num)
+			end
+		end
 	})
 
 	PT:AddSection({
@@ -5128,7 +5202,7 @@ else
 									Float.CanCollide = false
 								end
 							else
-								Float.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame - Vector3.new(0,FloatValue + game.Players.LocalPlayer.Character.Humanoid.HipHeight,0)
+								Float.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame - Vector3.new(0,(FloatValue + game.Players.LocalPlayer.Character.Humanoid.HipHeight) * Sizelist[game.Players.LocalPlayer.UserId],0)
 								Float.CanCollide = true
 							end
 						else
@@ -5216,7 +5290,7 @@ else
 										Float.CanCollide = false
 									end
 								else
-									Float.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame - Vector3.new(0,FloatValue + game.Players.LocalPlayer.Character.Humanoid.HipHeight,0)
+									Float.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame - Vector3.new(0,(FloatValue + game.Players.LocalPlayer.Character.Humanoid.HipHeight) * Sizelist[game.Players.LocalPlayer.UserId],0)
 									Float.CanCollide = true
 								end
 							else
@@ -9003,7 +9077,7 @@ else
 					end
 				end
 				if brisresult then
-					yigger = brisresult.Position + Vector3.new(0, 3, 0)
+					yigger = brisresult.Position + Vector3.new(0, 3 * Sizelist[game.Players.LocalPlayer.UserId], 0)
 				else
 					yigger = unitRay.Origin + (unitRay.Direction * 10000)
 				end
