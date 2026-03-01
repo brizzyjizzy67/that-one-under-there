@@ -2853,6 +2853,7 @@ else
 	end)
 
 	game.Players.ChildRemoved:Connect(function(plr)
+		Sizelist[plr.UserId] = nil
 		currantplrlist = {}
 		local masterplr = game.Players.LocalPlayer
 		local msplr = game.Players.LocalPlayer
@@ -3095,7 +3096,7 @@ else
 				if arg1[2] == "BigBjStarting" then
 					task.spawn(BJEvent)
 					game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","BigBjNotStarting"})
-					game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","ResizePlr",Value})
+					game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","ResizePlr",Sizelist[game.Players.LocalPlayer.UserId]})
 					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font><font color='#ff00ea'>"..plr.DisplayName.." (@"..plr.Name..") is a good boy</font>")
 					if not BJList[plr.UserId] then
 						BJList[plr.UserId] = true
@@ -3735,6 +3736,21 @@ else
 
 			task.wait()
 
+			for _,prt in pairs(model:GetChildren()) do
+				if prt:IsA("BasePart") then
+					prt.CanQuery = false
+					prt.CanTouch = false
+					prt.Transparency = 1
+				end
+			end
+		elseif model.Name == "NinjaShuriken" then
+			model.ChildAdded:Connect(function(prt)
+				if prt:IsA("BasePart") then
+					prt.CanQuery = false
+					prt.CanTouch = false
+					prt.Transparency = 1
+				end
+			end)
 			for _,prt in pairs(model:GetChildren()) do
 				if prt:IsA("BasePart") then
 					prt.CanQuery = false
@@ -5916,6 +5932,7 @@ else
 			TweenService:Create(rj, ti, {C0 = rootC0}):Play()
 			
 			if shoulderC0 and rs then
+				shoulderC0 = CFrame.new(shoulderC0.X * (Sizelist[player.UserId] or 1), shoulderC0.Y * (Sizelist[player.UserId] or 1), shoulderC0.Z) * shoulderC0.Rotation
 				TweenService:Create(rs, ti, {C0 = shoulderC0}):Play()
 			end
 		end)
