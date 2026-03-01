@@ -2169,7 +2169,7 @@ else
 	BlobKillList = {}
 	cmdlist = {}
 	BlobBringList = {}
-	Sizelist = {}
+	Sizelist = {[game.Players.LocalPlayer.UserId] = 1}
 	HoldableList = {}
 	HoldableWhite = {}
 	GrabItemsList = {}
@@ -2780,9 +2780,9 @@ else
 		penis2 = game.Players.LocalPlayer.Character.Humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
 			local nigger = 1
 			if flying then nigger = 10 end
-			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS * nigger
+			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS * nigger * Sizelist[game.Players.LocalPlayer.UserId]
 		end)
-		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS * Sizelist[game.Players.LocalPlayer.UserId]
 	end
 
 	game.Players.LocalPlayer.CharacterAdded:Connect(function()
@@ -2799,9 +2799,9 @@ else
 		penis2 = b:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
 			local nigger = 1
 			if flying then nigger = 10 end
-			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS * nigger
+			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS * nigger * Sizelist[game.Players.LocalPlayer.UserId]
 		end)
-		b.WalkSpeed = WS
+		b.WalkSpeed = WS * Sizelist[game.Players.LocalPlayer.UserId]
 		if DSL then
 			game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(SL)
 		end
@@ -3131,6 +3131,7 @@ else
 				task.wait()
 				if not findmsg(arg1[4]) then
 					commandfunction(arg1[4],arg1[3])
+					print(arg1[3],arg1[3].DisplayName)
 					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font><font color='#ff00ea'>"..arg1[3].DisplayName..":</font> "..arg1[4])
 				end
 			end
@@ -4809,21 +4810,23 @@ else
 								elseif SAT and not (SATC and friendslist[plr.UserId]) then
 									-- diddy
 								elseif QAT and not (QATC and friendslist[plr.UserId]) then
-									for _,prt in pairs(plr.Character:GetChildren()) do
-										if prt.ClassName == "Part" and prt.CanCollide then
-											task.spawn(function()
-												while QAT and plr.Character and prt and checkgrab(plr.Character) do
-													prt.AssemblyLinearVelocity = Vector3.new(0,-10,0)
-													prt.CanCollide = false
-													if prt:FindFirstChild("RagdollLimbPart") then
-														prt.RagdollLimbPart.CanCollide = false
+									if plr.Character:FindFirstChild("Torso") and plr.Character.Torso.CanCollide then
+										for _,prt in pairs(plr.Character:GetChildren()) do
+											if prt.ClassName == "Part" then
+												task.spawn(function()
+													while QAT and plr.Character and prt and checkgrab(plr.Character) do
+														prt.AssemblyLinearVelocity = Vector3.new(0,-10,0)
+														prt.CanCollide = false
+														if prt:FindFirstChild("RagdollLimbPart") then
+															prt.RagdollLimbPart.CanCollide = false
+														end
+														task.wait()
 													end
-													task.wait()
-												end
-												if prt then
-													prt.CanCollide = true
-												end
-											end)
+													if prt then
+														prt.CanCollide = true
+													end
+												end)
+											end
 										end
 									end
 								elseif (AAT and not (AATC and friendslist[plr.UserId])) and (ABT == 1 or ABT == 3) then
@@ -4889,7 +4892,7 @@ else
 			WS = Value
 			if Value then
 				if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
-					game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS
+					game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS * Sizelist[game.Players.LocalPlayer.UserId]
 				end
 				for _,plot in pairs(workspace.PlotItems:GetChildren()) do
 					if plot.Name ~= "PlayersInPlots" then
@@ -5126,7 +5129,7 @@ else
 				else
 					game.Players.LocalPlayer.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping,true)
 					game.Players.LocalPlayer.Character.Humanoid.UseJumpPower = true
-					game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS
+					game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS * Sizelist[game.Players.LocalPlayer.UserId]
 				end
 			end
 			task.wait()
@@ -5196,7 +5199,7 @@ else
 							if not AKE and not APKE and not ASE then
 								AST:Set(true)
 							end
-							game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS * 10
+							game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS * 10 * Sizelist[game.Players.LocalPlayer.UserId]
 							Float.Transparency = 1
 							FloatValue = 3.1
 							if uppies then
@@ -5212,7 +5215,7 @@ else
 							if game.Players.LocalPlayer.Character.Humanoid.Sit then
 								if game.Players.LocalPlayer.Character.Humanoid.SeatPart and game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent.Name == "CreatureBlobman" and game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent:FindFirstChild("HumanoidCreature") then
 									Float.CFrame = game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent.HumanoidRootPart.CFrame - Vector3.new(0,(FloatValue * 2) + game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent.HumanoidCreature.HipHeight - 4.4125,0)
-									game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent.HumanoidCreature.WalkSpeed = WS * 11.25
+									game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent.HumanoidCreature.WalkSpeed = WS * 15
 									Float.CanCollide = true
 								else
 									Float.CanCollide = false
@@ -5284,7 +5287,7 @@ else
 								if not AKE and not APKE and not ASE then
 									AST:Set(true)
 								end
-								game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS * 10
+								game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS * 10 * Sizelist[game.Players.LocalPlayer.UserId]
 								Float.Transparency = 1
 								FloatValue = 3.1
 								if uppies then
@@ -5300,7 +5303,7 @@ else
 								if game.Players.LocalPlayer.Character.Humanoid.Sit then
 									if game.Players.LocalPlayer.Character.Humanoid.SeatPart and game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent and game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent.Name == "CreatureBlobman" and game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent:FindFirstChild("HumanoidCreature") then
 										Float.CFrame = game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent.HumanoidRootPart.CFrame - Vector3.new(0,(FloatValue * 2) + game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent.HumanoidCreature.HipHeight - 4.4125,0)
-										game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent.HumanoidCreature.WalkSpeed = WS * 11.25
+										game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent.HumanoidCreature.WalkSpeed = WS * 15
 										Float.CanCollide = true
 									else
 										Float.CanCollide = false
@@ -5982,6 +5985,7 @@ else
 							
 							local template = ReplicatedFirst:WaitForChild("GrabParts")
 							local grabParts = template:Clone()
+							grabParts:ScaleTo(Sizelist[player.UserId] or 1)
 							
 							local beamColor = player:WaitForChild("BeamColor")
 							local color = beamColor:WaitForChild("BallColorHolder").Value
@@ -9061,8 +9065,10 @@ else
 		Callback = function(did)
 			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
 				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(SL)
+				game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(0,0,0)
 				if workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Map") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Plots") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Slots") then
 					workspace.GrabParts.GrabPart.CFrame = CFrame.new(SL) + Vector3.new(0,3,0)
+					workspace.GrabParts.GrabPart.AssemblyLinearVelocity = Vector3.new(0,0,0)
 				end
 			end
 		end
