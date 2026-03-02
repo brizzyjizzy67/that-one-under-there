@@ -2767,7 +2767,25 @@ else
 
 	local DSL = true
 
+	function makefat(char)
+		local fatprt = Instance.new("Part",char)
+		fatprt.Name = "FatPart"
+		fatprt.CanCollide = false
+		fatprt.CanQuery = false
+		fatprt.CanTouch = false
+		fatprt.Transparency = 1
+		fatprt.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+		fatprt.Size = Vector3.new(2048,2048,2048)
+		local wc = Instance.new("WeldConstraint")
+		wc.Parent = fatprt
+		wc.Part0 = fatprt
+		wc.Part1 = char.HumanoidRootPart
+	end
+
 	if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+		if AXE and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+			makefat(game.Players.LocalPlayer.Character)
+		end
 		penis = game.Players.LocalPlayer.Character.Humanoid:GetPropertyChangedSignal("Sit"):Connect(function()
 			if not game.Players.LocalPlayer.Character.Humanoid.SeatPart then
 				if AXE then
@@ -2786,6 +2804,12 @@ else
 	end
 
 	game.Players.LocalPlayer.CharacterAdded:Connect(function()
+		if AXE then
+			task.spawn(function()
+				game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+				makefat(game.Players.LocalPlayer.Character)
+			end)
+		end
 		local b = game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
 		penis = b:GetPropertyChangedSignal("Sit"):Connect(function()
 			if not game.Players.LocalPlayer.Character.Humanoid.SeatPart then
@@ -3674,6 +3698,16 @@ else
 	end)
 
 	function ddude(model,plr)
+		model.ChildAdded:Connect(function(prt)
+			if prt:IsA("BasePart") then
+				prt.CanCollide = prt.Transparency ~= 1
+			end
+		end)
+		for _,prt in pairs(model) do
+			if prt:IsA("BasePart") then
+				prt.CanCollide = prt.Transparency ~= 1
+			end
+		end
 		if model.Name == "ToolPencil" then
 			local bill = model:WaitForChild("SoundPart")
 			local prt = Instance.new("Part")
@@ -6256,9 +6290,16 @@ else
 
 	AS:AddToggle({
 		Name = "Anti-Explosion",
-		Default = false,
+		Default = true,
 		Callback = function(Value)
 			AXE = Value
+			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+				if Value then
+					makefat(game.Players.LocalPlayer.Character)
+				elseif game.Players.LocalPlayer.Character:FindFirstChild("FatPart") then
+					game.Players.LocalPlayer.Character.FatPart:Destroy()
+				end
+			end
 		end,
 	})
 
