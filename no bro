@@ -2775,7 +2775,7 @@ else
 		fatprt.CanTouch = false
 		fatprt.Transparency = 1
 		fatprt.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-		fatprt.Size = Vector3.new(2048,2048,2048)
+		fatprt.Size = Vector3.new(5,5,5)
 		local wc = Instance.new("WeldConstraint")
 		wc.Parent = fatprt
 		wc.Part0 = fatprt
@@ -5112,7 +5112,7 @@ else
 					game.Players.LocalPlayer.CameraMode = "Classic"
 					if game.Players.LocalPlayer.Character then
 						for _,prt in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-							if prt:IsA("BasePart") and prt.Name ~= "HumanoidRootPart" then
+							if prt:IsA("BasePart") and prt.Name ~= "HumanoidRootPart" and prt.Name ~= "FatPart" then
 								prt.Transparency = 0
 							elseif prt.ClassName == "Accessory" and prt.Name ~= "TypingKeyboardMyWorld" and prt:FindFirstChild("Handle") then
 								prt.Handle.Transparency = 0
