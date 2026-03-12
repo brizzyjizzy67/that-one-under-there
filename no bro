@@ -4456,6 +4456,7 @@ else
 		local holdingScroll   = false
 		local currentGrabPart = nil
 		local grabbedObject   = nil
+		local itm             = nil
 		local currentDistance = 10
 		local FSR = 50
 		local IXE = math.huge
@@ -4608,8 +4609,7 @@ else
 		end)
 
 		-- Orientation helper part
-		local orientPart = workspace.RotateOrientPart
-
+		local orientPart = workspace.RotateOrientPart:Clone()
 		local orientAtt = orientPart.PartOrient
 
 		RS.Stepped:Connect(function()
@@ -4640,7 +4640,7 @@ else
 						clone.Orientation.Y + delta.X,
 						clone.Orientation.Z
 					)
-					orientAtt.WorldOrientation = clone:WaitForChild("PartOrient").WorldOrientation
+					orientPart.PartOrient.WorldOrientation = clone.PartOrient.WorldOrientation
 					clone:Destroy()
 					camera.CFrame = (camera.CFrame - camera.CFrame.Position) + player.Character.HumanoidRootPart.CFrame.Position + camOffset
 				end)
@@ -4707,6 +4707,23 @@ else
 
 		local function updateDrag()
 			if not holdingGrab or not currentGrabPart then return end
+
+			local ownershipped = true
+			if not (itm:FindFirstAncestor("Plots") or itm:FindFirstAncestor("Slots") or itm:FindFirstAncestor("Map")) then
+				local prt = itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("Main") or itm:FindFirstChild("Balloon")
+				if prt and prt.ReceiveAge ~= 0 then
+					ownershipped = false
+				end
+			end
+
+			if not ownershipped and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+				local prt = itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("Main") or itm:FindFirstChild("Balloon")
+				if prt and (prt.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude < 30 then
+					SetNetworkOwner:FireServer(prt, CFrame.lookAt(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position,prt.CFrame.Position))
+				else
+					endGrab("nobris")
+				end
+			end
 
 			local targetPos = camera.CFrame.Position + game.Players.LocalPlayer:GetMouse().UnitRay.Direction * currentDistance
 
@@ -4839,6 +4856,7 @@ else
 			currentDistance = (camera.CFrame.Position - hitPos).Magnitude
 
 			grabbedObject = hit
+			itm = grabbedObject.Parent
 
 			if ncg then
 				if not grabbedObject:FindFirstAncestor("Plots") and not grabbedObject:FindFirstAncestor("Slots") and (not grabbedObject:FindFirstAncestor("Map") or grabbedObject:FindFirstAncestor("AlwaysHereTweenedObjects")) then
@@ -4849,6 +4867,8 @@ else
 							prt.CanCollide = false
 						end
 					end
+				else
+					print("clippy bris")
 				end
 			end
 
@@ -4862,9 +4882,6 @@ else
 			end
 
 			grabClone.DragPart.Position = camera.CFrame.LookVector * currentDistance + camera.CFrame.Position
-
-			CreateGrabLine:FireServer(hit, hit.CFrame:Inverse() * hitPos)
-			ExtendGrabLine:FireServer(currentDistance)
 
 			-- visual
 			local beamColor = player:WaitForChild("BeamColor")
@@ -4916,6 +4933,8 @@ else
 			grabClone.Parent = workspace
 
 			SetNetworkOwner:FireServer(hit, CFrame.lookAt(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position,hit.CFrame.Position))
+			CreateGrabLine:FireServer(hit, hit.CFrame:Inverse() * hitPos)
+			ExtendGrabLine:FireServer(currentDistance)
 			rotateOffset = CFrame.new(0,0,0)
 			RS:BindToRenderStep("dragBinding", Enum.RenderPriority.First.Value, updateDrag)
 
@@ -7026,7 +7045,9 @@ else
 		local linelist = {}
 
 		ReplicatedStorage.GrabEvents.CreateGrabLine.OnClientEvent:Connect(function(player, targetPart, offset)
-			if player == LocalPlayer then return end
+			if player == LocalPlayer then
+				return
+			end
 			linelist[player.UserId] = {targetPart, offset, linelist[player.UserId] and linelist[player.UserId][3] + 1 or 1}
 		end)
 
