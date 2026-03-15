@@ -3528,6 +3528,7 @@ else
 				end
 			end
 			if arg1[2] == "LoadAsset" then
+				print(arg1[4],arg1[3])
 				if not AssetList[arg1[4]] then
 					AssetList[arg1[4]] = arg1[3]
 					local asset = game:GetObjects(arg1[3])[1]
@@ -8132,7 +8133,7 @@ else
 								end
 								hrp = plr.Character.HumanoidRootPart
 								if (hrp.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 28 then
-									game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = plr.UserId.Character.HumanoidRootPart.CFrame + VeclocityService[plr.UserId]
+									game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame + VeclocityService[plr.UserId]
 									game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = VeclocityService[plr.UserId]
 								end
 								task.spawn(function()
