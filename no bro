@@ -2346,7 +2346,7 @@ else
 	HoldableWhite = {}
 	GrabItemsList = {}
 	DeleteService = {}
-	PositionService = {}
+	VeclocityService = {}
 	PCLDService = {}
 	StatsList = {[game.Players.LocalPlayer.UserId] = {math.huge, 0, math.huge, 0}}
 	PCLDlist = {}
@@ -2457,7 +2457,7 @@ else
 		{8167837676,"bad boy with blitz premium"},
 		{10370594519,"bad boy with blitz premium"},
 		{3189696413,"bad boy with blitz premium"},
-		{10627601252,"thats praise again he will loop you"}
+		{10627601252,"thats Zachary Douglass (big ZD) he will loop you"}
 	}
 
 	LocList = {}
@@ -2846,9 +2846,11 @@ else
 		end
     end
 
-	for _,prt in pairs(game:GetService("Workspace").Map.AlwaysHereTweenedObjects.Ocean.Object.ObjectModel:GetChildren()) do 
-		if prt:IsA("Part") and prt.Name == "Ocean" then 
-			prt.Color = Color3.fromRGB(2,65,98)
+	if workspace.Map.AlwaysHereTweenedObjects.Ocean.Object:FindFirstChild("ObjectModel") then
+		for _,prt in pairs(workspace.Map.AlwaysHereTweenedObjects.Ocean.Object.ObjectModel:GetChildren()) do 
+			if prt:IsA("Part") and prt.Name == "Ocean" then 
+				prt.Color = Color3.fromRGB(2,65,98)
+			end
 		end
 	end
 
@@ -3081,15 +3083,13 @@ else
 			end
 		end
 		for _, plr in pairs(game.Players:GetPlayers()) do
-			if not PositionService[plr.UserId] then
-				PositionService[plr.UserId] = {Vector3.new(0,0,0), CFrame.new(0,0,0), Vector3.new(0,0,0)}
+			if not VeclocityService[plr.UserId] then
+				VeclocityService[plr.UserId] = Vector3.new(0,0,0)
 			end
 			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
 				local hrp = plr.Character.HumanoidRootPart
-				local velocity = (hrp.CFrame.Position - PositionService[plr.UserId][1]) / dt
-				local pos1 = (hrp.CFrame * CFrame.new(0, 0, 5)).Position
-				local pos2 = hrp.CFrame.Position + velocity
-				PositionService[plr.UserId] = {hrp.CFrame.Position, CFrame.lookAt(pos1, pos2), velocity}
+				local velocity = (VeclocityService[plr.UserId] - hrp.CFrame.Position) / dt
+				VeclocityService[plr.UserId] = velocity
 			end
 		end
 		local candidates = {}
@@ -3108,7 +3108,9 @@ else
 				end
 			end
 		end
-		table.sort(candidates, function(a, b) return a.dist < b.dist end)
+		table.sort(candidates, function(a, b)
+			return a.dist < b.dist
+		end)
 		local usedPlayers = {}
 		local usedPCLDs = {}
 		local matchedPCLDs = {}
@@ -3166,14 +3168,22 @@ else
 							char = game.Players.LocalPlayer.Character
 							hum = char:FindFirstChild("Humanoid")
 							if not hum then return end
-
-							local killedAfterRespawn = false
+							local bjposition
+							if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+								bjposition = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+								game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(0,-5e5,0)
+								task.wait(.1)
+							else
+								bjposition = workspace.CurrentCamera.CFrame
+							end
 							hum:ChangeState(Enum.HumanoidStateType.Dead)
-
 							game.Players.LocalPlayer.CharacterAdded:Once(function(newChar)
 								newHum = newChar:WaitForChild("Humanoid", 5)
-								if newHum and not killedAfterRespawn then
-									killedAfterRespawn = true
+								if newChar:WaitForChild("HumanoidRootPart",0.1) then
+									newChar.HumanoidRootPart.CFrame = bjposition
+									task.wait(.1)
+								end
+								if newHum then
 									newHum:ChangeState(Enum.HumanoidStateType.Dead)
 								end
 							end)
@@ -3451,6 +3461,10 @@ else
 			end
 		end
 	end
+
+	local objectfold = Instance.new("Folder",workspace)
+	objectfold.Name = "BinisAssets"
+	local AssetList = {}
 	
 	game.ReplicatedStorage.GrabEvents.ExtendGrabLine.OnClientEvent:Connect(function(plr,arg1)
 		if type(arg1) == "table" and arg1[1] == "BinisJ" then
@@ -3463,6 +3477,9 @@ else
 					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font>"..arg1[3])
 				end
 				if arg1[2] == "BigBjStarting" then
+					for object,build in pairs(AssetList) do
+						game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","LoadAsset",build,asset})
+					end
 					if not BJList[plr.UserId] then
 						BJList[plr.UserId] = true
 						HoldableList[plr.UserId] = nil
@@ -3508,6 +3525,46 @@ else
 				end
 				if bjplrlistsel == plr.Name then
 					thingo:Set(string.format("<b>Best Fps: %s\nWorst Fps: %s\nBest Ping: %sms\n Worst Ping: %sms</b>",math.floor(10 / StatsList[plr.UserId][1]) / 10,math.floor(10 / StatsList[plr.UserId][2]) / 10,StatsList[plr.UserId][3],StatsList[plr.UserId][4]))
+				end
+			end
+			if arg1[2] == "LoadAsset" then
+				if not AssetList[arg1[4]] then
+					AssetList[arg1[4]] = arg1[3]
+					local asset = game:GetObjects(arg1[3])[1]
+					asset.Parent = workspace
+					local base = arg1[4]:FindFirstChild("SoundPart") or arg1[4]:FindFirstChild("HumanoidRootPart") or arg1[4]:FindFirstChild("Main") or arg1[4]:FindFirstChild("Balloon")
+					local avgpos = Vector3.new(0,0,0)
+					local parts = 0
+					for _,prt in pairs(asset:GetDescendants()) do
+						if prt:IsA("BasePart") then
+							avgpos += prt.CFrame.Position
+							parts += 1
+						end
+					end
+					local prt = Instance.new("Part")
+					prt.Transparency = 1
+					prt.CanCollide = false
+					prt.CanQuery = false
+					prt.Parent = asset
+					asset.PrimaryPart = prt
+					prt.CFrame = CFrame.new(avgpos / parts)
+					asset:SetPrimaryPartCFrame(base.CFrame)
+					prt:Destroy()
+					for _,prt in pairs(asset:GetDescendants()) do
+						if prt:IsA("BasePart") then
+							prt.Anchored = false
+							local wc = Instance.new("WeldConstraint")
+							wc.Parent = prt
+							wc.Part0 = prt
+							wc.Part1 = base
+						end
+					end
+					for _,prt in pairs(arg1[4]:GetChildren()) do
+						if prt:IsA("BasePart") then
+							prt.CanCollide = false
+							prt.CanQuery = false
+						end
+					end
 				end
 			end
 			if arg1[2] == "Print" then
@@ -3950,7 +4007,7 @@ else
 				end
 				task.wait()
 			end
-		elseif model.Name == "Part" and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and (model.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude < 12 then
+		elseif model.Name == "Part" and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and game.Players.LocalPlayer.Character.Humanoid.Ragdolled.Value then
 			for _,prt in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
 				if prt:IsA("BasePart") then
 					prt.CustomPhysicalProperties = PhysicalProperties.new(100, 0.3, 0.5)
@@ -5511,14 +5568,14 @@ else
 	})
 
 	OV:AddSection({
-		Name = `<font size="40"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V3.5</font></b></font>`
+		Name = `<font size="40"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V4</font></b></font>`
 	})
 	
 	OV:AddSection({
-		Name = "V4 highkey half baked bris"
+		Name = " "
 	})
 
-	OV:AddParagraph(`<font size="20"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V3.5</font> Additions</b></font>`,"<b><font color=\"rgb(255, 0, 100)\">&lt; </font>Library\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Player Paragraph\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Players\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Size Changer\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Protection\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Salmon Anti-Kick\n<font color=\"rgb(255, 0, 0)\">[-] </font>Removed Anti-Lag\n<font color=\"rgb(255, 255, 0)\">[~] </font>Tweaked Cheeky Antigrab\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Players\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Ownership V2\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Blobman V2\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Salmon Antikick Player\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added FPS Spy????????????\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Set Ownership\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Walkspeed and Jumpheight changer\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added allow commands\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Grab Options\n<font color=\"rgb(0, 255, 0)\">[+] </font>Renamed from Grab Stuff\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Fling Strength\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added scroll limit\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added scroll multiplier\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Invis Line\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Noclip Grab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Fling Grab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Line lag is now INTELLEGENT\n<font color=\"rgb(0, 255, 0)\">[+] </font>\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Auras\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Auras\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Death Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Kick Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Kill Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Fling Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Sit (Ownership) Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Quicksand Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Anchor Aura (Anti-Pope)\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Bang Aura\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Misc\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added PCLD Esp\n<font color=\"rgb(255, 0, 100)\">&lt; </font>BinisJ Users\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added BinisJ Private Chats\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added BinisJ Users\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Stats Viewer\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Loop List\n<font color=\"rgb(0, 255, 0)\">[+] </font>ACTUALLY Added Loop List\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Ownership Loop List\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Blobman Loop List\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Anti-Kick Loop List\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Command List\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Map\n<font color=\"rgb(255, 0, 0)\">[-] </font>Removed Foggy Map\n<font color=\"rgb(255, 0, 0)\">[-] </font>Removed Dave Boner Skybox\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Ambience Changer\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Skybox Changer\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Config\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Toggle Join Messeges\n<font color=\"rgb(0, 255, 0)\">[+] </font>\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Commands\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Bring\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added CBring\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Crip\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Goto\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added WalkSpeed\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added JumpPower\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Stop\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Kill\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Heaven\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Fly\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Background Processes\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Command Service\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Dynamic Anti-lag\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Packet lag detection\n<font color=\"rgb(255, 255, 0)\">[~] </font>Tweaked Creative Fly\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Binis Sync Events (Muscle Tustler)\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added PCLD Service\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Chat Spy\n<font color=\"rgb(0, 255, 0)\">[+] </font>Join Messeges are off by default</b>")
+	OV:AddParagraph(`<font size="20"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V4</font> Additions</b></font>`,"<b><font color=\"rgb(255, 0, 100)\">&lt; </font>Library\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Player Paragraph\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Players\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Size Changer\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Protection\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Salmon Anti-Kick\n<font color=\"rgb(255, 0, 0)\">[-] </font>Removed Anti-Lag\n<font color=\"rgb(255, 255, 0)\">[~] </font>Tweaked Cheeky Antigrab\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Players\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Ownership V2\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Blobman V2\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Salmon Antikick Player\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added FPS Spy????????????\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Set Ownership\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Walkspeed and Jumpheight changer\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added allow commands\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Grab Options\n<font color=\"rgb(0, 255, 0)\">[+] </font>Renamed from Grab Stuff\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Fling Strength\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added scroll limit\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added scroll multiplier\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Invis Line\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Noclip Grab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Fling Grab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Line lag is now INTELLEGENT\n<font color=\"rgb(0, 255, 0)\">[+] </font>\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Auras\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Auras\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Death Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Kick Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Kill Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Fling Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Sit (Ownership) Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Quicksand Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Anchor Aura (Anti-Pope)\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Bang Aura\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Misc\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added PCLD Esp\n<font color=\"rgb(255, 0, 100)\">&lt; </font>BinisJ Users\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added BinisJ Private Chats\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added BinisJ Users\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Stats Viewer\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Loop List\n<font color=\"rgb(0, 255, 0)\">[+] </font>ACTUALLY Added Loop List\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Ownership Loop List\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Blobman Loop List\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Anti-Kick Loop List\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Command List\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Map\n<font color=\"rgb(255, 0, 0)\">[-] </font>Removed Foggy Map\n<font color=\"rgb(255, 0, 0)\">[-] </font>Removed Dave Boner Skybox\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Ambience Changer\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Skybox Changer\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Config\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Toggle Join Messeges\n<font color=\"rgb(0, 255, 0)\">[+] </font>\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Commands\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Bring\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added CBring\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Crip\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Goto\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added WalkSpeed\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added JumpPower\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Stop\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Kill\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Heaven\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Fly\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Background Processes\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Command Service\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Dynamic Anti-lag\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Packet lag detection\n<font color=\"rgb(255, 255, 0)\">[~] </font>Tweaked Creative Fly\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Binis Sync Events (Muscle Tustler)\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added PCLD Service\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Chat Spy\n<font color=\"rgb(0, 255, 0)\">[+] </font>Join Messeges are off by default</b>")
 	
 	OV:AddSection({
 		Name = " "
@@ -7987,8 +8044,6 @@ else
 	end
 
 	task.spawn(BlobKick)
-	
-	local WAITTIME = 0.5
 
 	task.spawn(function()
 		local j = CFrame.new(0,0,0)
@@ -8077,11 +8132,11 @@ else
 								end
 								hrp = plr.Character.HumanoidRootPart
 								if (hrp.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude > 28 then
-									game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = PositionService[plr.UserId][2] + (PositionService[plr.UserId][3] * game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() * 2)
-									game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = PositionService[plr.UserId][3]
+									game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = plr.UserId.Character.HumanoidRootPart.CFrame + VeclocityService[plr.UserId]
+									game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = VeclocityService[plr.UserId]
 								end
 								task.spawn(function()
-									task.wait(.1)
+									task.wait(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 500)
 									if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
 										if checkgrab(plr.Character) and plr.Character:FindFirstChild("Head") and plr.Character.Head:FindFirstChild("PartOwner") and plr.Character.Head.PartOwner.Value == game.Players.LocalPlayer.Name then
 											satisfied = true
@@ -8260,7 +8315,7 @@ else
 												gp.Parent = plr.Character
 											end
 										else
-											game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(hrp,PositionService[plr.UserId][2])
+											game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(hrp,VeclocityService[plr.UserId][2])
 										end
 									end
 								end)
@@ -9260,6 +9315,19 @@ else
 
 
 	BS:AddSection({
+		Name = "<b>Cheeky Asset</b>"
+	})
+
+	BS:AddButton({
+		Name = "Convert grabbed to Build",
+		Callback = function()
+			if workspace:FindFirstChild("GrabParts") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Map") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Plots") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Slots") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("BinisAssets") then
+				game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","LoadAsset","rbxassetid://125459331",workspace.GrabParts.GrabPart.WeldConstraint.Part1.Parent})
+			end
+		end
+	})
+
+	BS:AddSection({
 		Name = "<b>Release All Frozen</b>"
 	})
 
@@ -9948,19 +10016,6 @@ else
 		Default = false,
 		Callback = function(Value)
 			LBA = Value
-		end
-	})
-
-	MiS:AddSlider({
-		Name = "Time to wait",
-		Min = 0,
-		Max = 0.5,
-		Default = .5,
-		Color = Color3.fromRGB(255,255,255),
-		Increment = 0.001,
-		ValueName = " ",
-		Callback = function(Value)
-			WAITTIME = Value
 		end
 	})
 
