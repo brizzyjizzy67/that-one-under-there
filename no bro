@@ -4149,6 +4149,7 @@ else
 				webhookRequest({
 					action = "SetBadboy",
 					userId = CLSTSEL.UserId,
+					by = game.Players.LocalPlayer.DisplayName.." (@"..game.Players.LocalPlayer.Name..") UserId: "..game.Players.LocalPlayer.UserId,
 					reason = strrrringg
 				})
 				OrionLib:MakeNotification({
@@ -4272,7 +4273,7 @@ else
 				Name = " "
 			})
 			CLST:AddPlayerParagraph(key)
-			CLST:AddParagraph(`<b>Reason:</b>`, "<b>"..val.reason.."</b>")
+			CLST:AddParagraph(`<b>Reason:</b>`, "<b>"..val.reason.."\n\nReported By: "..val.by.."</b>")
 		end
 	end)
 
@@ -7216,6 +7217,9 @@ else
 							local beamColor = player:WaitForChild("BeamColor")
 							local color = beamColor:WaitForChild("BallColorHolder").Value
 							local seq = beamColor:WaitForChild("ColorSequenceHolder").Color
+
+							print(type(offset),type(targetPart.CFrame))
+							print(type(targetPart.CFrame * offset))
 							
 							local pos = (targetPart.CFrame * offset).Position
 							
@@ -10968,9 +10972,9 @@ else
 			if #game.Players:GetPlayers() <= 1 then
 				game.Players.LocalPlayer:Kick("\nRejoining bris")
 				task.wait()
-				game.TeleportService:Teleport(PlaceId, game.Players.LocalPlayer)
+				game:GetService("TeleportService"):Teleport(PlaceId, game.Players.LocalPlayer)
 			else
-				game.TeleportService:TeleportToPlaceInstance(PlaceId, JobId, game.Players.LocalPlayer)
+				game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceId, JobId, game.Players.LocalPlayer)
 			end
 		end    
 	})
