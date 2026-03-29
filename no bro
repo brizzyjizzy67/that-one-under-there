@@ -3412,7 +3412,7 @@ else
 						})
 						BJT:AddPlayerParagraph(plr.UserId)
 						local val = GStatsList[plr.UserId]
-						btnlist[plr.UserId] = BJT:AddParagraph(`<b>Stats:</b>`, "<b>Most FPS: "..(math.floor(10 / val.maxfps) / 10).."\nMost Ping: "..val.maxping.."\nPlayers Kicked: "..val.pkicked.."\nRetards Kicked: "..val.pskicked.."\nTotal Kicked: "..val.cpkicked.."</b>")
+						btnlist[plr.UserId] = BJT:AddParagraph(`<b>Stats:</b>`, "<b>Most FPS: "..(math.floor(10 / val.maxfps) / 10).."\nMost Ping: "..val.maxping.."\nSession Kicked: "..val.pkicked.."\nRetards Kicked: "..val.pskicked.."\nTotal Kicked: "..val.cpkicked.."</b>")
 					end
 					game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","UpdateStats",StatsList[game.Players.LocalPlayer.UserId]})
 					for object,build in pairs(AssetList) do
@@ -3474,26 +3474,30 @@ else
 				if not AssetList[arg1[4]] then
 					AssetList[arg1[4]] = arg1[3]
 					local asset = game:GetObjects(arg1[3])[1]
+					arg1[4]:GetPropertyChangedSignal("Parent"):Connect(function()
+						if not arg1[4] or not arg1[4].Parent then
+							asset:Destroy()
+						end
+					end)
 					asset.Parent = workspace
 					local base = arg1[4]:FindFirstChild("SoundPart") or arg1[4]:FindFirstChild("HumanoidRootPart") or arg1[4]:FindFirstChild("Main") or arg1[4]:FindFirstChild("Balloon")
-					local avgpos = Vector3.new(0,0,0)
+					local avgpos = Vector3.new(0, 0, 0)
 					local parts = 0
-					for _,prt in pairs(asset:GetDescendants()) do
+					for _, prt in pairs(asset:GetDescendants()) do
 						if prt:IsA("BasePart") then
 							avgpos += prt.CFrame.Position
 							parts += 1
 						end
 					end
-					local prt = Instance.new("Part")
-					prt.Transparency = 1
-					prt.CanCollide = false
-					prt.CanQuery = false
-					prt.Parent = asset
-					asset.PrimaryPart = prt
-					prt.CFrame = CFrame.new(avgpos / parts)
-					asset:SetPrimaryPartCFrame(base.CFrame)
-					prt:Destroy()
-					for _,prt in pairs(asset:GetDescendants()) do
+					local primaryCFrame = CFrame.new(avgpos / parts)
+					local targetCFrame = base.CFrame
+					local offset = primaryCFrame:Inverse()
+					for _, prt in pairs(asset:GetDescendants()) do
+						if prt:IsA("BasePart") then
+							prt.CFrame = targetCFrame * (offset * prt.CFrame)
+						end
+					end
+					for _, prt in pairs(asset:GetDescendants()) do
 						if prt:IsA("BasePart") then
 							prt.Anchored = false
 							prt.Massless = true
@@ -3503,8 +3507,9 @@ else
 							wc.Part1 = base
 						end
 					end
-					for _,prt in pairs(arg1[4]:GetChildren()) do
+					for _, prt in pairs(arg1[4]:GetChildren()) do
 						if prt:IsA("BasePart") then
+							prt.Transparency = 1
 							prt.CanCollide = false
 							prt.CanQuery = false
 						end
@@ -4184,7 +4189,7 @@ else
 				Name = " "
 			})
 			BJT:AddPlayerParagraph(key)
-			btnlist[key] = BJT:AddParagraph(`<b>Stats:</b>`, "<b>Most FPS: "..(math.floor(10 / val.maxfps) / 10).."\nMost Ping: "..val.maxping.."\nPlayers Kicked: "..val.pkicked.."\nRetards Kicked: "..val.pskicked.."\nTotal Kicked: "..val.cpkicked.."</b>")
+			btnlist[key] = BJT:AddParagraph(`<b>Stats:</b>`, "<b>Most FPS: "..(math.floor(10 / val.maxfps) / 10).."\nMost Ping: "..val.maxping.."\nSession Kicked: "..val.pkicked.."\nRetards Kicked: "..val.pskicked.."\nTotal Kicked: "..val.cpkicked.."</b>")
 		end
 	end)
 
@@ -7217,9 +7222,6 @@ else
 							local beamColor = player:WaitForChild("BeamColor")
 							local color = beamColor:WaitForChild("BallColorHolder").Value
 							local seq = beamColor:WaitForChild("ColorSequenceHolder").Color
-
-							print(type(offset),type(targetPart.CFrame))
-							print(type(targetPart.CFrame * offset))
 							
 							local pos = (targetPart.CFrame * offset).Position
 							
