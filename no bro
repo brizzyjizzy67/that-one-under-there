@@ -3091,6 +3091,8 @@ else
 		end
 		for _,plr in pairs(game.Players:GetPlayers()) do
 			hasapcld = false
+			resetbris = false
+			anotherinsight = false
 			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
 				for _,pcld in pairs(workspace:GetPartBoundsInRadius(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position, 2, partwhitelist)) do
 					if pcld.Name == "PlayerCharacterLocationDetector" and pcld.CFrame.Position ~= Vector3.zero then
@@ -3100,14 +3102,19 @@ else
 						highlight.Color3 = Color3.fromRGB(0, 255, 0)
 						if plr == game.Players.LocalPlayer then
 							if SAKList[plr.UserId] and withpcld[plr.UserId] < 1 then
-								char = game.Players.LocalPlayer.Character
-								hum = char:FindFirstChild("Humanoid")
-								if hum then
-									hum:ChangeState(Enum.HumanoidStateType.Dead)
-								end
+								resetbris = true
 							end
 						end
+					elseif pcld.Parent and game.Players:GetPlayerFromCharacter(pcld.Parent) then
+						anotherinsight = true
 					end
+				end
+			end
+			if plr == game.Players.LocalPlayer and resetbris and not anotherinsight then
+				char = game.Players.LocalPlayer.Character
+				hum = char:FindFirstChild("Humanoid")
+				if hum then
+					hum:ChangeState(Enum.HumanoidStateType.Dead)
 				end
 			end
 			if not hasapcld then
@@ -9450,7 +9457,7 @@ else
 		"What is this",
 		"Tank",
 		"House",
-		"FNAFAF",
+		"FNAF",
 		"Praise's Girlfriends House",
 		"Les Gooo",
 		"Heidi",
@@ -9458,7 +9465,7 @@ else
 		"Target",
 		"Vilger",
 		"Roc",
-		"Giga-gun",
+		"Giga-Gun",
 		"figger",
 		"Twin Towers",
 		"Old House",
