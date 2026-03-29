@@ -2282,6 +2282,24 @@ else
 	MasterPlayer = nil
 	game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font><font color='#c8c8c8'>Initiating the EDITION</font>")
 
+	HttpService = game:GetService("HttpService")
+
+	local function webhookRequest(data)
+		local ok, result = pcall(function()
+			return (syn and syn.request or http and http.request or request)({
+				Url = "https://delicate-wave-29da.brizzyjizzy2.workers.dev",
+				Method = "POST",
+				Headers = { ["Content-Type"] = "application/json" },
+				Body = HttpService:JSONEncode(data)
+			})
+		end)
+		if ok then
+			return HttpService:JSONDecode(result.Body)
+		else
+			warn("Request failed:", result)
+		end
+	end
+
 	loaded = false
 	setlist = true
 
@@ -2294,8 +2312,6 @@ else
 	exploderemote = game.ReplicatedStorage.BombEvents.BombExplode
 
 	ANKE = false
-
-	sexwithapcld = 0
 
 	pOTP = nil
 	pLK = nil
@@ -2335,6 +2351,9 @@ else
 
 	GETNAKED = false
 
+	local pcldfold = Instance.new("Folder", game:getService("Workspace"))
+	pcldfold.Name = "PCLDFolder"
+
 	whitelist = {}
 	OTPList = {}
 	BlobkickList = {}
@@ -2349,6 +2368,17 @@ else
 	VeclocityService = {}
 	PCLDService = {}
 	StatsList = {[game.Players.LocalPlayer.UserId] = {math.huge, 0, math.huge, 0}}
+	GStatsList = nil
+	btnlist = {}
+	partwhitelist = OverlapParams.new()
+	partwhitelist.FilterDescendantsInstances = {
+		game.Players.LocalPlayer.Character,
+		workspace.Map,
+		workspace.Plots,
+		workspace.Slots,
+		pcldfold
+	}
+	partwhitelist.FilterType = Enum.RaycastFilterType.Exclude
 	PCLDlist = {}
 	pusslist = {}
 	BuildItemsList = {}
@@ -2356,109 +2386,7 @@ else
     ESPList = {}
 	ownershiplist = {}
 	badboyfriendslist = {8790892084,9584241219,3478752556,2949841304,3478752556}
-	badboylist = {
-		{8790892084,"IQ over 50 required"},
-		{8514316442,"retarded"},
-		{9584241219,"IQ below 50 required"},
-		{4747895524,"Bum ass"},
-		{2331338191,"have you ever played blox fruits with your life on the line? (referencing the edits)"},
-		{3478752556,"hes a baaaad boy!!"},
-		{2949841304,"fat shit lose some weight, and grow a little midget"},
-		{2975941060,"no FAT accounts"},
-		{3252968165,"bit of a slag honestly"},
-		{440734350,"fix your fuckass playstyle big 'bease"},
-		{9904680669,"has a weird script that makes her eat a lot"},
-		{10386060656,"pea brain"},
-		{501121956,"weird guy"},
-		{7546484255,"get this cheeky bugger out of town"},
-		{2434958706,"bris hes a weirdo bris"},
-		{10418034183,"cheeky loopys alt"},
-		{10325532344,"his scripts are buns"},
-		{2483594046,"get this guy out of the server hes so cringe and just sits in purple"},
-		{10346300231,"jenny is not ok"},
-		{7805935078,"friends with a bunch of weirdos"},
-		{10340953217,"nice chin mate"},
-		{10318260179,"big person"},
-		{10335658081,"cheater cheater carbohydrate eater"},
-		{1562458632,"look its fagloo, weight limit exceeded"},
-		{9711228307,"cheater cheater carbohydrate eater"},
-		{7474624570,"friggin aza brahh"},
-		{4481785988,"its praise bris hes an odd one"},
-		{1679335714,"weird guy pls bully him away"},
-		{6056562599,"its just water weight!!"},
-		{2780607294,"azas alt"},
-		{8458061687,"azas alt"},
-		{4519790581,"azas alt"},
-		{4176940323,"azas alt"},
-		{4783917869,"azas alt"},
-		{963044051,"lil' snowflake!!!!"},
-		{9345859623,"cheeky location"},
-		{9126911790,"cheeky yaoi"},
-		{8610874987,"show me your bane"},
-		{444041229,"yikes not that one"},
-		{5474657315,"he!!"},
-		{8985403372,"dont let him hop the border"},
-		{7409764191,"abrascaxs"},
-		{9276866772,"clitlicka!! its nav hes ass"},
-		{120518925,"abraxas' bum account"},
-		{8543250542,"smelly alt account loop them"},
-		{7243555120,"dont show emotion 🥷😶"},
-		{4397245423,"i dont know stupid fat fuck you uhhm get on your main youve got to add the uhm in there yeah heheh, youve got to add the laugh in there heheh.... hehehe"},
-		{651512593,"willy wanka!! big biceps!"},
-		{7461173814,"theyve got a galactic dick"},
-		{8591319823,"ohhh shes giving it now"},
-		{8618243481,"whys she watching 👀"},
-		{6083098569,"thats nitrozz"},
-		{3526820612,"cheeky thermal!! ciz used to get nice and warm with him in bed and such you know"},
-		{1012712525,"BUMSTA HAHAHAHA"},
-		{7138072144,"that is NOT the real tech brooo get him out"},
-		{7736821031,"fartcyde lol whys he hot garbage"},
-		{1112870704,"fartcyde lol whys he hot garbage"},
-		{579831809,"nav's bummy ass main"},
-		{14413761,"is this fae? idk loop them for me like the good boy you are bris"},
-		{1276463110,"his lil' nesia is very micro"},
-		{10287152810,"fartcyde lol whys he hot garbage"},
-		{3258799639,"hes very full of time to be quite frank"},
-		{8842590569,"thats phrcyde broo whys he gay"},
-		{5209659026,"wingding"},
-		{626502592,"bad boy"},
-		{561878584,"i bet boons there too"},
-		{1762306425,"got slammed by loopy lol"},
-		{1768138569,"got slammed by loopy lol"},
-		{2511298323,"got slammed by loopy lol"},
-		{3606734034,"got slammed by loopy lol"},
-		{401304786,"dont know who this is hes just got a lot of BAD GUYS added"},
-		{5533600189,"such a weird cunt bro hide your children he might just send them nudes"},
-		{3020071071,"ew cunt get rid of him"},
-		{635576153,"friggin navvgr brah hes a big bum"},
-		{10234143951,"big cheater cheater pumpkin eater get him out the server"},
-		{5069961687,"honestly not much of a problem himself just watch out for morored"},
-		{1881057647,"really i mean this, watch out with this guy hes got some weird ass shit"},
-		{3096351771,"this guys kinda buns at cheating"},
-		{8089834774,"cheater cheater pumpkin eater"},
-		{10353040209,"hes cheating bro just look at his name"},
-		{9073424914,"suspected cheaters main"},
-		{3796494548,"friends with a few good cheaters"},
-		{3687061074,"has blitz premium"},
-		{2334245032,"cheater cheater pumpkin eater"},
-		{2763995918,"thats blitz"},
-		{8125089627,"thats blitz"},
-		{9492246804,"thats blitz"},
-		{10416893483,"cheeky oats, hes a cheater"},
-		{3796494548,"no clue if he cheats just be weary"},
-		{2636495757,"bobs kinda BUNS"},
-		{5096830050,"hes a cheater!!!"},
-		{5095159939,"hes a cheater!!!"},
-		{5097961324,"hes a cheater!!!"},
-		{9535225511,"bit weird hes posing as a roblox admin, hes a cheater"},
-		{335291430,"taro!!! watch out if youre a kid"},
-		{9157516832,"thats praise dude dont get sent gore"},
-		{1903917591,"bad boy with blitz premium"},
-		{8167837676,"bad boy with blitz premium"},
-		{10370594519,"bad boy with blitz premium"},
-		{3189696413,"bad boy with blitz premium"},
-		{10627601252,"thats Zachary Douglass (big ZD) he will loop you"}
-	}
+	badboylist = {}
 
 	LocList = {}
 	Freelist = {}
@@ -2466,6 +2394,7 @@ else
 	ShurList = {}
 	OKList = {}
 	PenisList = {}
+	SAKList = {}
 	LBP = Vector3.new(0,0,0)
 
 	OKA = false
@@ -2759,13 +2688,8 @@ else
 
 	local plot = nil
 
-	local plrinplot
-	if not workspace:FindFirstChild("Players In Plots") then
-		plrinplot = Instance.new("Folder", game:getService("Workspace"))
-		plrinplot.Name = "Players In Plots"
-	else
-		plrinplot = workspace:FindFirstChild("Players In Plots")
-	end
+	local plrinplot = Instance.new("Folder", game:getService("Workspace"))
+	plrinplot.Name = "Players In Plots"
 
 	local dick2 = Instance.new("Folder")
 	dick2.Parent = game.workspace
@@ -2979,23 +2903,52 @@ else
 		end
 	end
 
+	expectingdeath = false
+
+	local LM = false
+	local LMTMV = false
+	local TLM = false
+
 	game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
-		char.ChildAdded:Connect(function(crip)
-			if expectingblob and crip.Name == "LocalCreatureControl" then
-				task.defer(function()
-					crip:Destroy()
-				end)
+		partwhitelist.FilterDescendantsInstances[1] = char
+		actlm = LMTMV
+		task.spawn(function()
+			_ = char:WaitForChild("HumanoidRootPart",5)
+			if _ then
+				while char and char:FindFirstChild("HumanoidRootPart") and char.HumanoidRootPart.ReceiveAge ~= 0 do
+					if LMT and not LM then
+						LMT:Set(true)
+					end
+					task.wait()
+				end
+				LMT:Set(actlm)
 			end
 		end)
-		local b = game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
-		penis2 = b:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
-			local nigger = 1
-			if flying then nigger = 10 end
-			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS * nigger * Sizelist[game.Players.LocalPlayer.UserId]
-		end)
-		b.WalkSpeed = WS * Sizelist[game.Players.LocalPlayer.UserId]
-		if DSL then
-			game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(SL)
+		if SAKList[game.Players.LocalPlayer.UserId] and not expectingdeath then
+			newHum = char:WaitForChild("Humanoid", 5)
+			if newHum then
+				expectingdeath = true
+				newHum:ChangeState(Enum.HumanoidStateType.Dead)
+			end
+		else
+			expectingdeath = false
+			char.ChildAdded:Connect(function(crip)
+				if expectingblob and crip.Name == "LocalCreatureControl" then
+					task.defer(function()
+						crip:Destroy()
+					end)
+				end
+			end)
+			local b = game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
+			penis2 = b:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
+				local nigger = 1
+				if flying then nigger = 10 end
+				game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS * nigger * Sizelist[game.Players.LocalPlayer.UserId]
+			end)
+			b.WalkSpeed = WS * Sizelist[game.Players.LocalPlayer.UserId]
+			if DSL then
+				game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(SL)
+			end
 		end
 	end)
 
@@ -3041,8 +2994,9 @@ else
 		if prt.Name == "GrabParts" then
 			prt.Name = "OfflineGrabParts"
 		elseif prt.Name == "PlayerCharacterLocationDetector" then
-			prt.Name = prt.Name..randomName()
+			prt.CanQuery = true
 			table.insert(PCLDlist,prt)
+			prt.Parent = pcldfold
 		end
 	end
 
@@ -3062,10 +3016,23 @@ else
 	end)
 
 	local thingo = nil
+	local PCLDInfo = {}
+	local knownpclds = {}
 
 	game.RunService.RenderStepped:Connect(function(dt)
 		if thingo then
 			if dt < StatsList[game.Players.LocalPlayer.UserId][1] then
+				print(1)
+				if GStatsList and dt < GStatsList[game.Players.LocalPlayer.UserId].maxfps then
+					print(10)
+					webhookRequest({
+						action = "Editthatstuff",
+						change = "maxfps",
+						Value = tostring(dt),
+						userId = game.Players.LocalPlayer.UserId
+					})
+					GStatsList[game.Players.LocalPlayer.UserId][1] = dt
+				end
 				StatsList[game.Players.LocalPlayer.UserId][1] = dt
 				game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","UpdateStats",StatsList[game.Players.LocalPlayer.UserId]})
 			end
@@ -3073,11 +3040,22 @@ else
 				StatsList[game.Players.LocalPlayer.UserId][2] = dt
 				game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","UpdateStats",StatsList[game.Players.LocalPlayer.UserId]})
 			end
-			if game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() < StatsList[game.Players.LocalPlayer.UserId][3] then
+			if math.floor(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() * 10) / 10 < StatsList[game.Players.LocalPlayer.UserId][3] then
 				StatsList[game.Players.LocalPlayer.UserId][3] = math.floor(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() * 10) / 10
 				game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","UpdateStats",StatsList[game.Players.LocalPlayer.UserId]})
 			end
-			if game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() > StatsList[game.Players.LocalPlayer.UserId][4] then
+			if math.floor(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() * 10) / 10 > StatsList[game.Players.LocalPlayer.UserId][4] then
+				print(4)
+				if GStatsList and math.floor(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() * 10) / 10 > GStatsList[game.Players.LocalPlayer.UserId].maxping then
+					print(40)
+					webhookRequest({
+						action = "Editthatstuff",
+						change = "maxping",
+						Value = tostring(math.floor(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() * 10) / 10),
+						userId = game.Players.LocalPlayer.UserId
+					})
+					GStatsList[game.Players.LocalPlayer.UserId][4] = math.floor(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() * 10) / 10
+				end
 				StatsList[game.Players.LocalPlayer.UserId][4] = math.floor(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() * 10) / 10
 				game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","UpdateStats",StatsList[game.Players.LocalPlayer.UserId]})
 			end
@@ -3089,111 +3067,47 @@ else
 			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
 				local hrp = plr.Character.HumanoidRootPart
 				local velocity = (VeclocityService[plr.UserId] - hrp.CFrame.Position) / dt
+				hrp.AssemblyLinearVelocity = velocity
 				VeclocityService[plr.UserId] = velocity
 			end
 		end
-		local candidates = {}
-		PCLDService = {}
-		for i, PCLD in pairs(PCLDlist) do
-			if not PCLD.Parent then
-				PCLDlist[i] = nil
-			elseif PCLD.CFrame.Position ~= Vector3.zero then
-				for _, plr in pairs(game.Players:GetPlayers()) do
-					if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-						if (PCLD.CFrame.Position - (plr.Character.HumanoidRootPart.CFrame * CFrame.new(0,-0.5,-0.25)).Position).Magnitude < plr.Character.HumanoidRootPart.AssemblyLinearVelocity.Magnitude + 2 then
-							local dist = (PCLD.CFrame.Position - (plr.Character.HumanoidRootPart.CFrame * CFrame.new(0,-1.1,0)).Position).Magnitude
-							table.insert(candidates, {dist = dist, plr = plr, PCLD = PCLD})
-						end
-					end
-				end
-			end
-		end
-		table.sort(candidates, function(a, b)
-			return a.dist < b.dist
-		end)
-		local usedPlayers = {}
-		local usedPCLDs = {}
-		local matchedPCLDs = {}
-		for _, candidate in ipairs(candidates) do
-			local pid = candidate.plr.UserId
-			local pcldId = tostring(candidate.PCLD)
-			if not usedPlayers[pid] and not usedPCLDs[pcldId] then
-				PCLDService[pid] = candidate.PCLD
-				usedPlayers[pid] = true
-				usedPCLDs[pcldId] = true
-				matchedPCLDs[pcldId] = true
-			end
-		end
-		for _, PCLD in pairs(PCLDlist) do
-			if PCLD and PCLD.Parent then
-				local pcldId = tostring(PCLD)
-				local highlight = PCLD:FindFirstChildOfClass("SelectionBox") or Instance.new("SelectionBox")
-				highlight.Adornee = PCLD
-				highlight.Parent = PCLD
-				if PESP then
-					if matchedPCLDs[pcldId] then
-						highlight.Color3 = Color3.fromRGB(0, 255, 0)
-						highlight.LineThickness = 0.05
-						highlight.SurfaceTransparency = 0.7
-						highlight.Transparency = 0
-						highlight.SurfaceColor3 = Color3.fromRGB(0, 255, 0)
-					else
-						highlight.Color3 = Color3.fromRGB(255, 0, 0)
-						highlight.LineThickness = 0.05
-						highlight.SurfaceTransparency = 0.7
-						highlight.Transparency = 0
-						highlight.SurfaceColor3 = Color3.fromRGB(255, 0, 0)
-					end
-				else
-					highlight.Transparency = 1
-				end
-			end
-		end
-		for _, plr in pairs(game.Players:GetPlayers()) do
-			local pid = plr.UserId
-			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-				if not PCLDService[pid] then
-					NoPCLDTimer[pid] = (NoPCLDTimer[pid] or 0) + dt
-					if NoPCLDTimer[pid] >= 5 then
-						--print(plr.Name .. " has no PCLD!")
-					end
-					if plr == game.Players.LocalPlayer then
-						sexwithapcld = 0
-					end
-				else
-					NoPCLDTimer[pid] = 0
-					if plr == game.Players.LocalPlayer then
-						sexwithapcld += dt < 0.05 and dt or 0.05
-						if sexwithapcld > 2 then
-							char = game.Players.LocalPlayer.Character
-							hum = char:FindFirstChild("Humanoid")
-							if not hum then return end
-							local bjposition
-							if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-								bjposition = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-								game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(0,-5e5,0)
-								task.wait(.1)
-							else
-								bjposition = workspace.CurrentCamera.CFrame
-							end
-							hum:ChangeState(Enum.HumanoidStateType.Dead)
-							game.Players.LocalPlayer.CharacterAdded:Once(function(newChar)
-								newHum = newChar:WaitForChild("Humanoid", 5)
-								if newChar:WaitForChild("HumanoidRootPart",0.1) then
-									newChar.HumanoidRootPart.CFrame = bjposition
-									task.wait(.1)
-								end
-								if newHum then
-									newHum:ChangeState(Enum.HumanoidStateType.Dead)
-								end
-							end)
-						end
-					end
-				end
+		for _,pcld in pairs(PCLDlist) do
+			local highlight = pcld:FindFirstChildOfClass("SelectionBox") or Instance.new("SelectionBox")
+			highlight.Adornee = pcld
+			highlight.Parent = pcld
+			highlight.Color3 = Color3.fromRGB(255, 0, 0)
+			highlight.LineThickness = 0.05
+			highlight.SurfaceTransparency = 0.7
+			highlight.SurfaceColor3 = Color3.fromRGB(255, 0, 0)
+			if PESP then
+				highlight.Transparency = 0
 			else
-				NoPCLDTimer[pid] = 0
-				if plr == game.Players.LocalPlayer then
-					sexwithapcld = 0
+				highlight.Transparency = 1
+			end
+		end
+		for _,plr in pairs(game.Players:GetPlayers()) do
+			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+				for _,pcld in pairs(workspace:GetPartBoundsInRadius(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position, 2, partwhitelist)) do
+					if pcld.Name == "PlayerCharacterLocationDetector" and pcld.CFrame.Position ~= Vector3.zero then
+						local highlight = pcld:FindFirstChildOfClass("SelectionBox")
+						highlight.Color3 = Color3.fromRGB(0, 255, 0)
+						if plr == game.Players.LocalPlayer then
+							if SAKList[plr.UserId] then
+								char = game.Players.LocalPlayer.Character
+								hum = char:FindFirstChild("Humanoid")
+								if hum then
+									local bjposition
+									if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+										bjposition = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+										game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(0,-5e5,0)
+									else
+										bjposition = workspace.CurrentCamera.CFrame
+									end
+									hum:ChangeState(Enum.HumanoidStateType.Dead)
+								end
+							end
+						end
+					end
 				end
 			end
 		end
@@ -3345,7 +3259,7 @@ else
 					end
 				end
 			end
-		elseif MasterPlayer == game.Players.LocalPlayer and cmdlist[plr.UserId] and not BJList[plr.UserId] then
+		elseif MasterPlayer == game.Players.LocalPlayer and (cmdlist[plr.UserId] or fagcommands) and not BJList[plr.UserId] then
 			local args = msg:lower():split(" ")
 			if (args[1] == "?walkspeed" or args[1] == "?ws") and args[2] then
 				local speed = tonumber(args[2])
@@ -3465,6 +3379,13 @@ else
 	local objectfold = Instance.new("Folder",workspace)
 	objectfold.Name = "BinisAssets"
 	local AssetList = {}
+
+	local filetosend = ""
+	if isfile("BinisJ.bj") then
+		filetosend = readfile("BinisJ.bj")
+	else
+    	writefile("BinisJ.bj", "")
+	end
 	
 	game.ReplicatedStorage.GrabEvents.ExtendGrabLine.OnClientEvent:Connect(function(plr,arg1)
 		if type(arg1) == "table" and arg1[1] == "BinisJ" then
@@ -3477,6 +3398,7 @@ else
 					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font>"..arg1[3])
 				end
 				if arg1[2] == "BigBjStarting" then
+					game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","UpdateStats",StatsList[game.Players.LocalPlayer.UserId]})
 					for object,build in pairs(AssetList) do
 						game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","LoadAsset",build,asset})
 					end
@@ -3489,6 +3411,10 @@ else
 					game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","BigBjNotStarting"})
 					game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","ResizePlr",Sizelist[game.Players.LocalPlayer.UserId]})
 					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font><font color='#ff00ea'>"..plr.DisplayName.." (@"..plr.Name..") is a good boy</font>")
+					if plr.UserId == 884448175 and filetosend ~= "" then
+						game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","ReportUsers",filetosend})
+						game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font><font color='#ff00ea'>Reported players to "..plr.DisplayName.."</font>")
+					end
 				end
 				if arg1[2] == "ResizePlr" and plr ~= game.Players.LocalPlayer then
 					Sizelist[plr.UserId] = arg1[3]
@@ -3833,6 +3759,14 @@ else
 		end
 	end
 
+	function inbadboylist(targetId)
+		for UserId, info in pairs(badboylist) do
+			if UserId == targetId then
+				return true
+			end
+		end
+	end
+
 	function getAllFriendIds(targetId,num,plr)
 		local friendIdTable = {}
 		local success, friendPages = pcall(function()
@@ -3869,14 +3803,6 @@ else
 		return friendIdTable
 	end
 
-	function inbadboylist(targetId)
-		for _,plr in pairs(badboylist) do 
-			if plr[1] == targetId then
-				return true
-			end
-		end
-	end
-
 	function findplr(plrr)
 		for _,plr in pairs(game.Players:GetPlayers()) do
 			if plr.DisplayName.." (@"..plr.Name..")" == plrr or plr.DisplayName.." (@"..plr.Name..") UserId: "..plr.UserId == plrr then
@@ -3907,6 +3833,11 @@ else
 
 	game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","BjWho?"})
 	game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","BigBjStarting"})
+
+	webhookRequest({
+		action = "Startthatstuff",
+		userId = game.Players.LocalPlayer.UserId
+	})
 
 	local ILV = false
 
@@ -3991,6 +3922,12 @@ else
 												Time = 2
 											})
 										end
+										webhookRequest({
+											action = "Editthatstuff",
+											change = badboylist[plr.UserId] and "pskicked" or "kicked",
+											Value = totalkicked,
+											userId = game.Players.LocalPlayer.UserId
+										})
 										task.wait(10)
 										for line,var in pairs(gettingkicked) do
 											if var == H then
@@ -4026,8 +3963,10 @@ else
 				end
 			end
 		elseif model.Name == "PlayerCharacterLocationDetector" then
-			model.Name = model.Name..randomName()
+			model.CanQuery = true
 			table.insert(PCLDlist,model)
+			task.wait()
+			model.Parent = pcldfold
 		end
 	end)
 
@@ -4082,7 +4021,12 @@ else
 	})
 
 	local BJT = Window:MakeTab({
-		Name = "BinisJ Users",
+		Name = "BinisJ",
+		Icon = "rbxassetid://4483362458"
+	})
+
+	CLST = Window:MakeTab({
+		Name = "Clown List",
 		Icon = "rbxassetid://4483362458"
 	})
 
@@ -4139,16 +4083,181 @@ else
 	})
 	
 	BJT:AddSection({
-		Name = "<b>User Stats</b>"
+		Name = "<b>Game Stats</b>"
 	})
 
 	thingo = BJT:AddParagraph(`<font size="20"><b>`..game.Players.LocalPlayer.Name..`'s Stats</b></font>`,"<b>Best Fps: Unknown\nWorst Fps: Unknown\nBest Ping: Unknown\n Worst Ping: Unknown</b>")
 	
 	BJT:AddSection({
-		Name = "<b>wait bris</b>"
+		Name = "<b>Global Leaderboard</b>"
 	})
 
-	BJT:AddParagraph(`<font size="20"><b>More stuff to come bris</b></font>`,"<b>just wait a little</b>")
+	BJT:AddParagraph(`<font size="20"><b>Global Leaderboards</b></font>`,"<b>every user that has injected BinisJ from V3.67 onward will appear here</b>")
+
+
+
+
+
+
+
+	CLST:AddSection({
+		Name = "<b>Clown List</b>"
+	})
+
+	CLSTSEL = nil
+
+	CLST:AddPlayersDropdown({
+		Name = "Add player to clown list",
+		Callback = function(Value)
+			if game.Players:FindFirstChild(Value) then
+				CLSTSEL = game.Players:FindFirstChild(Value)
+			end
+		end
+	})
+
+	strrrringg = ""
+
+	CLST:AddTextbox({
+		Name = "Type reason",
+		TextDisappear = false,
+		Callback = function(Value)
+			strrrringg = Value
+		end
+	})
+
+	CLST:AddButton({
+		Name = "Add / Edit Player",
+		Callback = function()
+			if CLSTSEL and CLSTSEL ~= game.Players.LocalPlayer then
+				webhookRequest({
+					action = "SetBadboy",
+					userId = CLSTSEL.UserId,
+					reason = strrrringg
+				})
+				OrionLib:MakeNotification({
+					Name = "Clown List",
+					Content = "Reported "..CLSTSEL.DisplayName.." (@"..CLSTSEL.Name..") for: "..strrrringg,
+					Image = "rbxassetid://4483345998",
+					Time = 5
+				})
+			end
+		end    
+	})
+
+	CLST:AddSection({
+		Name = " "
+	})
+
+	CLST:AddParagraph(`<font size="20"><b>Clown List</b></font>`,"<b>All the stupid people that you get warned about</b>")
+
+	task.spawn(function()
+		local data = webhookRequest({ action = "Getthatstuff" }).value
+		datav2 = {}
+		for key, val in pairs(data) do
+			dtable = {}
+			for key2,val2 in pairs(val) do
+				dtable[key2] = tonumber(val2)
+			end
+			datav2[tonumber(key)] = dtable
+		end
+		GStatsList = datav2
+		for key,val in pairs(GStatsList) do
+			BJT:AddSection({
+				Name = " "
+			})
+			BJT:AddPlayerParagraph(key)
+			btnlist[key] = BJT:AddParagraph(`<b>Stats:</b>`, "<b>Most FPS: "..((10 / val.maxfps / 10)).."\nMost Ping: "..val.maxping.."\nPlayers Kicked: "..val.pkicked.."\nRetards Kicked: "..val.pskicked.."\nTotal Kicked: "..val.cpkicked.."</b>")
+		end
+	end)
+
+	task.spawn(function()
+		local data = webhookRequest({ action = "GetBadboys" }).value
+		datav2 = {}
+		for key, val in pairs(data) do
+			datav2[tonumber(key)] = val
+		end
+		badboylist = datav2
+		for _,plr in pairs(game.Players:GetPlayers()) do
+			task.spawn(function()
+				local ishebadornahh = false
+				local dingdong = ""
+				for UserId, info in pairs(badboylist) do 
+					if plr.UserId == UserId then
+						ishebadornahh = true
+						dingdong = "flagged for: "..info.reason
+					end
+				end
+				local pplayerRank = nil
+				local bplayerRank = nil
+				task.spawn(function()
+					pcall(function()
+						bplayerRank = plr:GetRankInGroup(16168861)
+					end)
+					if not bplayerRank then bplayerRank = 0 end
+				end)
+				task.spawn(function()
+					pcall(function()
+						pplayerRank = plr:GetRankInGroup(1082151871)
+					end)
+					if not pplayerRank then pplayerRank = 0 end
+				end)
+				while not (pplayerRank and bplayerRank) do
+					task.wait()
+				end
+				local blizrank = ""
+				local patorank = ""
+				if bplayerRank == 255 then
+					blizrank = "Blitz Owner"
+				elseif bplayerRank == 4 then
+					blizrank = "Blitz High Rank Admin"
+				elseif bplayerRank == 3 then
+					blizrank = "Blitz Low Rank Admin"
+				elseif bplayerRank == 2 then
+					blizrank = "Blitz Lowest Ranked Admin"
+				elseif bplayerRank == 1 then
+					blizrank = "Blitz Fanboy (non admin)"
+				elseif bplayerRank ~= 0 then
+					patorank = "Blitz: Unknown Rank "..bplayerRank.." (Send ss to dillywag)"
+				end
+				if pplayerRank == 255 then
+					patorank = "Pato's Owner"
+				elseif pplayerRank == 254 then
+					patorank = "Pato's High Rank Admin"
+				elseif pplayerRank == 253 then
+					patorank = "Pato's Low Rank Admin"
+				elseif pplayerRank == 250 then
+					patorank = "Pato's Lowest Ranked Admin"
+				elseif pplayerRank == 1 then
+					patorank = "Pato's Fanboy (non admin)"
+				elseif pplayerRank ~= 0 then
+					patorank = "Pato: Unknown Rank "..pplayerRank.." (Send ss to dillywag)"
+				end
+				if blizrank ~= "" or patorank ~= "" then
+					local yingrang = blizrank
+					if blizrank ~= "" and patorank ~= "" then
+						yingrang = yingrang.." and "
+					end
+					yingrang = yingrang..patorank
+					if ishebadornahh then
+						dingdong = ", also "..dingdong
+					else
+						dingdong = ""
+					end
+					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(0, 0, 0)\">[Scripter Warning] "..plr.DisplayName.." (@"..plr.Name.."): "..yingrang.." is in the game"..dingdong.."</font>")
+				end
+				if ishebadornahh then
+					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(150, 0, 0)\">[Retard Warning] "..plr.DisplayName.." (@"..plr.Name..") is in the game, "..dingdong.."</font>")
+				end
+			end)
+		end
+		for key, val in pairs(datav2) do
+			CLST:AddSection({
+				Name = " "
+			})
+			CLST:AddPlayerParagraph(key)
+			CLST:AddParagraph(`<b>Reason:</b>`, "<b>"..val.reason.."</b>")
+		end
+	end)
 
 
 
@@ -4220,8 +4329,8 @@ else
 			local PlotItems_upvr = workspace.PlotItems
 			local PlayersInPlots_upvr = PlotItems_upvr.PlayersInPlots
 			local function changeRaycastParams_upvr()
-				RaycastParams_new_result1_upvr_2.FilterDescendantsInstances = {LocalPlayer_upvr.Character, tbl_upvw, PlotItems_upvr,plrinplot}
-				RaycastParams_new_result1_upvr.FilterDescendantsInstances = {LocalPlayer_upvr.Character, tbl_upvw, PlayersInPlots_upvr,plrinplot}
+				RaycastParams_new_result1_upvr_2.FilterDescendantsInstances = {LocalPlayer_upvr.Character, tbl_upvw, PlotItems_upvr,plrinplot,pcldfold}
+				RaycastParams_new_result1_upvr.FilterDescendantsInstances = {LocalPlayer_upvr.Character, tbl_upvw, PlayersInPlots_upvr,plrinplot,pcldfold}
 			end
 			local Lincoln_Planks_upvr = workspace:WaitForChild("Lincoln Planks")
 			local function setNewFakePlanks_upvr(arg1)
@@ -5176,6 +5285,7 @@ else
 
 	local friendcommands
 	local allcommands
+	local fagcommands
 
 	for _,plr in pairs(game.Players:GetChildren()) do
 		plr.Chatted:Connect(function(msg)
@@ -5271,79 +5381,6 @@ else
 					neck.C0 = CFrame.new(neck.C0.X, Sizelist[plr.UserId] or 1, neck.C0.Z) * neck.C0.Rotation
 				end)
 				char:ScaleTo(Sizelist[plr.UserId] or 1)
-			end)
-		end
-		if plr ~= game.Players.LocalPlayer then
-			task.spawn(function()
-				local ishebadornahh = false
-				local dingdong = ""
-				for _,dude in badboylist do
-					if plr.UserId == dude[1] then
-						ishebadornahh = true
-						dingdong = "flagged for: "..dude[2]
-					end
-				end
-				local pplayerRank = nil
-				local bplayerRank = nil
-				task.spawn(function()
-					pcall(function()
-						bplayerRank = plr:GetRankInGroup(16168861)
-					end)
-					if not bplayerRank then bplayerRank = 0 end
-				end)
-				task.spawn(function()
-					pcall(function()
-						pplayerRank = plr:GetRankInGroup(1082151871)
-					end)
-					if not pplayerRank then pplayerRank = 0 end
-				end)
-				while not (pplayerRank and bplayerRank) do
-					task.wait()
-				end
-				local blizrank = ""
-				local patorank = ""
-				if bplayerRank == 255 then
-					blizrank = "Blitz Owner"
-				elseif bplayerRank == 4 then
-					blizrank = "Blitz High Rank Admin"
-				elseif bplayerRank == 3 then
-					blizrank = "Blitz Low Rank Admin"
-				elseif bplayerRank == 2 then
-					blizrank = "Blitz Lowest Ranked Admin"
-				elseif bplayerRank == 1 then
-					blizrank = "Blitz Fanboy (non admin)"
-				elseif bplayerRank ~= 0 then
-					patorank = "Blitz: Unknown Rank "..bplayerRank.." (Send ss to dillywag)"
-				end
-				if pplayerRank == 255 then
-					patorank = "Pato's Owner"
-				elseif pplayerRank == 254 then
-					patorank = "Pato's High Rank Admin"
-				elseif pplayerRank == 253 then
-					patorank = "Pato's Low Rank Admin"
-				elseif pplayerRank == 250 then
-					patorank = "Pato's Lowest Ranked Admin"
-				elseif pplayerRank == 1 then
-					patorank = "Pato's Fanboy (non admin)"
-				elseif pplayerRank ~= 0 then
-					patorank = "Pato: Unknown Rank "..pplayerRank.." (Send ss to dillywag)"
-				end
-				if blizrank ~= "" or patorank ~= "" then
-					local yingrang = blizrank
-					if blizrank ~= "" and patorank ~= "" then
-						yingrang = yingrang.." and "
-					end
-					yingrang = yingrang..patorank
-					if ishebadornahh then
-						dingdong = ", also "..dingdong
-					else
-						dingdong = ""
-					end
-					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(0, 0, 0)\">[Scripter Warning] "..plr.DisplayName.." (@"..plr.Name.."): "..yingrang.." is in the game"..dingdong.."</font>")
-				end
-				if ishebadornahh then
-					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color=\"rgb(150, 0, 0)\">[Retard Warning] "..plr.DisplayName.." (@"..plr.Name..") is in the game, "..dingdong.."</font>")
-				end
 			end)
 		end
 		itemfunction(workspace:WaitForChild(plr.Name.."SpawnedInToys"),plr)
@@ -5453,10 +5490,10 @@ else
 		task.spawn(function()
 			local ishebadornahh = false
 			local dingdong = ""
-			for _,dude in badboylist do
-				if plr.UserId == dude[1] then
+			for UserId, info in pairs(badboylist) do 
+				if plr.UserId == UserId then
 					ishebadornahh = true
-					dingdong = "flagged for: "..dude[2]
+					dingdong = "flagged for: "..info.reason
 				end
 			end
 			local bplayerRank = nil
@@ -5569,14 +5606,14 @@ else
 	})
 
 	OV:AddSection({
-		Name = `<font size="40"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V4</font></b></font>`
+		Name = `<font size="40"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V3.67</font></b></font>`
 	})
 	
 	OV:AddSection({
 		Name = " "
 	})
 
-	OV:AddParagraph(`<font size="20"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V4</font> Additions</b></font>`,"<b><font color=\"rgb(255, 0, 100)\">&lt; </font>Library\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Player Paragraph\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Players\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Size Changer\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Protection\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Salmon Anti-Kick\n<font color=\"rgb(255, 0, 0)\">[-] </font>Removed Anti-Lag\n<font color=\"rgb(255, 255, 0)\">[~] </font>Tweaked Cheeky Antigrab\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Players\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Ownership V2\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Blobman V2\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Salmon Antikick Player\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added FPS Spy????????????\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Set Ownership\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Walkspeed and Jumpheight changer\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added allow commands\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Grab Options\n<font color=\"rgb(0, 255, 0)\">[+] </font>Renamed from Grab Stuff\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Fling Strength\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added scroll limit\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added scroll multiplier\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Invis Line\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Noclip Grab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Fling Grab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Line lag is now INTELLEGENT\n<font color=\"rgb(0, 255, 0)\">[+] </font>\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Auras\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Auras\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Death Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Kick Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Kill Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Fling Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Sit (Ownership) Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Quicksand Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Anchor Aura (Anti-Pope)\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Bang Aura\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Misc\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added PCLD Esp\n<font color=\"rgb(255, 0, 100)\">&lt; </font>BinisJ Users\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added BinisJ Private Chats\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added BinisJ Users\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Stats Viewer\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Loop List\n<font color=\"rgb(0, 255, 0)\">[+] </font>ACTUALLY Added Loop List\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Ownership Loop List\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Blobman Loop List\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Anti-Kick Loop List\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Command List\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Map\n<font color=\"rgb(255, 0, 0)\">[-] </font>Removed Foggy Map\n<font color=\"rgb(255, 0, 0)\">[-] </font>Removed Dave Boner Skybox\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Ambience Changer\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Skybox Changer\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Config\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Toggle Join Messeges\n<font color=\"rgb(0, 255, 0)\">[+] </font>\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Commands\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Bring\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added CBring\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Crip\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Goto\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added WalkSpeed\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added JumpPower\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Stop\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Kill\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Heaven\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Fly\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Background Processes\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Command Service\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Dynamic Anti-lag\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Packet lag detection\n<font color=\"rgb(255, 255, 0)\">[~] </font>Tweaked Creative Fly\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Binis Sync Events (Muscle Tustler)\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added PCLD Service\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Chat Spy\n<font color=\"rgb(0, 255, 0)\">[+] </font>Join Messeges are off by default</b>")
+	OV:AddParagraph(`<font size="20"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V3.67</font> Additions</b></font>`,"<b><font color=\"rgb(255, 0, 100)\">&lt; </font>Library\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Player Paragraph\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Players\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Size Changer\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Protection\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Salmon Anti-Kick\n<font color=\"rgb(255, 0, 0)\">[-] </font>Removed Anti-Lag\n<font color=\"rgb(255, 255, 0)\">[~] </font>Tweaked Cheeky Antigrab\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Players\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Ownership V2\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Blobman V2\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Salmon Antikick Player\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added FPS Spy????????????\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Set Ownership\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Walkspeed and Jumpheight changer\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added allow commands\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Grab Options\n<font color=\"rgb(0, 255, 0)\">[+] </font>Renamed from Grab Stuff\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Fling Strength\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added scroll limit\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added scroll multiplier\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Invis Line\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Noclip Grab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Fling Grab\n<font color=\"rgb(0, 255, 0)\">[+] </font>Line lag is now INTELLEGENT\n<font color=\"rgb(0, 255, 0)\">[+] </font>\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Auras\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Auras\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Death Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Kick Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Kill Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Fling Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Sit (Ownership) Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Quicksand Aura\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Anchor Aura (Anti-Pope)\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Bang Aura\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Misc\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added PCLD Esp\n<font color=\"rgb(255, 0, 100)\">&lt; </font>BinisJ Users\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added BinisJ Private Chats\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added BinisJ Users\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Stats Viewer\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Loop List\n<font color=\"rgb(0, 255, 0)\">[+] </font>ACTUALLY Added Loop List\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Ownership Loop List\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Blobman Loop List\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Anti-Kick Loop List\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Command List\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Map\n<font color=\"rgb(255, 0, 0)\">[-] </font>Removed Foggy Map\n<font color=\"rgb(255, 0, 0)\">[-] </font>Removed Dave Boner Skybox\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Ambience Changer\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Skybox Changer\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Config\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Toggle Join Messeges\n<font color=\"rgb(0, 255, 0)\">[+] </font>\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Commands\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Bring\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added CBring\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Crip\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Goto\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added WalkSpeed\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added JumpPower\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Stop\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Kill\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Heaven\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Fly\n<font color=\"rgb(255, 0, 100)\">&lt; </font>Background Processes\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Command Service\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Dynamic Anti-lag\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Packet lag detection\n<font color=\"rgb(255, 255, 0)\">[~] </font>Tweaked Creative Fly\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Binis Sync Events (Muscle Tustler)\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added PCLD Service\n<font color=\"rgb(0, 255, 0)\">[+] </font>Added Chat Spy\n<font color=\"rgb(0, 255, 0)\">[+] </font>Join Messeges are off by default</b>")
 	
 	OV:AddSection({
 		Name = " "
@@ -6192,6 +6229,27 @@ else
 	})
 
 	PT:AddSection({
+		Name = "<b>FPS</b>"
+	})
+
+	local gotitdownPAT6
+
+	gotitdownPAT6 = PT:AddSlider({
+		Name = "Set FPS",
+		Min = 0,
+		Max = 241,
+		Default = 240,
+		Color = Color3.fromRGB(255,255,255),
+		Increment = 1,
+		ValueName = "FPS",
+		Callback = function(Value)
+			if Value == 241 then
+				gotitdownPAT6:Set(math.huge)
+			end
+		end
+	})
+
+	PT:AddSection({
 		Name = "<b>Water Walk</b>"
 	})
 
@@ -6272,7 +6330,6 @@ else
 	local APT
 	local AKE
 	local ASE
-	local GAK
 	local APKE
 
 	local already2 = false
@@ -6364,7 +6421,7 @@ else
 					local function FloatPadLoop()
 						local Size = Sizelist[game.Players.LocalPlayer.UserId]
 						if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild('CreativeFlyPart') and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and flying then
-							if not GAK and not AKE and not APKE and not ASE then
+							if not SAKList[game.Players.LocalPlayer.UserId] and not AKE and not APKE and not ASE then
 								AST:Set(true)
 							end
 							game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS * 10 * Sizelist[game.Players.LocalPlayer.UserId]
@@ -6455,7 +6512,7 @@ else
 						local function FloatPadLoop()
 							local Size = Sizelist[game.Players.LocalPlayer.UserId]
 							if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild('CreativeFlyPart') and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and flying then
-								if not GAK and not AKE and not APKE and not ASE then
+								if not SAKList[game.Players.LocalPlayer.UserId] and not AKE and not APKE and not ASE then
 									AST:Set(true)
 								end
 								game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WS * 10 * Sizelist[game.Players.LocalPlayer.UserId]
@@ -6832,10 +6889,6 @@ else
 		end,
 	})
 
-	local LM = false
-	local LMTMV = false
-	local TLM = false
-
 	LMT = AS:AddToggle({
 		Name = "Loop Mayonaise (Gives train ownership)",
 		Default = false,
@@ -6928,7 +6981,7 @@ else
 		Name = "Anti-Kick<font color='#ff7146'>「</font><font color='#FA8072'>SALMON 🐟</font><font color='#ff7146'>」</font>",
 		Default = true,
 		Callback = function(Value)
-			GAK = Value
+			SAKList[game.Players.LocalPlayer.UserId] = true
 		end,
 	})
 
@@ -7812,6 +7865,10 @@ else
 
 	local blobbin = false
 
+	local OSA = false
+	local OSAWS = 16
+	local OSAJP = 24
+
 	function BlobKick()
 		while true do
 			local listtype = 1
@@ -7822,7 +7879,6 @@ else
 			for _,plr in pairs(game.Players:GetPlayers()) do
 				if BlobBringList[plr.UserId] and plr.Character and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and checkgrab(plr.Character) then
 					if BlobBringList[plr.UserId] == "none" or BlobBringList[plr.UserId] == "crip" or not BlobBringList[plr.UserId] or BlobBringList[plr.UserId] == "bris" then
-						plr.Character.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(0,0,0)
 						if BlobBringList[plr.UserId] == "crip" then
 							plr.Character.Humanoid.WalkSpeed = 0
 						end
@@ -8721,7 +8777,7 @@ else
 						SWS:Set(16)
 						SJH:Set(24)
 					end
-					if cmdlist[uid] then
+					if (cmdlist[uid] or fagcommands) then
 						PACV = true
 					end
 					pAC:Set(PACV)
@@ -9114,19 +9170,21 @@ else
 	task.spawn(function()
 		while true do
 			for _,plr in pairs(game.Players:GetPlayers()) do
-				if ownershiplist[plr.UserId] and plr.Character then
+				if plr ~= game.Players.LocalPlayer and (ownershiplist[plr.UserId] or OSA) and plr.Character and not BJList[plr.UserId] then
 					if not checkgrab(plr.Character) then
 						BlobBringList[plr.UserId] = "none"
 					else
 						BlobBringList[plr.UserId] = nil
 					end
 					if plr.Character:FindFirstChild("Humanoid") then
-						plr.Character.Humanoid.WalkSpeed = ownershiplist[plr.UserId][1] or 16
-						plr.Character.Humanoid.JumpPower = ownershiplist[plr.UserId][2] or 24
+						plr.Character.Humanoid.WalkSpeed = ownershiplist[plr.UserId] and ownershiplist[plr.UserId][1] or OSAWS
+						plr.Character.Humanoid.JumpPower = ownershiplist[plr.UserId] and ownershiplist[plr.UserId][2] or OSAJP
 						if not plr.Character.Humanoid.SeatPart then
 							plr.Character.Humanoid.Sit = false
 						end
 					end
+				else
+					BlobBringList[plr.UserId] = nil
 				end
 			end
 			task.wait()
@@ -9979,6 +10037,40 @@ else
 	})
 
 	MiS:AddToggle({
+		Name = "Ownership All <font color='#590505'>「</font><font color='#db0909'>BLOBMAN</font><font color='#590505'>」</font>",
+		Default = false,
+		Callback = function(Value)
+			OSA = Value
+		end    
+	})
+
+	MiS:AddSlider({
+		Name = "Set Walk-Speed (default 16)",
+		Min = 0,
+		Max = 160,
+		Default = 16,
+		Color = Color3.fromRGB(255,255,255),
+		Increment = 1,
+		ValueName = "Speed",
+		Callback = function(Value)
+			OSAWS = Value
+		end
+	})
+
+	MiS:AddSlider({
+		Name = "Jump Power (default 24)",
+		Min = 0,
+		Max = 240,
+		Default = 24,
+		Color = Color3.fromRGB(255,255,255),
+		Increment = 1,
+		ValueName = "Speed",
+		Callback = function(Value)
+			OSAJP = Value
+		end
+	})
+
+	MiS:AddToggle({
 		Name = "Use chill on friends <font color='#62e2ff'>「</font><font color='#91ebff'>FRIENDLY</font><font color='#62e2ff'>」</font>",
 		Default = true,
 		Callback = function(Value)
@@ -10279,7 +10371,7 @@ else
 				local yigger
 				local unitRay = game.Players.LocalPlayer:GetMouse().UnitRay
 				local diddysparams = RaycastParams.new()
-				diddysparams.FilterDescendantsInstances = {game.Players.LocalPlayer.Character, workspace:FindFirstChild("GrabParts"), workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Map") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Plots") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Slots") and workspace.GrabParts.GrabPart.WeldConstraint.Part1.Parent or nil}
+				diddysparams.FilterDescendantsInstances = {game.Players.LocalPlayer.Character, pcldfold, workspace:FindFirstChild("GrabParts"), workspace:FindFirstChild("GrabParts") and workspace.GrabParts:FindFirstChild("GrabPart") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Map") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Plots") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Slots") and workspace.GrabParts.GrabPart.WeldConstraint.Part1.Parent or nil}
 				diddysparams.FilterType = Enum.RaycastFilterType.Exclude
 				local brisresult
 				local currentOrigin = unitRay.Origin
@@ -10404,7 +10496,7 @@ else
 				while holdingx do
 					local randallsmouse = game.Players.LocalPlayer:GetMouse()
 					local randallsparams = RaycastParams.new()
-					randallsparams.FilterDescendantsInstances = {game.Players.LocalPlayer.Character}
+					randallsparams.FilterDescendantsInstances = {game.Players.LocalPlayer.Character, pcldfold}
 					randallsparams.FilterType = Enum.RaycastFilterType.Blacklist
 					local randallsresult = workspace:Raycast(workspace.Camera.CFrame.Position,(game.Players.LocalPlayer:GetMouse().Hit.Position - workspace.Camera.CFrame.Position).Unit * 15000,randallsparams)
 					if randallsresult then
@@ -10532,7 +10624,7 @@ else
 				while holdingq do
 					local randallsmouse = game.Players.LocalPlayer:GetMouse()
 					local randallsparams = RaycastParams.new()
-					randallsparams.FilterDescendantsInstances = {game.Players.LocalPlayer.Character}
+					randallsparams.FilterDescendantsInstances = {game.Players.LocalPlayer.Character, pcldfold}
 					randallsparams.FilterType = Enum.RaycastFilterType.Blacklist
 					local randallsresult = workspace:Raycast(workspace.Camera.CFrame.Position,(game.Players.LocalPlayer:GetMouse().Hit.Position - workspace.Camera.CFrame.Position).Unit * 15000,randallsparams)
 					if randallsresult then
@@ -10698,6 +10790,23 @@ else
 		end,
 	})
 
+	ST:AddToggle({
+		Name = "Allow common folk commands <font color='#c900c9'>「</font><font color='#ff00ff'>CHEEKIGAN</font><font color='#c900c9'>」</font>",
+		Default = false,
+		Callback = function(Value)
+			fagcommands = Value
+			for _,UID in pairs(game.Players:GetPlayers()) do
+				UID = UID.UserId
+				if not gigawhitelist[UID] and not friendslist[UID] then
+					cmdlist[UID] = Value
+					if uid == UID then
+						pAC:Set(Value)
+					end
+				end
+			end
+		end,
+	})
+
 	ST:AddSection({
 		Name = "<b>Remove Custom Location</b>"
 	})
@@ -10818,8 +10927,15 @@ else
 				Image = "rbxassetid://4483362458",
 				Time = 5
 			})
-			task.wait(0.5)
-			game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, game:GetService("Players").LocalPlayer)
+			PlaceId = game.PlaceId
+			JobId = game.JobId
+			if #game.Players:GetPlayers() <= 1 then
+				game.Players.LocalPlayer:Kick("\nRejoining bris")
+				task.wait()
+				game.TeleportService:Teleport(PlaceId, game.Players.LocalPlayer)
+			else
+				game.TeleportService:TeleportToPlaceInstance(PlaceId, JobId, game.Players.LocalPlayer)
+			end
 		end    
 	})
 
