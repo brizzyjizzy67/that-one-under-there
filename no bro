@@ -9396,11 +9396,28 @@ else
 
 	local selid = 125459331
 
+	local idlist = {
+		["TreeHouse"] = 125459331
+	}
+
+	local buildlist = {
+		"TreeHouse"
+	}
+
+	BS:AddDropdown({
+		Name = "Select Asset To Load",
+		Options = buildlist,
+		Default = "TreeHouse",
+		Callback = function(Value)
+			selid = idlist[Value]
+		end
+	})
+
 	BS:AddButton({
 		Name = "Convert grabbed to Build",
 		Callback = function()
 			if workspace:FindFirstChild("GrabParts") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Map") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Plots") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Slots") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("BinisAssets") then
-				game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","LoadAsset","rbxassetid://" + selid,workspace.GrabParts.GrabPart.WeldConstraint.Part1.Parent})
+				game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","LoadAsset","rbxassetid://"..selid,workspace.GrabParts.GrabPart.WeldConstraint.Part1.Parent})
 			end
 		end
 	})
