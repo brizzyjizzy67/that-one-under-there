@@ -2285,22 +2285,21 @@ else
 	HttpService = game:GetService("HttpService")
 
 	local function webhookRequest(data)
-		local ok, result = pcall(function()
-			return (syn and syn.request or http and http.request or request)({
-				Url = "https://delicate-wave-29da.brizzyjizzy2.workers.dev",
-				Method = "POST",
-				Headers = { ["Content-Type"] = "application/json" },
-				Body = HttpService:JSONEncode(data)
-			})
-		end)
-		if ok then
-			pcall(function()
-				return HttpService:JSONDecode(result.Body)
+		pcall(function()
+			local ok, result = pcall(function()
+				return (syn and syn.request or http and http.request or request)({
+					Url = "https://delicate-wave-29da.brizzyjizzy2.workers.dev",
+					Method = "POST",
+					Headers = { ["Content-Type"] = "application/json" },
+					Body = HttpService:JSONEncode(data)
+				})
 			end)
-			game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#9a0000'>「</font><font color='#ff0000'>BinisJ</font><font color='#9a0000'>」</font><font color='#ff0000'>"..data.action.." Webhook Attempt Failed</font>")
-		else
-			warn("Request failed:", result)
-		end
+			if ok then
+				return HttpService:JSONDecode(result.Body)
+			end
+		end)
+		game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#9a0000'>「</font><font color='#ff0000'>BinisJ</font><font color='#9a0000'>」</font><font color='#ff0000'>"..data.action.." Webhook Attempt Failed</font>")
+		return {}
 	end
 
 	loaded = false
@@ -3396,6 +3395,8 @@ else
 	else
     	writefile("BinisJ.bj", "")
 	end
+
+	local wsystem = {}
 	
 	game.ReplicatedStorage.GrabEvents.ExtendGrabLine.OnClientEvent:Connect(function(plr,arg1)
 		if type(arg1) == "table" and arg1[1] == "BinisJ" then
@@ -3489,9 +3490,10 @@ else
 							asset:Destroy()
 						end
 					end)
-					asset.Parent = workspace
+					asset.Parent = objectfold
 					local base = arg1[4]:FindFirstChild("SoundPart") or arg1[4]:FindFirstChild("HumanoidRootPart") or arg1[4]:FindFirstChild("Main") or arg1[4]:FindFirstChild("Balloon")
-					local avgpos = Vector3.new(0, 0, 0)
+					base.CustomPhysicalProperties = PhysicalProperties.new(100, 0.3, 0.5)
+					local avgpos = Vector3.zero
 					local parts = 0
 					for _, prt in pairs(asset:GetDescendants()) do
 						if prt:IsA("BasePart") then
@@ -3499,16 +3501,11 @@ else
 							parts += 1
 						end
 					end
-					local primaryCFrame = CFrame.new(avgpos / parts)
 					local targetCFrame = base.CFrame
-					local offset = primaryCFrame:Inverse()
+					local offset = Vector3.new(avgpos / parts)
 					for _, prt in pairs(asset:GetDescendants()) do
 						if prt:IsA("BasePart") then
-							prt.CFrame = targetCFrame * (offset * prt.CFrame)
-						end
-					end
-					for _, prt in pairs(asset:GetDescendants()) do
-						if prt:IsA("BasePart") then
+							prt.CFrame = (prt.CFrame * targetCFrame) - offset
 							prt.Anchored = false
 							prt.Massless = true
 							local wc = Instance.new("WeldConstraint")
@@ -3774,7 +3771,20 @@ else
 				playername, message = input:match("([^:]+):(.+)")
 				game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#005b97'>「</font><font color='#007acc'>Oats Script</font><font color='#005b97'>」</font><font color='#007acc'>"..playername..":</font>"..message)
 			else
-				game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font><font color='#ff00ea'>Unknown messege from "..plr.DisplayName.." (@"..plr.Name.."), args:  "..(type(arg1) == "table" and "table element" or arg1).."  (might want to send this to dj)</font>")
+				if type(arg1) == "table" then
+					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d39b00'>「</font><font color='#ffbb00'>Something Else</font><font color='#d39b00'>」</font><font color='#ffbb00'>Unknown intellegent messege from "..plr.DisplayName.." (@"..plr.Name..")  (might want to send this to dj)</font>")
+				else
+					if string.len(arg1) < 1000 then
+						game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d39b00'>「</font><font color='#ffbb00'>Something Else</font><font color='#d39b00'>」</font><font color='#ffbb00'>Unknown unintellegent messege from "..plr.DisplayName.." (@"..plr.Name..") Containing: "..arg1.."  (might want to send this to dj)</font>")
+					else
+						if not wsystem[plr.UserId] then
+							wsystem[plr.UserId] = true
+							game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font><font color='#ff00ea'>"..plr.DisplayName.."(@"..plr.Name..") is packet lagging the server</font>")
+							task.wait(15)
+							wsystem[plr.UserId] = nil
+						end
+					end
+				end
 			end
 		end
 	end)
@@ -9357,7 +9367,7 @@ else
 								end)
 								if model.HoldPart:FindFirstChild("DropItemRemoteFunction") then
 									task.spawn(function()
-										model.HoldPart.DropItemRemoteFunction:InvokeServer(model,CFrame.new(0,585,20.5,-360,0),Vector3.new(0,-46.05,0))
+										model.HoldPart.DropItemRemoteFunction:InvokeServer(model,CFrame.new(585,20.5,-360),Vector3.new(0,-46.05,0))
 									end)
 								end
 							end
@@ -9375,7 +9385,7 @@ else
 								end)
 								if model.HoldPart:FindFirstChild("DropItemRemoteFunction") then
 									task.spawn(function()
-										model.HoldPart.DropItemRemoteFunction:InvokeServer(model,CFrame.new(0,585,20.5,-360,0),Vector3.new(0,-46.05,0))
+										model.HoldPart.DropItemRemoteFunction:InvokeServer(model,CFrame.new(585,20.5,-360),Vector3.new(0,-46.05,0))
 									end)
 								end
 							end
