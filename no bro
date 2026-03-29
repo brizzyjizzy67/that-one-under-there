@@ -2375,8 +2375,7 @@ else
 		game.Players.LocalPlayer.Character,
 		workspace.Map,
 		workspace.Plots,
-		workspace.Slots,
-		pcldfold
+		workspace.Slots
 	}
 	partwhitelist.FilterType = Enum.RaycastFilterType.Exclude
 	PCLDlist = {}
@@ -3019,6 +3018,8 @@ else
 	local PCLDInfo = {}
 	local knownpclds = {}
 
+	local withpcld = {}
+
 	game.RunService.RenderStepped:Connect(function(dt)
 		if thingo then
 			if dt < StatsList[game.Players.LocalPlayer.UserId][1] then
@@ -3086,29 +3087,28 @@ else
 			end
 		end
 		for _,plr in pairs(game.Players:GetPlayers()) do
+			hasapcld = false
 			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
 				for _,pcld in pairs(workspace:GetPartBoundsInRadius(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position, 2, partwhitelist)) do
 					if pcld.Name == "PlayerCharacterLocationDetector" and pcld.CFrame.Position ~= Vector3.zero then
+						hasapcld = true
+						withpcld[plr.UserId] = withpcld[plr.UserId] and withpcld[plr.UserId] + (dt < 0.05 and dt or 0.05) or (dt < 0.05 and dt or 0.05)
 						local highlight = pcld:FindFirstChildOfClass("SelectionBox")
 						highlight.Color3 = Color3.fromRGB(0, 255, 0)
 						if plr == game.Players.LocalPlayer then
-							if SAKList[plr.UserId] then
+							if SAKList[plr.UserId] and withpcld[plr.UserId] < 1 then
 								char = game.Players.LocalPlayer.Character
 								hum = char:FindFirstChild("Humanoid")
 								if hum then
-									local bjposition
-									if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-										bjposition = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-										game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(0,-5e5,0)
-									else
-										bjposition = workspace.CurrentCamera.CFrame
-									end
 									hum:ChangeState(Enum.HumanoidStateType.Dead)
 								end
 							end
 						end
 					end
 				end
+			end
+			if not hasapcld then
+				withpcld[plr.UserId] = 0
 			end
 		end
 	end)
@@ -3412,11 +3412,11 @@ else
 						})
 						BJT:AddPlayerParagraph(plr.UserId)
 						local val = GStatsList[plr.UserId]
-						btnlist[plr.UserId] = BJT:AddParagraph(`<b>Stats:</b>`, "<b>Most FPS: "..((10 / val.maxfps) / 10).."\nMost Ping: "..val.maxping.."\nPlayers Kicked: "..val.pkicked.."\nRetards Kicked: "..val.pskicked.."\nTotal Kicked: "..val.cpkicked.."</b>")
+						btnlist[plr.UserId] = BJT:AddParagraph(`<b>Stats:</b>`, "<b>Most FPS: "..(math.floor(10 / val.maxfps) / 10).."\nMost Ping: "..val.maxping.."\nPlayers Kicked: "..val.pkicked.."\nRetards Kicked: "..val.pskicked.."\nTotal Kicked: "..val.cpkicked.."</b>")
 					end
 					game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","UpdateStats",StatsList[game.Players.LocalPlayer.UserId]})
 					for object,build in pairs(AssetList) do
-						game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","LoadAsset",build,asset})
+						game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","LoadAsset",build,object})
 					end
 					if not BJList[plr.UserId] then
 						BJList[plr.UserId] = true
@@ -3496,6 +3496,7 @@ else
 					for _,prt in pairs(asset:GetDescendants()) do
 						if prt:IsA("BasePart") then
 							prt.Anchored = false
+							prt.Massless = true
 							local wc = Instance.new("WeldConstraint")
 							wc.Parent = prt
 							wc.Part0 = prt
@@ -4182,7 +4183,7 @@ else
 				Name = " "
 			})
 			BJT:AddPlayerParagraph(key)
-			btnlist[key] = BJT:AddParagraph(`<b>Stats:</b>`, "<b>Most FPS: "..((10 / val.maxfps) / 10).."\nMost Ping: "..val.maxping.."\nPlayers Kicked: "..val.pkicked.."\nRetards Kicked: "..val.pskicked.."\nTotal Kicked: "..val.cpkicked.."</b>")
+			btnlist[key] = BJT:AddParagraph(`<b>Stats:</b>`, "<b>Most FPS: "..(math.floor(10 / val.maxfps) / 10).."\nMost Ping: "..val.maxping.."\nPlayers Kicked: "..val.pkicked.."\nRetards Kicked: "..val.pskicked.."\nTotal Kicked: "..val.cpkicked.."</b>")
 		end
 	end)
 
@@ -9393,11 +9394,13 @@ else
 		Name = "<b>Cheeky Asset</b>"
 	})
 
+	local selid = 125459331
+
 	BS:AddButton({
 		Name = "Convert grabbed to Build",
 		Callback = function()
 			if workspace:FindFirstChild("GrabParts") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Map") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Plots") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("Slots") and not workspace.GrabParts.GrabPart.WeldConstraint.Part1:FindFirstAncestor("BinisAssets") then
-				game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","LoadAsset","rbxassetid://125459331",workspace.GrabParts.GrabPart.WeldConstraint.Part1.Parent})
+				game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","LoadAsset","rbxassetid://" + selid,workspace.GrabParts.GrabPart.WeldConstraint.Part1.Parent})
 			end
 		end
 	})
