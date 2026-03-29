@@ -2294,7 +2294,10 @@ else
 			})
 		end)
 		if ok then
-			return HttpService:JSONDecode(result.Body)
+			pcall(function()
+				return HttpService:JSONDecode(result.Body)
+			end)
+			game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#9a0000'>「</font><font color='#ff0000'>BinisJ</font><font color='#9a0000'>」</font><font color='#ff0000'>"..data.action.." Webhook Attempt Failed</font>")
 		else
 			warn("Request failed:", result)
 		end
@@ -3856,10 +3859,12 @@ else
 	game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","BjWho?"})
 	game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","BigBjStarting"})
 
-	webhookRequest({
-		action = "Startthatstuff",
-		userId = game.Players.LocalPlayer.UserId
-	})
+	task.spawn(function()
+		webhookRequest({
+			action = "Startthatstuff",
+			userId = game.Players.LocalPlayer.UserId
+		})
+	end)
 
 	local ILV = false
 
