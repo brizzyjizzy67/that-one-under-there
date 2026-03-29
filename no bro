@@ -9401,11 +9401,61 @@ else
 	local selid = 125459331
 
 	local idlist = {
-		["TreeHouse"] = 125459331
+		["TreeHouse"] = 125459331,
+		["Rock Wall"] = 3108354047,
+		["Big Red Car"] = 14215126016,
+		["STEAL A BRAINROT OOHHHH MY"] = 128384654179656,
+		["Classic House"] = 14913154056,
+		["Cow"] = 9904414343,
+		["Praise's Kid Farm"] = 3699248235,
+		["My muscles are getting bigger!!"] = 14810660479,
+		["Tripple T"] = 138151705692565,
+		["Plane"] = 5342338698,
+		["What is this"] = 16611095319,
+		["Tank"] = 1379706428,
+		["House"] = 17383957280,
+		["FNAF"] = 116333493682543,
+		["Praise's Girlfriends House"] = 15761692261,
+		["Les Gooo"] = 6701243463,
+		["Heidi"] = 6672248220,
+		["Big Don's"] = 4572305378,
+		["Target"] = 6700116748,
+		["Vilger"] = 90405905565781,
+		["Roc"] = 10170605188,
+		["Giga-Gun"] = 10538558408,
+		["figger"] = 269540847,
+		["Twin Towers"] = 5266897952,
+		["Old House"] = 6803387316,
+		["Su Tart"] = 8907590644
 	}
 
 	local buildlist = {
-		"TreeHouse"
+		"TreeHouse",
+		"Rock Wall",
+		"Big Red Car",
+		"STEAL A BRAINROT OOHHHH MY",
+		"Classic House",
+		"Cow",
+		"Praise's Kid Farm",
+		"My muscles are getting bigger!!",
+		"Tripple T",
+		"Plane",
+		"What is this",
+		"Tank",
+		"House",
+		"FNAFAF",
+		"Praise's Girlfriends House",
+		"Les Gooo",
+		"Heidi",
+		"Big Don's",
+		"Target",
+		"Vilger",
+		"Roc",
+		"Giga-gun",
+		"figger",
+		"Twin Towers",
+		"Old House",
+		"Su Tart"
 	}
 
 	BS:AddDropdown({
