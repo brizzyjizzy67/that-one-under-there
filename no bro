@@ -3398,6 +3398,22 @@ else
 					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font>"..arg1[3])
 				end
 				if arg1[2] == "BigBjStarting" then
+					if not GStatsList[plr.UserId] then
+						GStatsList[plr.UserId] = {
+							["maxfps"] = 0,
+							["maxping"] = 0,
+							["lowping"] = 1000000,
+							["pkicked"] = 0,
+							["pskicked"] = 0,
+							["cpkicked"] =  0
+						}
+						BJT:AddSection({
+							Name = " "
+						})
+						BJT:AddPlayerParagraph(plr.UserId)
+						local val = GStatsList[plr.UserId]
+						btnlist[plr.UserId] = BJT:AddParagraph(`<b>Stats:</b>`, "<b>Most FPS: "..((10 / val.maxfps / 10)).."\nMost Ping: "..val.maxping.."\nPlayers Kicked: "..val.pkicked.."\nRetards Kicked: "..val.pskicked.."\nTotal Kicked: "..val.cpkicked.."</b>")
+					end
 					game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","UpdateStats",StatsList[game.Players.LocalPlayer.UserId]})
 					for object,build in pairs(AssetList) do
 						game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","LoadAsset",build,asset})
