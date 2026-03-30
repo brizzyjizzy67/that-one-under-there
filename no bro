@@ -3092,10 +3092,10 @@ else
 		end
 		for _,plr in pairs(game.Players:GetPlayers()) do
 			hasapcld = false
-			resetbris = false
-			anotherinsight = false
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-				for _,pcld in pairs(workspace:GetPartBoundsInRadius(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position, 2, partwhitelist)) do
+			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+				resetbris = false
+				anotherinsight = false
+				for _,pcld in pairs(workspace:GetPartBoundsInRadius(plr.Character.HumanoidRootPart.CFrame.Position, 2, partwhitelist)) do
 					if pcld.Name == "PlayerCharacterLocationDetector" and pcld.CFrame.Position ~= Vector3.zero then
 						hasapcld = true
 						withpcld[plr.UserId] = withpcld[plr.UserId] and withpcld[plr.UserId] + (dt < 0.05 and dt or 0.05) or (dt < 0.05 and dt or 0.05)
@@ -3110,12 +3110,12 @@ else
 						anotherinsight = true
 					end
 				end
-			end
-			if plr == game.Players.LocalPlayer and resetbris and not anotherinsight then
-				char = game.Players.LocalPlayer.Character
-				hum = char:FindFirstChild("Humanoid")
-				if hum then
-					hum:ChangeState(Enum.HumanoidStateType.Dead)
+				if plr == game.Players.LocalPlayer and resetbris and not anotherinsight then
+					char = game.Players.LocalPlayer.Character
+					hum = char:FindFirstChild("Humanoid")
+					if hum then
+						hum:ChangeState(Enum.HumanoidStateType.Dead)
+					end
 				end
 			end
 			if not hasapcld then
@@ -4150,13 +4150,28 @@ else
 		Name = "<b>Clown List</b>"
 	})
 
-	CLSTSEL = nil
+	cdname = ""
+	cname = ""
+	cid = nil
+
+	local selpal
 
 	CLST:AddPlayersDropdown({
 		Name = "Add player to clown list",
 		Callback = function(Value)
-			if game.Players:FindFirstChild(Value) then
-				CLSTSEL = game.Players:FindFirstChild(Value)
+			local CLSTSEL = game.Players:FindFirstChild(Value)
+			if CLSTSEL then
+				cdname = CLSTSEL.DisplayName
+				cname = CLSTSEL.Name
+				cid = CLSTSEL.UserId
+				if selpal then
+					if inbadboylist(cid) then
+						info = badboylist[cid]
+						selpal:Set("<b>"..info.reason.."\n\nReported By: "..info.by.."</b>")
+					else
+						selpal:Set("<b>User not in list</b>")
+					end
+				end
 			end
 		end
 	})
@@ -4171,19 +4186,21 @@ else
 		end
 	})
 
+	selpal = CLST:AddParagraph(`<b>Reason</b>`,"<b>No player selected</b>")
+
 	CLST:AddButton({
 		Name = "Add / Edit Player",
 		Callback = function()
-			if CLSTSEL and CLSTSEL ~= game.Players.LocalPlayer then
+			if cid and cid ~= game.Players.LocalPlayer.UserId then
 				webhookRequest({
 					action = "SetBadboy",
-					userId = CLSTSEL.UserId,
+					userId = cid,
 					by = game.Players.LocalPlayer.DisplayName.." (@"..game.Players.LocalPlayer.Name..") UserId: "..game.Players.LocalPlayer.UserId,
 					reason = strrrringg
 				})
 				OrionLib:MakeNotification({
 					Name = "Clown List",
-					Content = "Reported "..CLSTSEL.DisplayName.." (@"..CLSTSEL.Name..") for: "..strrrringg,
+					Content = "Reported "..cdname.." (@"..cname..") for: "..strrrringg,
 					Image = "rbxassetid://4483345998",
 					Time = 5
 				})
