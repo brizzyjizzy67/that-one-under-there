@@ -2285,20 +2285,22 @@ else
 	HttpService = game:GetService("HttpService")
 
 	local function webhookRequest(data)
-		pcall(function()
-			local ok, result = pcall(function()
-				return (syn and syn.request or http and http.request or request)({
-					Url = "https://delicate-wave-29da.brizzyjizzy2.workers.dev",
-					Method = "POST",
-					Headers = { ["Content-Type"] = "application/json" },
-					Body = HttpService:JSONEncode(data)
-				})
-			end)
-			if ok then
-				return HttpService:JSONDecode(result.Body)
-			end
+		local ok, result = pcall(function()
+			return (syn and syn.request or http and http.request or request)({
+				Url = "https://delicate-wave-29da.brizzyjizzy2.workers.dev",
+				Method = "POST",
+				Headers = { ["Content-Type"] = "application/json" },
+				Body = HttpService:JSONEncode(data)
+			})
 		end)
-		game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#9a0000'>「</font><font color='#ff0000'>BinisJ</font><font color='#9a0000'>」</font><font color='#ff0000'>"..data.action.." Webhook Attempt Failed</font>")
+		if ok and result and result.StatusCode == 200 then
+			local decodeOk, decoded = pcall(HttpService.JSONDecode, HttpService, result.Body)
+			if decodeOk then return decoded end
+		end
+		game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
+			"<font color='#9a0000'>「</font><font color='#ff0000'>BinisJ</font><font color='#9a0000'>」</font>" ..
+			"<font color='#ff0000'>" .. data.action .. " Webhook Attempt Failed</font>"
+		)
 		return {}
 	end
 
