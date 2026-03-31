@@ -4540,16 +4540,13 @@ else
 				cname = CLSTSEL.Name
 				cid = CLSTSEL.UserId
 				if selpal then
-					if inbadboylist(cid) then
-						info = badboylist[cid]
-						selpal:Set("<b>"..info.reason.."\n\nReported By: "..info.by.."</b>")
-					else
-						selpal:Set("<b>User not in list</b>")
-					end
+					selpal:Refresh(cid)
 				end
 			end
 		end
 	})
+
+	selpal = CLST:AddUserProfile(game.Players.LocalPlayer.UserId)
 
 	strrrringg = ""
 
@@ -4560,8 +4557,6 @@ else
 			strrrringg = Value
 		end
 	})
-
-	selpal = CLST:AddParagraph(`<b>Reason</b>`,"<b>No player selected</b>")
 
 	CLST:AddButton({
 		Name = "Add / Edit Player",
