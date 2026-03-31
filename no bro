@@ -5,6 +5,17 @@ local friendslist = {}
 local alreadytherelist = {}
 local gigawhitelist = {}
 
+local badboylist = {}
+
+function inbadboylist(targetId)
+	for UserId, info in pairs(badboylist) do
+		if UserId == targetId then
+			return true
+		end
+	end
+	return false
+end
+
 function BJOrion()
 	local UserInputService = game:GetService("UserInputService")
 	local TweenService = game:GetService("TweenService")
@@ -905,6 +916,373 @@ function BJOrion()
 				
 					return PlayerParagraph
 				end
+				function ElementFunction:AddUserProfile(UserId)
+					task.spawn(function()
+						local currentUserId = UserId
+						local friendTask = nil
+						local FriendsHeader, FriendsList, BioLabel, JoinedLabel
+						local AvatarImg, DisplayNameLabel, UsernameLabel, TagLabel
+						local ConnectionsVal, FollowersVal, FollowingVal
+						local FavHolder, FavSection
+
+						local function GetAsync(url)
+							local success, result = pcall(function()
+								return game:HttpGetAsync(url)
+							end)
+							if success then
+								return HttpService:JSONDecode(result)
+							end
+							return nil
+						end
+
+						local function GetTags(uid)
+							local tags = {}
+							if BJList and BJList[uid] then
+								table.insert(tags, "<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font>")
+							end
+							if inbadboylist(uid) then
+								table.insert(tags, "<font color='#740000'>「</font><font color='#ba0000'>Retard</font><font color='#740000'>」</font>")
+							end
+							if friendslist[uid] then
+								table.insert(tags, "<font color='#00c1ec'>「</font><font color='#91ebff'>Friend</font><font color='#00c1ec'>」</font>")
+							end
+							return table.concat(tags, "")
+						end
+
+						local function RunFriendScan(uid)
+							friendTask = nil
+							FriendsHeader.Text = "Bad Friends"
+							FriendsList.Text   = "Loading..."
+
+							local thisTask = {}
+							friendTask = thisTask
+
+							task.spawn(function()
+								local friendCount = 0
+								local lines = {}
+
+								local ok, friendPages = pcall(function()
+									return game.Players:GetFriendsAsync(uid)
+								end)
+
+								if not ok then
+									if friendTask == thisTask then
+										FriendsList.Text = "<font color=\"rgb(200,80,80)\">Failed to load friends.</font>"
+									end
+									return
+								end
+
+								while true do
+									if friendTask ~= thisTask then return end
+
+									local currentPage = friendPages:GetCurrentPage()
+									for _, friendInfo in ipairs(currentPage) do
+										if friendTask ~= thisTask then return end
+
+										friendCount += 1
+										local inGame = game.Players:GetPlayerByUserId(friendInfo.Id)
+
+										if inGame then
+											table.insert(lines, "<font color=\"rgb(100,210,100)\">[In Game] " .. inGame.DisplayName .. " (@" .. inGame.Name .. ")</font>")
+										elseif inbadboylist(friendInfo.Id) then
+											local d, u = getOfflinePlayerData(friendInfo.Id)
+											table.insert(lines, "<font color=\"rgb(200,80,80)\">[Offline] " .. d .. " (@" .. u .. ") UserId: " .. friendInfo.Id .. "</font>")
+										end
+									end
+
+									FriendsHeader.Text = "Bad Friends  " .. friendCount
+									FriendsList.Text   = #lines > 0 and table.concat(lines, "\n") or "Loading..."
+
+									if friendPages.IsFinished then break end
+									friendPages:AdvanceToNextPageAsync()
+								end
+
+								if friendTask == thisTask then
+									FriendsHeader.Text = "Bad Friends  " .. friendCount
+									FriendsList.Text   = #lines > 0 and table.concat(lines, "\n") or "No flagged friends found."
+								end
+							end)
+						end
+
+						local function LoadProfile(uid, tagsOnly)
+							-- If tagsOnly, just update the tag label and bail
+							if tagsOnly then
+								local tags = GetTags(uid)
+								TagLabel.Text    = tags
+								TagLabel.Visible = tags ~= ""
+								return
+							end
+
+							local userInfo      = GetAsync("https://users.roblox.com/v1/users/" .. uid)
+							local friendsData   = GetAsync("https://friends.roblox.com/v1/users/" .. uid .. "/friends/count")
+							local followersData = GetAsync("https://friends.roblox.com/v1/users/" .. uid .. "/followers/count")
+							local followingData = GetAsync("https://friends.roblox.com/v1/users/" .. uid .. "/followings/count")
+							local favPlaces     = GetAsync("https://games.roblox.com/v2/users/" .. uid .. "/favorite/games?accessFilter=Public&sortOrder=Asc&limit=5")
+
+							local username    = userInfo and userInfo.name or tostring(uid)
+							local displayName = userInfo and userInfo.displayName or "Unknown"
+							local created     = userInfo and userInfo.created and userInfo.created:sub(1, 10) or "Unknown"
+							local verified    = userInfo and userInfo.hasVerifiedBadge and " ✔" or ""
+							local description = (userInfo and userInfo.description and #userInfo.description > 0) and userInfo.description or "(No description set)"
+							local connections = friendsData and tostring(friendsData.count) or "?"
+							local followers   = followersData and tostring(followersData.count) or "?"
+							local following   = followingData and tostring(followingData.count) or "?"
+
+							AvatarImg.Image       = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. uid .. "&width=420&height=420&format=png"
+							DisplayNameLabel.Text = displayName .. verified
+							UsernameLabel.Text    = "@" .. username
+
+							local tags = GetTags(uid)
+							TagLabel.Text    = tags
+							TagLabel.Visible = tags ~= ""
+
+							ConnectionsVal.Text = connections
+							FollowersVal.Text   = followers
+							FollowingVal.Text   = following
+							BioLabel.Text       = description
+							JoinedLabel.Text    = "Joined  " .. created
+
+							for _, child in ipairs(FavHolder:GetChildren()) do
+								if not child:IsA("UIListLayout") then
+									child:Destroy()
+								end
+							end
+
+							if favPlaces and favPlaces.data and #favPlaces.data > 0 then
+								FavSection.Visible = true
+								for i, place in ipairs(favPlaces.data) do
+									if i > 5 then break end
+									AddThemeObject(SetProps(MakeElement("Label", "⭐  " .. place.name, 13), {
+										Size = UDim2.new(1, 0, 0, 16),
+										Font = Enum.Font.GothamSemibold,
+										Parent = FavHolder
+									}), "Text")
+								end
+							else
+								FavSection.Visible = false
+							end
+
+							RunFriendScan(uid)
+						end
+
+						-- ── Build card ───────────────────────────────────────────────────────────
+
+						local ProfileCard = AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(255, 255, 255), 0, 5), {
+							Size = UDim2.new(1, 0, 0, 0),
+							AutomaticSize = Enum.AutomaticSize.Y,
+							BackgroundTransparency = 0.7,
+							Parent = ItemParent,
+							ClipsDescendants = false
+						}), {
+							AddThemeObject(MakeElement("Stroke"), "Stroke"),
+							MakeElement("Padding", 10, 12, 12, 10)
+						}), "Second")
+
+						MakeElement("List", 0, 6).Parent = ProfileCard
+
+						-- Avatar row
+						local AvatarRow = SetProps(MakeElement("TFrame"), {
+							Size = UDim2.new(1, 0, 0, 50),
+							Parent = ProfileCard
+						})
+
+						AvatarImg = Create("ImageLabel", {
+							Size = UDim2.new(1, 0, 1, 0),
+							BackgroundTransparency = 1,
+							ScaleType = Enum.ScaleType.Fit
+						})
+
+						SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(40, 40, 40), 1, 0), {
+							Size = UDim2.new(0, 46, 0, 46),
+							Parent = AvatarRow
+						}), {
+							AvatarImg,
+							MakeElement("Corner", 1)
+						})
+
+						DisplayNameLabel = AddThemeObject(SetProps(MakeElement("Label", "", 15), {
+							Size = UDim2.new(1, 0, 0, 18),
+							Position = UDim2.new(0, 0, 0, 6),
+							Font = Enum.Font.GothamBold,
+						}), "Text")
+
+						UsernameLabel = AddThemeObject(SetProps(MakeElement("Label", "", 13), {
+							Size = UDim2.new(1, 0, 0, 14),
+							Position = UDim2.new(0, 0, 0, 28),
+							Font = Enum.Font.GothamSemibold,
+						}), "TextDark")
+
+						-- Tags sit just below username, hugging left
+						TagLabel = Create("TextLabel", {
+							Size = UDim2.new(1, 0, 0, 18),
+							Position = UDim2.new(0, 0, 0, 6),
+							BackgroundTransparency = 1,
+							Font = Enum.Font.GothamBold,
+							TextSize = 25,
+							RichText = true,
+							TextXAlignment = Enum.TextXAlignment.Right,
+							Visible = false
+						})
+
+						SetChildren(SetProps(MakeElement("TFrame"), {
+							Size = UDim2.new(1, -56, 1, 0),
+							Position = UDim2.new(0, 56, 0, 0),
+							Parent = AvatarRow
+						}), {
+							DisplayNameLabel,
+							UsernameLabel,
+							TagLabel
+						})
+
+						-- Divider
+						AddThemeObject(SetProps(MakeElement("Frame"), {
+							Size = UDim2.new(1, 0, 0, 1),
+							Parent = ProfileCard
+						}), "Stroke")
+
+						-- Stats row
+						local StatsRow = SetChildren(SetProps(MakeElement("TFrame"), {
+							Size = UDim2.new(1, 0, 0, 36),
+							Parent = ProfileCard
+						}), { MakeElement("List", 0, 0) })
+						StatsRow.UIListLayout.FillDirection = Enum.FillDirection.Horizontal
+
+						local function MakeStat(label)
+							local valLabel = AddThemeObject(SetProps(MakeElement("Label", "?", 14), {
+								Size = UDim2.new(1, 0, 0, 16),
+								Position = UDim2.new(0, 0, 0, 4),
+								Font = Enum.Font.GothamBold,
+								TextXAlignment = Enum.TextXAlignment.Center
+							}), "Text")
+
+							SetChildren(SetProps(MakeElement("TFrame"), {
+								Size = UDim2.new(0.333, 0, 1, 0),
+								Parent = StatsRow
+							}), {
+								valLabel,
+								AddThemeObject(SetProps(MakeElement("Label", label, 12), {
+									Size = UDim2.new(1, 0, 0, 12),
+									Position = UDim2.new(0, 0, 0, 21),
+									Font = Enum.Font.GothamBold,
+									TextXAlignment = Enum.TextXAlignment.Center
+								}), "TextDark")
+							})
+
+							return valLabel
+						end
+
+						ConnectionsVal = MakeStat("Connections")
+						FollowersVal   = MakeStat("Followers")
+						FollowingVal   = MakeStat("Following")
+
+						-- Divider
+						AddThemeObject(SetProps(MakeElement("Frame"), {
+							Size = UDim2.new(1, 0, 0, 1),
+							Parent = ProfileCard
+						}), "Stroke")
+
+						-- About
+						AddThemeObject(SetProps(MakeElement("Label", "About", 18), {
+							Size = UDim2.new(1, 0, 0, 14),
+							Font = Enum.Font.GothamBold,
+							Parent = ProfileCard
+						}), "TextDark")
+
+						BioLabel = AddThemeObject(SetProps(MakeElement("Label", "", 13), {
+							Size = UDim2.new(1, 0, 0, 0),
+							AutomaticSize = Enum.AutomaticSize.Y,
+							Font = Enum.Font.GothamSemibold,
+							TextWrapped = true,
+							Parent = ProfileCard
+						}), "Text")
+
+						-- Divider
+						AddThemeObject(SetProps(MakeElement("Frame"), {
+							Size = UDim2.new(1, 0, 0, 1),
+							Parent = ProfileCard
+						}), "Stroke")
+
+						-- Bad Friends
+						FriendsHeader = AddThemeObject(SetProps(MakeElement("Label", "Friends", 18), {
+							Size = UDim2.new(1, 0, 0, 14),
+							Font = Enum.Font.GothamBold,
+							Parent = ProfileCard
+						}), "Text")
+
+						FriendsList = Create("TextLabel", {
+							Size = UDim2.new(1, 0, 0, 0),
+							AutomaticSize = Enum.AutomaticSize.Y,
+							BackgroundTransparency = 1,
+							Font = Enum.Font.GothamBold,
+							TextSize = 12,
+							TextWrapped = true,
+							TextXAlignment = Enum.TextXAlignment.Left,
+							RichText = true,
+							Text = "",
+							Parent = ProfileCard
+						})
+						AddThemeObject(FriendsList, "TextDark")
+
+						-- Divider
+						AddThemeObject(SetProps(MakeElement("Frame"), {
+							Size = UDim2.new(1, 0, 0, 1),
+							Parent = ProfileCard
+						}), "Stroke")
+
+						-- Joined
+						JoinedLabel = AddThemeObject(SetProps(MakeElement("Label", "", 15), {
+							Size = UDim2.new(1, 0, 0, 14),
+							Font = Enum.Font.GothamBold,
+							Parent = ProfileCard
+						}), "TextDark")
+
+						-- Fav places
+						FavSection = SetProps(MakeElement("TFrame"), {
+							Size = UDim2.new(1, 0, 0, 0),
+							AutomaticSize = Enum.AutomaticSize.Y,
+							Visible = false,
+							Parent = ProfileCard
+						})
+
+						AddThemeObject(SetProps(MakeElement("Frame"), {
+							Size = UDim2.new(1, 0, 0, 1),
+							Parent = FavSection
+						}), "Stroke")
+
+						AddThemeObject(SetProps(MakeElement("Label", "Favourite Places", 13), {
+							Size = UDim2.new(1, 0, 0, 14),
+							Font = Enum.Font.GothamBold,
+							Parent = FavSection
+						}), "TextDark")
+
+						FavHolder = SetChildren(SetProps(MakeElement("TFrame"), {
+							Size = UDim2.new(1, 0, 0, 0),
+							AutomaticSize = Enum.AutomaticSize.Y,
+							Parent = FavSection
+						}), { MakeElement("List", 0, 4) })
+
+						-- ── Return table with Refresh method (mirrors Dropdown:Refresh pattern) ──
+
+						local ProfileObject = {}
+
+						function ProfileObject:Refresh(newUid)
+							task.spawn(function()
+								if newUid and newUid ~= currentUserId then
+									-- Different user — full reload
+									currentUserId = newUid
+									LoadProfile(currentUserId, false)
+								else
+									-- Same user — only recheck tags, do not rescan friends
+									LoadProfile(currentUserId, true)
+								end
+							end)
+						end
+
+						LoadProfile(UserId, false)
+
+						return ProfileObject
+					end)
+				end
 				function ElementFunction:AddParagraph(Text, Content)
 					Text = Text or "Text"
 					Content = Content or "Content"
@@ -1406,7 +1784,7 @@ function BJOrion()
 								}), "Text"),
 
 								
-								namelabel = AddThemeObject(SetProps(MakeElement("Label", "<b>"..Player_Display..(BJList[UId] and " <font color='#d300c1'>「</font><font color='#ff00ea'>BINISJ</font><font color='#d300c1'>」</font> " or " ")..(isFriend and "<font color='#62e2ff'>「</font><font color='#91ebff'>FRIEND</font><font color='#62e2ff'>」</font>" or "").."</b>", 17, 0.4, UId), {
+								namelabel = AddThemeObject(SetProps(MakeElement("Label", "<b>"..Player_Display..(BJList[UId] and " <font color='#d300c1'>「</font><font color='#ff00ea'>BINISJ</font><font color='#d300c1'>」</font> " or " ")..(isFriend and "<font color='#00c1ec'>「</font><font color='#91ebff'>FRIEND</font><font color='#00c1ec'>」</font>" or "").."</b>", 17, 0.4, UId), {
 									Position = UDim2.new(0.135, 0, 0, -6),
 									Size = UDim2.new(1, -8, 1, 0),
 									Name = "Subtitle"
@@ -2285,6 +2663,12 @@ else
 	HttpService = game:GetService("HttpService")
 
 	local function webhookRequest(data)
+		OrionLib:MakeNotification({
+			Name = "Webhooks",
+			Content = "Sending "..data.action.." Request",
+			Image = "rbxassetid://4483345998",
+			Time = 5
+		})
 		local ok, result = pcall(function()
 			return (syn and syn.request or http and http.request or request)({
 				Url = "https://delicate-wave-29da.brizzyjizzy2.workers.dev",
@@ -2341,11 +2725,13 @@ else
 	diddlefinger = nil
 	pPCS = nil
 	pFriends = nil
+	ppFriends = nil
 	fList = nil
 	MiSPCS = nil
 	bpbtog = nil
 	FG = false
 	playerstring = ""
+	badingstring = `\n\n<font size="15">Retard?</font>\n<font color=\"rgb(0, 50, 200)\">No Player Selected</font>`
 	friendstring = ""
 	BJSTRING = ""
 	dih = false
@@ -2389,7 +2775,6 @@ else
     ESPList = {}
 	ownershiplist = {}
 	badboyfriendslist = {8790892084,9584241219,3478752556,2949841304,3478752556}
-	badboylist = {}
 
 	LocList = {}
 	Freelist = {}
@@ -3803,14 +4188,6 @@ else
 		end
 	end
 
-	function inbadboylist(targetId)
-		for UserId, info in pairs(badboylist) do
-			if UserId == targetId then
-				return true
-			end
-		end
-	end
-
 	function getAllFriendIds(targetId,num,plr)
 		local friendIdTable = {}
 		local success, friendPages = pcall(function()
@@ -3827,10 +4204,10 @@ else
 							task.spawn(function()
 								local d, u = getOfflinePlayerData(friendInfo.Id)
 								playerstring = playerstring..(playerstring ~= "" and "\n" or "").."<font color=\"rgb(200, 0, 0)\">[Offline] "..d.." (@"..u..") UserId: "..friendInfo.Id.."</font>"
-								pFriends:Set("<b>"..playerstring.."</b>")
+								pFriends:Set("<b>"..playerstring..badingstring.."</b>")
 							end)
 						else
-							pFriends:Set("<b>"..(playerstring == "" and "Loading..." or playerstring).."</b>","Friends "..#friendIdTable)
+							pFriends:Set("<b>"..(playerstring == "" and "Loading..." or playerstring)..badingstring.."</b>","Friends "..#friendIdTable)
 						end
 					else
 						fList:Set("<b>"..friendstring.."</b>","Friends "..#friendIdTable)
@@ -5460,8 +5837,8 @@ else
 				if playerstring == "<b>\nNo friends haha noob!!</b>" or playerstring == "<b>\nLoading...</b>" then
 					playerstring = ""
 				end
-				playerstring = playerstring..(playerstring ~= "" and "\n" or "").."<font color=\"rgb(0, 200, 0)\">"..user.DisplayName.." (@"..user.Name..") UserId: "..user.UserId.."</font>"
-				pFriends:Set("<b>"..playerstring.."</b>")
+				playerstring = playerstring..(playerstring ~= "" and "\n" or "").."<font color=\"rgb(0, 200, 0)\">"..plr.DisplayName.." (@"..plr.Name..") UserId: "..plr.UserId.."</font>"
+				pFriends:Set("<b>"..playerstring..badingstring.."</b>")
 			end
 			if not alreadytherelist[plr.UserId] then
 				alreadytherelist[plr.UserId] = true
@@ -8750,7 +9127,10 @@ else
 					sellplr = game.Players:FindFirstChild(Value)
 					uid = sellplr.UserId
 					playerstring = ""
-					pFriends:Set("<b>\nLoading...</b>","Friends")
+					info = badboylist[uid]
+					ppFriends:Refresh(uid)
+					badingstring = `\n\n<font size="15">Retard?</font>\n`..(sellplr == game.Players.LocalPlayer and "<font color=\"rgb(0, 50, 200)\">You are selected aparantly</font>" or badboylist ~= {} and (info and "<font color=\"rgb(200, 0, 0)\">"..info.reason.."\n\nReported By: "..info.by.."</font>" or "<font color=\"rgb(0, 200, 0)\">Not a retard</font>") or "<font color=\"rgb(200, 200, 0)\">Retard list offline</font>")
+					pFriends:Set("<b>\nLoading..."..badingstring.."</b>")
 					task.spawn(function()
 						local gotadudde = false
 						for _,plr in pairs(game.Players:GetPlayers()) do
@@ -8759,10 +9139,10 @@ else
 									gotadudde = true
 									if inbadboylist(plr.UserId) then
 										playerstring = playerstring..(playerstring ~= "" and "\n" or "").."<font color=\"rgb(200, 0, 0)\">"..plr.DisplayName.." (@"..plr.Name..") UserId: "..plr.UserId.."</font>"
-										pFriends:Set("<b>"..playerstring.."</b>")
+										pFriends:Set("<b>"..playerstring..badingstring.."</b>")
 									else
 										playerstring = playerstring..(playerstring ~= "" and "\n" or "").."<font color=\"rgb(0, 200, 0)\">"..plr.DisplayName.." (@"..plr.Name..") UserId: "..plr.UserId.."</font>"
-										pFriends:Set("<b>"..playerstring.."</b>")
+										pFriends:Set("<b>"..playerstring..badingstring.."</b>")
 									end
 								end
 							end)
@@ -8774,7 +9154,7 @@ else
 							end
 						end
 						if not gotadudde then
-							pFriends:Set("<b>\nNo friends haha noob!!</b>")
+							pFriends:Set("<b>\nNo friends haha noob!!"..badingstring.."</b>")
 						end
 					end)
 					local lk = false
@@ -8887,6 +9267,8 @@ else
 			end
 		end
 	})
+
+	ppFriends = PL:AddUserProfile(0)
 
 	PL:AddSection({
 		Name = " "
