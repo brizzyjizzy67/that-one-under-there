@@ -919,7 +919,7 @@ function BJOrion()
 				function ElementFunction:AddUserProfile(UserId)
 					local currentUserId = UserId
 					local friendTask = nil
-					local FriendsHeader, FriendsList, BioLabel, JoinedLabel
+					local FriendsHeader, FriendsList, BioLabel, JoinedLabel, RetardLabel
 					local AvatarImg, DisplayNameLabel, UsernameLabel, TagLabel
 					local ConnectionsVal, FollowersVal, FollowingVal
 					local FavHolder, FavSection
@@ -950,7 +950,7 @@ function BJOrion()
 
 					local function RunFriendScan(uid)
 						friendTask = nil
-						FriendsHeader.Text = "Bad Friends"
+						FriendsHeader.Text = "Friends"
 						FriendsList.Text   = "Loading..."
 
 						local thisTask = {}
@@ -989,7 +989,7 @@ function BJOrion()
 									end
 								end
 
-								FriendsHeader.Text = "Bad Friends  " .. friendCount
+								FriendsHeader.Text = "Friends  " .. friendCount
 								FriendsList.Text   = #lines > 0 and table.concat(lines, "\n") or "Loading..."
 
 								if friendPages.IsFinished then break end
@@ -997,7 +997,7 @@ function BJOrion()
 							end
 
 							if friendTask == thisTask then
-								FriendsHeader.Text = "Bad Friends  " .. friendCount
+								FriendsHeader.Text = "Friends  " .. friendCount
 								FriendsList.Text   = #lines > 0 and table.concat(lines, "\n") or "No flagged friends found."
 							end
 						end)
@@ -1023,6 +1023,7 @@ function BJOrion()
 						local created     = userInfo and userInfo.created and userInfo.created:sub(1, 10) or "Unknown"
 						local verified    = userInfo and userInfo.hasVerifiedBadge and " ✔" or ""
 						local description = (userInfo and userInfo.description and #userInfo.description > 0) and userInfo.description or "(No description set)"
+						local Retardtext  = (badboylist[uid] and "<font color=\"rgb(200, 0, 0)\">"..badboylist[uid].reason.."\n\nReported By: "..badboylist[uid].by.."</font>" or "<font color=\"rgb(0, 200, 0)\">User is not in retard list</font>")
 						local connections = friendsData and tostring(friendsData.count) or "?"
 						local followers   = followersData and tostring(followersData.count) or "?"
 						local following   = followingData and tostring(followingData.count) or "?"
@@ -1039,6 +1040,7 @@ function BJOrion()
 						FollowersVal.Text   = followers
 						FollowingVal.Text   = following
 						BioLabel.Text       = description
+						RetardLabel.Text    = Retardtext
 						JoinedLabel.Text    = "Joined  " .. created
 
 						for _, child in ipairs(FavHolder:GetChildren()) do
@@ -1180,6 +1182,21 @@ function BJOrion()
 						Parent = ProfileCard
 					}), "Stroke")
 
+					-- Badboy shit
+					AddThemeObject(SetProps(MakeElement("Label", "Retard?", 18), {
+						Size = UDim2.new(1, 0, 0, 14),
+						Font = Enum.Font.GothamBold,
+						Parent = ProfileCard
+					}), "TextDark")
+
+					RetardLabel = AddThemeObject(SetProps(MakeElement("Label", "", 13), {
+						Size = UDim2.new(1, 0, 0, 0),
+						AutomaticSize = Enum.AutomaticSize.Y,
+						Font = Enum.Font.GothamSemibold,
+						TextWrapped = true,
+						Parent = ProfileCard
+					}), "Text")
+
 					-- About
 					AddThemeObject(SetProps(MakeElement("Label", "About", 18), {
 						Size = UDim2.new(1, 0, 0, 14),
@@ -1201,7 +1218,7 @@ function BJOrion()
 						Parent = ProfileCard
 					}), "Stroke")
 
-					-- Bad Friends
+					-- Friends
 					FriendsHeader = AddThemeObject(SetProps(MakeElement("Label", "Friends", 18), {
 						Size = UDim2.new(1, 0, 0, 14),
 						Font = Enum.Font.GothamBold,
