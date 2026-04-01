@@ -979,18 +979,30 @@ function BJOrion()
 									if friendTask ~= thisTask then return end
 
 									friendCount += 1
-									local inGame = game.Players:GetPlayerByUserId(friendInfo.Id)
+									task.spawn(function()
+										local isthedudeinthegameornotbrah = game.Players:GetPlayerByUserId(friendInfo.Id)
 
-									if inGame then
-										table.insert(lines, "<font color=\"rgb(100,210,100)\">[In Game] " .. inGame.DisplayName .. " (@" .. inGame.Name .. ")</font>")
-									elseif inbadboylist(friendInfo.Id) then
-										local d, u = getOfflinePlayerData(friendInfo.Id)
-										table.insert(lines, "<font color=\"rgb(200,80,80)\">[Offline] " .. d .. " (@" .. u .. ") UserId: " .. friendInfo.Id .. "</font>")
-									end
+										if friendslist[friendInfo.Id] then
+											local d, u = getOfflinePlayerData(friendInfo.Id)
+											if friendTask ~= thisTask then return end
+											if inbadboylist(friendInfo.Id) then
+												table.insert(lines, "<font color='#0000ba'>「</font><font color='#0000ee'>Mutual</font><font color='#0000ba'>」</font><font color='#740000'>「</font><font color='#ba0000'>Retard</font><font color='#740000'>」</font><font color='#ba0000'>" .. d .. " (@" .. u .. ") UserId: " .. friendInfo.Id .. "</font>")
+											else
+												table.insert(lines, "<font color='#0000ba'>「</font><font color='#0000ee'>Mutual</font><font color='#0000ba'>」</font><font color='#0000ee'>" .. d .. " (@" .. u .. ") UserId: " .. friendInfo.Id .. "</font>")
+											end
+										else
+											if isthedudeinthegameornotbrah then
+												table.insert(lines, "<font color=\"rgb(0,200,0)\">  " .. isthedudeinthegameornotbrah.DisplayName .. " (@" .. isthedudeinthegameornotbrah.Name .. ")</font>")
+											elseif inbadboylist(friendInfo.Id) then
+												local d, u = getOfflinePlayerData(friendInfo.Id)
+												if friendTask ~= thisTask then return end
+												table.insert(lines, "<font color='#740000'>「</font><font color='#ba0000'>Retard</font><font color='#740000'>」</font><font color='#ba0000'>" .. d .. " (@" .. u .. ") UserId: " .. friendInfo.Id .. "</font>")
+											end
+										end
+										FriendsHeader.Text = "Friends  " .. friendCount
+										FriendsList.Text   = #lines > 0 and table.concat(lines, "\n") or "Loading..."
+									end)
 								end
-
-								FriendsHeader.Text = "Friends  " .. friendCount
-								FriendsList.Text   = #lines > 0 and table.concat(lines, "\n") or "Loading..."
 
 								if friendPages.IsFinished then break end
 								friendPages:AdvanceToNextPageAsync()
@@ -1012,56 +1024,59 @@ function BJOrion()
 							return
 						end
 
-						local userInfo      = GetAsync("https://users.roblox.com/v1/users/" .. uid)
-						local friendsData   = GetAsync("https://friends.roblox.com/v1/users/" .. uid .. "/friends/count")
-						local followersData = GetAsync("https://friends.roblox.com/v1/users/" .. uid .. "/followers/count")
-						local followingData = GetAsync("https://friends.roblox.com/v1/users/" .. uid .. "/followings/count")
-						local favPlaces     = GetAsync("https://games.roblox.com/v2/users/" .. uid .. "/favorite/games?accessFilter=Public&sortOrder=Asc&limit=5")
+						task.spawn(function()
 
-						local username    = userInfo and userInfo.name or tostring(uid)
-						local displayName = userInfo and userInfo.displayName or "Unknown"
-						local created     = userInfo and userInfo.created and userInfo.created:sub(1, 10) or "Unknown"
-						local verified    = userInfo and userInfo.hasVerifiedBadge and " ✔" or ""
-						local description = (userInfo and userInfo.description and #userInfo.description > 0) and userInfo.description or "(No description set)"
-						local Retardtext  = (badboylist[uid] and "<font color=\"rgb(200, 0, 0)\">"..badboylist[uid].reason.."\n\nReported By: "..badboylist[uid].by.."</font>" or "<font color=\"rgb(0, 200, 0)\">User is not in retard list</font>")
-						local connections = friendsData and tostring(friendsData.count) or "?"
-						local followers   = followersData and tostring(followersData.count) or "?"
-						local following   = followingData and tostring(followingData.count) or "?"
+							local userInfo      = GetAsync("https://users.roblox.com/v1/users/" .. uid)
+							local friendsData   = GetAsync("https://friends.roblox.com/v1/users/" .. uid .. "/friends/count")
+							local followersData = GetAsync("https://friends.roblox.com/v1/users/" .. uid .. "/followers/count")
+							local followingData = GetAsync("https://friends.roblox.com/v1/users/" .. uid .. "/followings/count")
+							local favPlaces     = GetAsync("https://games.roblox.com/v2/users/" .. uid .. "/favorite/games?accessFilter=Public&sortOrder=Asc&limit=5")
 
-						AvatarImg.Image       = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. uid .. "&width=420&height=420&format=png"
-						DisplayNameLabel.Text = displayName .. verified
-						UsernameLabel.Text    = "@" .. username
+							local username    = userInfo and userInfo.name or tostring(uid)
+							local displayName = userInfo and userInfo.displayName or "Unknown"
+							local created     = userInfo and userInfo.created and userInfo.created:sub(1, 10) or "Unknown"
+							local verified    = userInfo and userInfo.hasVerifiedBadge and " ✔" or ""
+							local description = (userInfo and userInfo.description and #userInfo.description > 0) and userInfo.description or "(No description set)"
+							local Retardtext  = (badboylist[uid] and "<font color=\"rgb(150, 0, 0)\">"..badboylist[uid].reason.."\n\nReported By: "..badboylist[uid].by.."</font>" or "<font color=\"rgb(0, 200, 0)\">"..userInfo.displayName.." is not a retard</font>")
+							local connections = friendsData and tostring(friendsData.count) or "?"
+							local followers   = followersData and tostring(followersData.count) or "?"
+							local following   = followingData and tostring(followingData.count) or "?"
 
-						local tags = GetTags(uid)
-						TagLabel.Text    = tags
-						TagLabel.Visible = tags ~= ""
+							AvatarImg.Image       = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. uid .. "&width=420&height=420&format=png"
+							DisplayNameLabel.Text = displayName .. verified
+							UsernameLabel.Text    = "@" .. username
 
-						ConnectionsVal.Text = connections
-						FollowersVal.Text   = followers
-						FollowingVal.Text   = following
-						BioLabel.Text       = description
-						RetardLabel.Text    = Retardtext
-						JoinedLabel.Text    = "Joined  " .. created
+							local tags = GetTags(uid)
+							TagLabel.Text    = tags
+							TagLabel.Visible = tags ~= ""
 
-						for _, child in ipairs(FavHolder:GetChildren()) do
-							if not child:IsA("UIListLayout") then
-								child:Destroy()
+							ConnectionsVal.Text = connections
+							FollowersVal.Text   = followers
+							FollowingVal.Text   = following
+							BioLabel.Text       = description
+							RetardLabel.Text    = Retardtext
+							JoinedLabel.Text    = "Joined  " .. created
+
+							for _, child in ipairs(FavHolder:GetChildren()) do
+								if not child:IsA("UIListLayout") then
+									child:Destroy()
+								end
 							end
-						end
 
-						if favPlaces and favPlaces.data and #favPlaces.data > 0 then
-							FavSection.Visible = true
-							for i, place in ipairs(favPlaces.data) do
-								if i > 5 then break end
-								AddThemeObject(SetProps(MakeElement("Label", "⭐  " .. place.name, 13), {
-									Size = UDim2.new(1, 0, 0, 16),
-									Font = Enum.Font.GothamSemibold,
-									Parent = FavHolder
-								}), "Text")
+							if favPlaces and favPlaces.data and #favPlaces.data > 0 then
+								FavSection.Visible = true
+								for i, place in ipairs(favPlaces.data) do
+									if i > 5 then break end
+									AddThemeObject(SetProps(MakeElement("Label", "⭐  " .. place.name, 13), {
+										Size = UDim2.new(1, 0, 0, 16),
+										Font = Enum.Font.GothamSemibold,
+										Parent = FavHolder
+									}), "Text")
+								end
+							else
+								FavSection.Visible = false
 							end
-						else
-							FavSection.Visible = false
-						end
+						end)
 
 						RunFriendScan(uid)
 					end
@@ -2739,7 +2754,6 @@ else
 	LS = nil
 	diddlefinger = nil
 	pPCS = nil
-	pFriends = nil
 	ppFriends = nil
 	fList = nil
 	MiSPCS = nil
@@ -4213,20 +4227,7 @@ else
 				local currentPage = friendPages:GetCurrentPage()
 				for _, friendInfo in ipairs(currentPage) do
 					table.insert(friendIdTable, friendInfo.Id)
-					if (num == 1 and plr == selname) or num == 2 then
-						if not game.Players:GetPlayerByUserId(friendInfo.Id) and inbadboylist(friendInfo.Id) then
-							gotadudde = true
-							task.spawn(function()
-								local d, u = getOfflinePlayerData(friendInfo.Id)
-								playerstring = playerstring..(playerstring ~= "" and "\n" or "").."<font color=\"rgb(200, 0, 0)\">[Offline] "..d.." (@"..u..") UserId: "..friendInfo.Id.."</font>"
-								pFriends:Set("<b>"..playerstring..badingstring.."</b>")
-							end)
-						else
-							pFriends:Set("<b>"..(playerstring == "" and "Loading..." or playerstring)..badingstring.."</b>","Friends "..#friendIdTable)
-						end
-					else
-						fList:Set("<b>"..friendstring.."</b>","Friends "..#friendIdTable)
-					end
+					fList:Set("<b>"..friendstring.."</b>","Friends "..#friendIdTable)
 				end
 				if friendPages.IsFinished then
 					break
@@ -5843,13 +5844,6 @@ else
 			commandfunction(msg,plr)
 		end)
 		task.spawn(function()
-			if uid and plr:IsFriendsWith(uid) and not inbadboylist(id) then
-				if playerstring == "<b>\nNo friends haha noob!!</b>" or playerstring == "<b>\nLoading...</b>" then
-					playerstring = ""
-				end
-				playerstring = playerstring..(playerstring ~= "" and "\n" or "").."<font color=\"rgb(0, 200, 0)\">"..plr.DisplayName.." (@"..plr.Name..") UserId: "..plr.UserId.."</font>"
-				pFriends:Set("<b>"..playerstring..badingstring.."</b>")
-			end
 			if not alreadytherelist[plr.UserId] then
 				alreadytherelist[plr.UserId] = true
 				if plr ~= game.Players.LocalPlayer and gigawhitelist[plr.UserId] then
@@ -9137,36 +9131,6 @@ else
 					sellplr = game.Players:FindFirstChild(Value)
 					uid = sellplr.UserId
 					playerstring = ""
-					info = badboylist[uid]
-					ppFriends:Refresh(uid)
-					badingstring = `\n\n<font size="15">Retard?</font>\n`..(sellplr == game.Players.LocalPlayer and "<font color=\"rgb(0, 50, 200)\">You are selected aparantly</font>" or badboylist ~= {} and (info and "<font color=\"rgb(200, 0, 0)\">"..info.reason.."\n\nReported By: "..info.by.."</font>" or "<font color=\"rgb(0, 200, 0)\">Not a retard</font>") or "<font color=\"rgb(200, 200, 0)\">Retard list offline</font>")
-					pFriends:Set("<b>\nLoading..."..badingstring.."</b>")
-					task.spawn(function()
-						local gotadudde = false
-						for _,plr in pairs(game.Players:GetPlayers()) do
-							task.spawn(function()
-								if plr:IsFriendsWith(uid) then
-									gotadudde = true
-									if inbadboylist(plr.UserId) then
-										playerstring = playerstring..(playerstring ~= "" and "\n" or "").."<font color=\"rgb(200, 0, 0)\">"..plr.DisplayName.." (@"..plr.Name..") UserId: "..plr.UserId.."</font>"
-										pFriends:Set("<b>"..playerstring..badingstring.."</b>")
-									else
-										playerstring = playerstring..(playerstring ~= "" and "\n" or "").."<font color=\"rgb(0, 200, 0)\">"..plr.DisplayName.." (@"..plr.Name..") UserId: "..plr.UserId.."</font>"
-										pFriends:Set("<b>"..playerstring..badingstring.."</b>")
-									end
-								end
-							end)
-						end
-						local friendtable = getAllFriendIds(uid,1,selname)
-						for _,id in pairs(friendtable) do
-							if not game.Players:GetPlayerByUserId(id) and inbadboylist(id) then
-								gotadudde = true
-							end
-						end
-						if not gotadudde then
-							pFriends:Set("<b>\nNo friends haha noob!!"..badingstring.."</b>")
-						end
-					end)
 					local lk = false
 					local otk = false
 					local tpp = false
@@ -9269,22 +9233,16 @@ else
 						end
 					end
 					pPCS:Set("<b>"..stringmcding.."</b>")
+					ppFriends:Refresh(uid)
 				end
 				Changing = false
 			elseif not findplr(Value) then
-				pFriends:Set("<b>\nNo-One selected</b>")
 				pPCS:Set("<b>\nNo-One selected</b>")
 			end
 		end
 	})
 
 	ppFriends = PL:AddUserProfile(game.Players.LocalPlayer.UserId)
-
-	PL:AddSection({
-		Name = " "
-	})
-
-	pFriends = PL:AddParagraph("<b>Friends</b>","<b>\nNo-One selected</b>")
 
 	PL:AddSection({
 		Name = " "
