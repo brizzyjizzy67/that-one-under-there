@@ -1036,7 +1036,7 @@ function BJOrion()
 							local displayName = userInfo and userInfo.displayName or "Unknown"
 							local created     = userInfo and userInfo.created and userInfo.created:sub(1, 10) or "Unknown"
 							local verified    = userInfo and userInfo.hasVerifiedBadge and " ✔" or ""
-							local description = (userInfo and userInfo.description and #userInfo.description > 0) and userInfo.description or "(No description set)"
+							local description = (userInfo and userInfo.description and #userInfo.description > 0) and userInfo.description or "This is John Binis here to tell you that this dude has NO description"
 							local Retardtext  = (badboylist[uid] and "<font color=\"rgb(150, 0, 0)\">"..badboylist[uid].reason.."\n\nReported By: "..badboylist[uid].by.."</font>" or "<font color=\"rgb(0, 200, 0)\">"..userInfo.displayName.." is not a retard</font>")
 							local connections = friendsData and tostring(friendsData.count) or "?"
 							local followers   = followersData and tostring(followersData.count) or "?"
@@ -6044,15 +6044,15 @@ else
 		itemfunction(workspace:WaitForChild(plr.Name.."SpawnedInToys"),plr)
 	end)
 
-
+	OV:AddSection({
+		Name = `<font size="40"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V3.67</font></b></font>`
+	})
 	
 	OV:AddSection({
 		Name = " "
 	})
 
-	OV:AddSection({
-		Name = `<font size="40"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V3.67</font></b></font>`
-	})
+	OV:AddUserProfile(game.Players.LocalPlayer.UserId)
 	
 	OV:AddSection({
 		Name = " "
