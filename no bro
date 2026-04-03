@@ -1,3 +1,21 @@
+--[[
+    list of stuff to add to binisj that hasnt been done:
+		add icons
+		build minecraft map for soggy
+		add fly commands
+		add freecam and that other grab thing that uses it (ctrl + p)
+		add force emote
+		save anchored stuff to file and to cloud
+		FIX THE BLOODY GRAB MODS!!!!
+		fix blobman stuff
+		fix ownership antigrab
+		add ownership v2
+		add blobman v2
+		infinite grab length
+		add bomb stuff
+		add fire all and other stuff like that
+]]--
+
 while not game:IsLoaded() do task.wait() end
 local BJList = {[game.Players.LocalPlayer.UserId] = true}
 local btnlist = {}
@@ -2712,8 +2730,7 @@ else
 			if decodeOk then return decoded end
 		end
 		game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
-			"<font color='#9a0000'>「</font><font color='#ff0000'>BinisJ</font><font color='#9a0000'>」</font>" ..
-			"<font color='#ff0000'>" .. data.action .. " Webhook Attempt Failed</font>"
+			"<font color='#9a0000'>「</font><font color='#ff0000'>BinisJ</font><font color='#9a0000'>」</font>".."<font color='#ff0000'>"..data.action.." Webhook Attempt Failed</font>"
 		)
 		return {}
 	end
@@ -3438,18 +3455,37 @@ else
 
 	local withpcld = {}
 
+	sfps = nil
+	fpng = nil
+
+	task.spawn(function()
+		while task.wait(60) do
+			if sfps then
+				webhookRequest({
+					action = "Editthatstuff",
+					change = "maxfps",
+					Value = tostring(sfps),
+					userId = game.Players.LocalPlayer.UserId
+				})
+				sfps = nil
+			end
+			if fpng then
+				webhookRequest({
+					action = "Editthatstuff",
+					change = "maxping",
+					Value = tostring(fpng),
+					userId = game.Players.LocalPlayer.UserId
+				})
+				fpng = nil
+			end
+		end
+	end)
+
 	game.RunService.RenderStepped:Connect(function(dt)
 		if thingo then
 			if dt < StatsList[game.Players.LocalPlayer.UserId][1] then
-				print(1)
 				if GStatsList and dt < GStatsList[game.Players.LocalPlayer.UserId].maxfps then
-					print(10)
-					webhookRequest({
-						action = "Editthatstuff",
-						change = "maxfps",
-						Value = tostring(dt),
-						userId = game.Players.LocalPlayer.UserId
-					})
+					sfps = dt
 					GStatsList[game.Players.LocalPlayer.UserId][1] = dt
 				end
 				StatsList[game.Players.LocalPlayer.UserId][1] = dt
@@ -3464,15 +3500,8 @@ else
 				game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","UpdateStats",StatsList[game.Players.LocalPlayer.UserId]})
 			end
 			if math.floor(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() * 10) / 10 > StatsList[game.Players.LocalPlayer.UserId][4] then
-				print(4)
 				if GStatsList and math.floor(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() * 10) / 10 > GStatsList[game.Players.LocalPlayer.UserId].maxping then
-					print(40)
-					webhookRequest({
-						action = "Editthatstuff",
-						change = "maxping",
-						Value = tostring(math.floor(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() * 10) / 10),
-						userId = game.Players.LocalPlayer.UserId
-					})
+					fpng = math.floor(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() * 10) / 10
 					GStatsList[game.Players.LocalPlayer.UserId][4] = math.floor(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() * 10) / 10
 				end
 				StatsList[game.Players.LocalPlayer.UserId][4] = math.floor(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() * 10) / 10
@@ -3516,11 +3545,11 @@ else
 						local highlight = pcld:FindFirstChildOfClass("SelectionBox")
 						highlight.Color3 = Color3.fromRGB(0, 255, 0)
 						if plr == game.Players.LocalPlayer then
-							if SAKList[plr.UserId] and withpcld[plr.UserId] < 1 then
+							if SAKList[plr.UserId] and withpcld[plr.UserId] >= 1 then
 								resetbris = true
 							end
 						end
-					elseif pcld.Parent and game.Players:GetPlayerFromCharacter(pcld.Parent) then
+					elseif pcld.Parent and game.Players:GetPlayerFromCharacter(pcld.Parent) and game.Players:GetPlayerFromCharacter(pcld.Parent) ~= game.Players.LocalPlayer then
 						anotherinsight = true
 					end
 				end
@@ -3813,6 +3842,8 @@ else
 	end
 
 	local wsystem = {}
+
+	local BJT
 	
 	game.ReplicatedStorage.GrabEvents.ExtendGrabLine.OnClientEvent:Connect(function(plr,arg1)
 		if type(arg1) == "table" and arg1[1] == "BinisJ" then
@@ -3825,7 +3856,7 @@ else
 					game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font>"..arg1[3])
 				end
 				if arg1[2] == "BigBjStarting" then
-					if not GStatsList[plr.UserId] then
+					if plr ~= game.Players.LocalPlayer and BJT and not GStatsList[plr.UserId] then
 						GStatsList[plr.UserId] = {
 							["maxfps"] = 1000000,
 							["maxping"] = 0,
@@ -4459,7 +4490,7 @@ else
 		Icon = "rbxassetid://4483362458",
 	})
 
-	local BJT = Window:MakeTab({
+	BJT = Window:MakeTab({
 		Name = "BinisJ",
 		Icon = "rbxassetid://4483362458"
 	})
@@ -5552,7 +5583,7 @@ else
 			grabClone.Parent = workspace
 
 			SetNetworkOwner:FireServer(hit, CFrame.lookAt(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position,hit.CFrame.Position))
-			CreateGrabLine:FireServer(hit, hit.CFrame:Inverse() * hitPos)
+			CreateGrabLine:FireServer(hit, hit.CFrame:Inverse() * CFrame.new(hitPos))
 			ExtendGrabLine:FireServer(currentDistance)
 			rotateOffset = CFrame.new(0,0,0)
 			RS:BindToRenderStep("dragBinding", Enum.RenderPriority.First.Value, updateDrag)
@@ -6681,7 +6712,7 @@ else
 
 	gotitdownPAT6 = PT:AddSlider({
 		Name = "Set FPS",
-		Min = 0,
+		Min = 1,
 		Max = 241,
 		Default = 240,
 		Color = Color3.fromRGB(255,255,255),
@@ -6690,9 +6721,13 @@ else
 		Callback = function(Value)
 			if Value == 241 then
 				gotitdownPAT6:Set(math.huge)
+			else
+				setfpscap(Value)
 			end
 		end
 	})
+
+	gotitdownPAT6:Set(241)
 
 	PT:AddSection({
 		Name = "<b>Water Walk</b>"
