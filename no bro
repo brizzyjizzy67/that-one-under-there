@@ -2787,6 +2787,7 @@ else
 	ncg = nil
 	LMT = nil
 	VJM = false
+	ablob = nil
 
 	GETNAKED = false
 
@@ -7750,7 +7751,16 @@ else
 	end
 
 	function antilag()
-		while not (game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Torso") and game.Players.LocalPlayer.Character.Torso:FindFirstChild("Right Shoulder") and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("RootJoint") and game.Players.LocalPlayer.Character:FindFirstChild("Neck") and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")) do task.wait() end
+		while not (game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Torso") and game.Players.LocalPlayer.Character.Torso:FindFirstChild("Right Shoulder") and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("RootJoint") and game.Players.LocalPlayer.Character.Torso:FindFirstChild("Neck") and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")) do
+			task.wait()
+			print(game.Players.LocalPlayer.Character)
+			print(game.Players.LocalPlayer.Character:FindFirstChild("Torso"))
+			print(game.Players.LocalPlayer.Character.Torso:FindFirstChild("Right Shoulder"))
+			print(game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart"))
+			print(game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("RootJoint"))
+			print(game.Players.LocalPlayer.Character.Torso:FindFirstChild("Neck"))
+			print(game.Players.LocalPlayer.Character:FindFirstChild("Humanoid"))
+		end
 		local ReplicatedStorage = game:GetService("ReplicatedStorage")
 		local script = game.Players.LocalPlayer.PlayerScripts.CharacterAndBeamMove
 		local Players = game:GetService("Players")
@@ -8034,9 +8044,11 @@ else
 		RunService.RenderStepped:Connect(function()
 			if hrp and neck then
 				local look = hrp.CFrame:ToObjectSpace(CurrentCamera.CFrame).LookVector
-				neck.C0 = CFrame.new(0, neckYOffset, 0)
-					* CFrame.Angles(math.rad(270), 0, math.rad(180))
-					* CFrame.Angles(-math.asin(look.Y), 0, 0)
+				if not freecamEnabled then
+					neck.C0 = CFrame.new(0, neckYOffset, 0)
+						* CFrame.Angles(math.rad(270), 0, math.rad(180))
+						* CFrame.Angles(-math.asin(look.Y), 0, 0)
+				end
 			end
 		end)
 
@@ -8077,7 +8089,9 @@ else
 					* CFrame.Angles(0, math.rad(extraAngle) * look.Y * 0.8, 0)
 					* CFrame.Angles(0, 0, -math.rad(extraAngle) * (1 - math.abs(look.Y)))
 				
-				neck.C0 = neckCF
+				if not freecamEnabled then
+					neck.C0 = neckCF
+				end
 				
 				-- Send to server periodically (anti-lag spam protection)
 				tickCounter += 1
@@ -8116,6 +8130,7 @@ else
 				end
 			end
 		end)
+		ablob:Set(True)
 	end
 
 	task.spawn(antilag)
@@ -8170,7 +8185,7 @@ else
 
 	local antiblob = false
 
-	AS:AddToggle({
+	ablob = AS:AddToggle({
 		Name = "Antiblob",
 		Default = true,
 		Callback = function(Value)
