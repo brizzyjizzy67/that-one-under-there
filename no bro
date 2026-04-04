@@ -1,7 +1,7 @@
 --[[
     list of stuff to add to binisj that hasnt been done:
 		add icons
-		build minecraft map for soggy
+		build minecraft map for soggy <
 		add fly commands
 		add freecam and that other grab thing that uses it (ctrl + p)
 		add force emote
@@ -2735,6 +2735,9 @@ else
 		return {}
 	end
 
+	RunService = game:GetService("RunService")
+	UserInputService = game:GetService("UserInputService")
+
 	loaded = false
 	setlist = true
 
@@ -2860,6 +2863,207 @@ else
 
 	uid = 0
 	selname = nil
+	player = game.Players.LocalPlayer
+	camera = workspace.CurrentCamera
+	freecamEnabled = false
+	camCFrame = CFrame.new()
+	targetPitch, targetYaw, currentPitch, currentYaw = 0, 0, 0, 0
+	targetPos = Vector3.new()
+	currentPos = Vector3.new()
+	targetVelocity = Vector3.zero
+	currentVelocity = Vector3.zero
+	SPEED = 100
+	SHIFT_MULTIPLIER = 5
+	CTRL_HINDER = 5
+	ROTATION_SMOOTHING = 8
+	MOVEMENT_ACCELERATION = 10
+	MOVEMENT_FRICTION = 8
+
+	csubject = nil
+
+	UserGameSettings = UserSettings():GetService("UserGameSettings")
+	SENSITIVITY = UserGameSettings.MouseSensitivity / 10
+	UserGameSettings:GetPropertyChangedSignal("MouseSensitivity"):Connect(function()
+		SENSITIVITY = UserGameSettings.MouseSensitivity / 10
+	end)
+
+	camzoom = 70
+	thatrotation = CFrame.new(0,0,0)
+	thatoffset = Vector3.new(0,0,0)
+
+	function setCharacterMovement(enabled)
+		if not enabled then
+			game.ContextActionService:BindActionAtPriority(
+				"freezeMovement",
+				function()end,
+				false,
+				2001,
+				Enum.KeyCode.W,
+				Enum.KeyCode.A,
+				Enum.KeyCode.S,
+				Enum.KeyCode.D,
+				Enum.KeyCode.Space,
+				Enum.KeyCode.LeftShift,
+				Enum.KeyCode.LeftControl
+			)
+		else
+			game.ContextActionService:UnbindAction("freezeMovement")
+			if csubject then
+				camera.CameraSubject = csubject
+			end
+		end
+	end
+
+	function enable()
+		freecamEnabled = true
+		camCFrame = camera.CFrame
+		thatrotation = camera.CFrame - camera.CFrame.Position
+		thatoffset = camera.CFrame.Position - camera.Focus.Position
+		local rx, ry, _ = camCFrame:ToEulerAnglesYXZ()
+		targetPitch = math.deg(rx)
+		targetYaw = math.deg(ry)
+		currentPitch = targetPitch
+		currentYaw = targetYaw
+		targetPos = camCFrame.Position
+		currentPos = camCFrame.Position
+		currentVelocity = Vector3.zero
+		targetVelocity = Vector3.zero
+		camera.CameraType = Enum.CameraType.Scriptable
+		targetPos = camera.CFrame.Position
+		currentPos = camera.CFrame.Position
+		local rx2, ry2, _ = camera.CFrame:ToEulerAnglesYXZ()
+		targetPitch = math.deg(rx2)
+		targetYaw = math.deg(ry2)
+		currentPitch = targetPitch
+		currentYaw = targetYaw
+		UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter
+
+		setCharacterMovement(false)
+	end
+
+	function disable()
+		game.Players.LocalPlayer.CameraMinZoomDistance = 0.5
+		freecamEnabled = false
+		UserInputService.MouseBehavior = Enum.MouseBehavior.Default
+		local character = player.Character
+		if character and character:FindFirstChild("HumanoidRootPart") then
+			local root = character.HumanoidRootPart
+			local stime = tick()
+			local othatoffset = thatoffset
+			local othatrotation = thatrotation
+			while tick() - stime < 0.5 do
+				if freecamEnabled then
+					thatoffset = othatoffset
+					thatrotation = othatrotation
+					return
+				end
+				local targetCFrame = CFrame.new(root.CFrame.Position + Vector3.new(0, 2, 0) + othatoffset) * thatrotation
+				local t = (tick() - stime) * 0.5
+				camera.CFrame = camera.CFrame:Lerp(targetCFrame, math.clamp(t, 0, 1))
+				if game.Players.LocalPlayer.Character then
+					for _,prt in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+						if prt:IsA("BasePart") then
+							prt.LocalTransparencyModifier = 1 - math.clamp(((camera.CFrame.Position - (game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,2,0)).Position).Magnitude - 2) / 10, 0, 1)
+						elseif prt:IsA("Accessory") then
+							for _,prt in pairs(prt:GetChildren()) do
+								if prt:IsA("BasePart") then
+									prt.LocalTransparencyModifier = 1 - math.clamp(((camera.CFrame.Position - (game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,2,0)).Position).Magnitude - 2) / 10, 0, 1)
+								end
+							end
+						end
+					end
+				end
+				task.wait()
+			end
+		end
+		camera.CameraType = Enum.CameraType.Custom
+
+		setCharacterMovement(true)
+	end
+
+	player.CharacterAdded:Connect(function()
+		if freecamEnabled then
+			setCharacterMovement(false)
+		end
+	end)
+
+	UserInputService.InputBegan:Connect(function(input, gameProcessed)
+		if gameProcessed then return end
+		if input.KeyCode == Enum.KeyCode.P then
+			if freecamEnabled then
+				camzoom = 70
+				disable()
+			else
+				enable()
+			end
+		end
+	end)
+
+	UserInputService.InputChanged:Connect(function(input,yorn)
+		if not freecamEnabled then return end
+		if input.UserInputType == Enum.UserInputType.MouseWheel and not yorn then
+			camzoom = math.clamp(camzoom - input.Position.Z * 5, 1, 120)
+		end
+	end)
+
+	function lerp(a, b, t)
+		return a + (b - a) * t
+	end
+
+	RunService.RenderStepped:Connect(function(dt)
+		camera.FieldOfView -= ((camera.FieldOfView - camzoom) * dt * 5)
+
+		if not freecamEnabled then return end
+		if UserInputService.MouseBehavior ~= Enum.MouseBehavior.LockCenter then return end
+
+		if camera.CameraSubject ~= workspace.Terrain then
+			csubject = camera.CameraSubject
+			camera.CameraSubject = workspace.Terrain
+		end
+
+		if game.Players.LocalPlayer.Character then
+			for _,prt in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+				if prt:IsA("BasePart") then
+					prt.LocalTransparencyModifier = 1 - math.clamp(((camera.CFrame.Position - (game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,2,0)).Position).Magnitude - 2) / 10, 0, 1)
+				elseif prt:IsA("Accessory") then
+					for _,prt in pairs(prt:GetChildren()) do
+						if prt:IsA("BasePart") then
+							prt.LocalTransparencyModifier = 1 - math.clamp(((camera.CFrame.Position - (game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,2,0)).Position).Magnitude - 2) / 10, 0, 1)
+						end
+					end
+				end
+			end
+		end
+		
+		local delta = UserInputService:GetMouseDelta()
+		targetPitch = targetPitch - delta.Y * SENSITIVITY * camera.FieldOfView
+		targetYaw = targetYaw - delta.X * SENSITIVITY * camera.FieldOfView
+		local t = math.clamp(ROTATION_SMOOTHING * dt, 0, 1)
+		currentPitch = lerp(currentPitch, targetPitch, t)
+		currentYaw = lerp(currentYaw, targetYaw, t)
+		local rotation = CFrame.Angles(0, math.rad(currentYaw), 0) * CFrame.Angles(math.rad(currentPitch), 0, 0)
+		local moveInput = Vector3.zero
+		if UserInputService:GetFocusedTextBox() == nil then
+			if UserInputService:IsKeyDown(Enum.KeyCode.W) then moveInput += Vector3.new(0, 0, -2) end
+			if UserInputService:IsKeyDown(Enum.KeyCode.S) then moveInput += Vector3.new(0, 0, 2) end
+			if UserInputService:IsKeyDown(Enum.KeyCode.A) then moveInput += Vector3.new(-2, 0, 0) end
+			if UserInputService:IsKeyDown(Enum.KeyCode.D) then moveInput += Vector3.new(2, 0, 0) end
+			if UserInputService:IsKeyDown(Enum.KeyCode.Space) then moveInput += Vector3.new(0, 2, 0) end
+			if UserInputService:IsKeyDown(Enum.KeyCode.C) then moveInput += Vector3.new(0, -2, 0) end
+		end
+		local speed = SPEED * (UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) and SHIFT_MULTIPLIER or 1) / (UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) and CTRL_HINDER or 1)
+		local worldInput = Vector3.zero
+		if moveInput.Magnitude > 0 then
+			worldInput = (rotation * moveInput.Unit) * speed
+		end
+		if moveInput.Magnitude > 0 then
+			currentVelocity = currentVelocity:Lerp(worldInput, math.clamp(MOVEMENT_ACCELERATION * dt, 0, 10))
+		else
+			currentVelocity = currentVelocity:Lerp(Vector3.zero, math.clamp(MOVEMENT_FRICTION * dt, 0, 10))
+		end
+		currentPos = currentPos + currentVelocity * dt
+		camera.CFrame = CFrame.new(currentPos) * rotation
+	end)
 
 	function findobject(folder,num)
 		for _,prt in pairs(workspace[folder]:GetChildren()) do
@@ -4744,7 +4948,6 @@ else
 
 
 
-	
 
 
 
@@ -7831,6 +8034,7 @@ else
 		-- Main loop – sends look updates to server
 		local lastAngle = 0
 		local tickCounter = 1
+		local lastargs = {}
 
 		spawn(function()
 			while true do
@@ -7878,24 +8082,27 @@ else
 					* CFrame.Angles(0, math.rad(90), math.rad(90))
 					* CFrame.Angles(0, 0, math.asin(look.Y))
 					* CFrame.Angles(-math.rad(extraAngle) * (1 - math.abs(look.Y)), 0, 0)
-				
-				if humanoid.Sit or humanoid.SeatPart then
-					LookEvent:FireServer(defaultNeckC0, rootJoint.C0, rightShoulder.C0, "high")
+
+				if freecamEnabled then
+					LookEvent:FireServer(unpack(lastargs))
 				else
-					if tickCounter % 20 == 5 or tickCounter % 20 == 15 then
-						LookEvent:FireServer(neckCF, rootCF, shoulderCF, "high")
-						LookEvent:FireServer(neckCF, rootCF, shoulderCF, "medium")
-					elseif tickCounter % 20 == 10 then
-						LookEvent:FireServer(neckCF, rootCF, shoulderCF, "high")
-						LookEvent:FireServer(neckCF, rootCF, shoulderCF, "medium")
-						LookEvent:FireServer(neckCF, rootCF, shoulderCF, "low")
-					elseif tickCounter % 20 == 0 then
-						LookEvent:FireServer(neckCF, rootCF, shoulderCF, "high")
-						LookEvent:FireServer(neckCF, rootCF, shoulderCF, "medium")
-						LookEvent:FireServer(neckCF, rootCF, shoulderCF, "low")
-						LookEvent:FireServer(neckCF, rootCF, shoulderCF, "lowest")
+					if humanoid.Sit or humanoid.SeatPart then
+						lastargs = {defaultNeckC0, rootJoint.C0, rightShoulder.C0, "high"}
+						LookEvent:FireServer(unpack(lastargs))
 					else
-						LookEvent:FireServer(neckCF, rootCF, shoulderCF, "high")
+						if tickCounter % 20 == 5 or tickCounter % 20 == 15 then
+							lastargs = {neckCF, rootCF, shoulderCF, "medium"}
+							LookEvent:FireServer(unpack(lastargs))
+						elseif tickCounter % 20 == 10 then
+							lastargs = {neckCF, rootCF, shoulderCF, "low"}
+							LookEvent:FireServer(unpack(lastargs))
+						elseif tickCounter % 20 == 0 then
+							lastargs = {neckCF, rootCF, shoulderCF, "lowest"}
+							LookEvent:FireServer(unpack(lastargs))
+						else
+							lastargs = {neckCF, rootCF, shoulderCF, "high"}
+							LookEvent:FireServer(unpack(lastargs))
+						end
 					end
 				end
 			end
@@ -9771,7 +9978,7 @@ else
 								end)
 								if model.HoldPart:FindFirstChild("DropItemRemoteFunction") then
 									task.spawn(function()
-										model.HoldPart.DropItemRemoteFunction:InvokeServer(model,CFrame.new(585,20.5,-360),Vector3.new(0,-46.05,0))
+										model.HoldPart.DropItemRemoteFunction:InvokeServer(model,CFrame.new(0,-10^40,0),Vector3.new(0,-46.05,0))
 									end)
 								end
 							end
@@ -9789,7 +9996,7 @@ else
 								end)
 								if model.HoldPart:FindFirstChild("DropItemRemoteFunction") then
 									task.spawn(function()
-										model.HoldPart.DropItemRemoteFunction:InvokeServer(model,CFrame.new(585,20.5,-360),Vector3.new(0,-46.05,0))
+										model.HoldPart.DropItemRemoteFunction:InvokeServer(model,CFrame.new(0,-10^40,0),Vector3.new(0,-46.05,0))
 									end)
 								end
 							end
