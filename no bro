@@ -2879,6 +2879,13 @@ else
 	MOVEMENT_ACCELERATION = 10
 	MOVEMENT_FRICTION = 8
 
+	local camFollowPart = Instance.new("Part",workspace)
+	camFollowPart.Name = "CamPart"
+	camFollowPart.Transparency = 1
+	camFollowPart.CanCollide = false
+	camFollowPart.CanQuery = false
+	camFollowPart.Anchored = true
+
 	csubject = nil
 
 	UserGameSettings = UserSettings():GetService("UserGameSettings")
@@ -3063,6 +3070,7 @@ else
 		end
 		currentPos = currentPos + currentVelocity * dt
 		camera.CFrame = CFrame.new(currentPos) * rotation
+		camFollowPart.CFrame = camera.CFrame
 	end)
 
 	function findobject(folder,num)
@@ -5437,7 +5445,7 @@ else
 		--   Camera follow part (used for beam & orientation)
 		-- ────────────────────────────────────────────────────────────────
 
-		local camFollowPart = Instance.new("Part")
+		camFollowPart = Instance.new("Part")
 		camFollowPart.Name = "CamPart"
 		camFollowPart.Transparency = 1
 		camFollowPart.CanCollide = false
