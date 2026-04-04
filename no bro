@@ -7750,7 +7750,7 @@ else
 	end
 
 	function antilag()
-		while not (game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Torso") and game.Players.LocalPlayer.Character.Torso:FindFirstChild("Right Shoulder") and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("RootJoint") and game.Players.LocalPlayer.Character:FindFirstChild("Neck") and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")) do task.wait() end
+		while not (game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Torso") and game.Players.LocalPlayer.Character.Torso:FindFirstChild("Right Shoulder") and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("RootJoint") and game.Players.LocalPlayer.Character:FindFirstChild("Neck") and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")) do task.wait() end
 		local ReplicatedStorage = game:GetService("ReplicatedStorage")
 		local script = game.Players.LocalPlayer.PlayerScripts.CharacterAndBeamMove
 		local Players = game:GetService("Players")
