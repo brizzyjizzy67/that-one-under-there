@@ -3,7 +3,7 @@
 		add icons
 		build minecraft map for soggy <
 		add fly commands
-		add freecam and that other grab thing that uses it (ctrl + p)
+		add freecam and that other grab thing that uses it (ctrl + p) <
 		add force emote
 		save anchored stuff to file and to cloud
 		FIX THE BLOODY GRAB MODS!!!!
@@ -936,22 +936,28 @@ function BJOrion()
 				end
 				function ElementFunction:AddUserProfile(UserId)
 					local currentUserId = UserId
-					local friendTask = nil
-					local FriendsHeader, FriendsList, BioLabel, JoinedLabel, RetardLabel
+					local friendTask    = nil
+
+					-- UI references
+					local FriendsHeader, FriendsList, BioLabel, JoinedLabel
 					local AvatarImg, DisplayNameLabel, UsernameLabel, TagLabel
+					local BadgeBtn, BadgeIcon, BadgeTooltip
+					local DetailsPanel, DetailsFlagLabel, DetailsReporterLabel
 					local ConnectionsVal, FollowersVal, FollowingVal
 					local FavHolder, FavSection
+					local detailsOpen = false
+
+					-- ── Helpers ──────────────────────────────────────────────────────────────
 
 					local function GetAsync(url)
-						local success, result = pcall(function()
-							return game:HttpGetAsync(url)
-						end)
-						if success then
-							return HttpService:JSONDecode(result)
-						end
-						return nil
+						local ok, result = pcall(function() return game:HttpGetAsync(url) end)
+						if not ok or type(result) ~= "string" or result == "" then return nil end
+						local decodeOk, decoded = pcall(HttpService.JSONDecode, HttpService, result)
+						if not decodeOk then return nil end
+						return decoded
 					end
 
+					-- Returns a rich-text tag string for the given uid (BinisJ / bad boy / friend)
 					local function GetTags(uid)
 						local tags = {}
 						if BJList and BJList[uid] then
@@ -965,6 +971,46 @@ function BJOrion()
 						end
 						return table.concat(tags, "")
 					end
+
+					-- Queries the Rotector flag API.
+					-- Returns: { flagged = bool, reason = string|nil, reportedBy = string|nil }
+					local function GetFlagData(uid)
+						local data = GetAsync("https://roscoe.rotector.com/v1/lookup/roblox/user/" .. uid)
+						if not data then return { flagged = false, reason = "User is not flagged", "John BJ" } end
+						return {
+							flagged    = data.flagged or false,
+							reason     = data.reason or (data.flags and table.concat(data.flags, ", ")) or nil,
+							reportedBy = data.reportedBy or data.submittedBy or nil,
+						}
+					end
+
+					-- Badge states: icon + colour shown on the avatar corner
+					local BADGE_STATES = {
+						clean   = { icon = "✔", color = Color3.fromRGB(0, 200, 80)  },
+						flagged = { icon = "⚠", color = Color3.fromRGB(255, 200, 0)  },
+						unknown = { icon = "?", color = Color3.fromRGB(160, 160, 160) },
+					}
+
+					local function SetBadgeState(state, flagData)
+						local s = BADGE_STATES[state] or BADGE_STATES.unknown
+						BadgeIcon.Text       = s.icon
+						BadgeIcon.TextColor3 = s.color
+						BadgeBtn.Visible     = true
+
+						if state == "flagged" and flagData then
+							local tip = flagData.reason or "Flagged"
+							if flagData.reportedBy then
+								tip = tip .. "\nReported by: " .. flagData.reportedBy
+							end
+							BadgeTooltip.Text = tip
+						elseif state == "clean" then
+							BadgeTooltip.Text = "No flags found"
+						else
+							BadgeTooltip.Text = "Flag status unknown"
+						end
+					end
+
+					-- ── Friend scanner ───────────────────────────────────────────────────────
 
 					local function RunFriendScan(uid)
 						friendTask = nil
@@ -992,31 +1038,40 @@ function BJOrion()
 							while true do
 								if friendTask ~= thisTask then return end
 
-								local currentPage = friendPages:GetCurrentPage()
-								for _, friendInfo in ipairs(currentPage) do
+								for _, friendInfo in ipairs(friendPages:GetCurrentPage()) do
 									if friendTask ~= thisTask then return end
-
 									friendCount += 1
+
 									task.spawn(function()
-										local isthedudeinthegameornotbrah = game.Players:GetPlayerByUserId(friendInfo.Id)
+										local inGame = game.Players:GetPlayerByUserId(friendInfo.Id)
 
 										if friendslist[friendInfo.Id] then
 											local d, u = getOfflinePlayerData(friendInfo.Id)
 											if friendTask ~= thisTask then return end
 											if inbadboylist(friendInfo.Id) then
-												table.insert(lines, "<font color='#0000ba'>「</font><font color='#0000ee'>Mutual</font><font color='#0000ba'>」</font><font color='#740000'>「</font><font color='#ba0000'>Retard</font><font color='#740000'>」</font><font color='#ba0000'>" .. d .. " (@" .. u .. ") UserId: " .. friendInfo.Id .. "</font>")
+												table.insert(lines,
+													"<font color='#0000ba'>「</font><font color='#0000ee'>Mutual</font><font color='#0000ba'>」</font>"
+													.. "<font color='#740000'>「</font><font color='#ba0000'>Retard</font><font color='#740000'>」</font>"
+													.. "<font color='#ba0000'>" .. d .. " (@" .. u .. ") UserId: " .. friendInfo.Id .. "</font>")
 											else
-												table.insert(lines, "<font color='#0000ba'>「</font><font color='#0000ee'>Mutual</font><font color='#0000ba'>」</font><font color='#0000ee'>" .. d .. " (@" .. u .. ") UserId: " .. friendInfo.Id .. "</font>")
+												table.insert(lines,
+													"<font color='#0000ba'>「</font><font color='#0000ee'>Mutual</font><font color='#0000ba'>」</font>"
+													.. "<font color='#0000ee'>" .. d .. " (@" .. u .. ") UserId: " .. friendInfo.Id .. "</font>")
 											end
 										else
-											if isthedudeinthegameornotbrah then
-												table.insert(lines, "<font color=\"rgb(0,200,0)\">  " .. isthedudeinthegameornotbrah.DisplayName .. " (@" .. isthedudeinthegameornotbrah.Name .. ")</font>")
+											if inGame then
+												table.insert(lines,
+													"<font color=\"rgb(0,200,0)\">  "
+													.. inGame.DisplayName .. " (@" .. inGame.Name .. ")</font>")
 											elseif inbadboylist(friendInfo.Id) then
 												local d, u = getOfflinePlayerData(friendInfo.Id)
 												if friendTask ~= thisTask then return end
-												table.insert(lines, "<font color='#740000'>「</font><font color='#ba0000'>Retard</font><font color='#740000'>」</font><font color='#ba0000'>" .. d .. " (@" .. u .. ") UserId: " .. friendInfo.Id .. "</font>")
+												table.insert(lines,
+													"<font color='#740000'>「</font><font color='#ba0000'>Retard</font><font color='#740000'>」</font>"
+													.. "<font color='#ba0000'>" .. d .. " (@" .. u .. ") UserId: " .. friendInfo.Id .. "</font>")
 											end
 										end
+
 										FriendsHeader.Text = "Friends  " .. friendCount
 										FriendsList.Text   = #lines > 0 and table.concat(lines, "\n") or "Loading..."
 									end)
@@ -1033,52 +1088,74 @@ function BJOrion()
 						end)
 					end
 
+					-- ── Main profile loader ───────────────────────────────────────────────────
+
 					local function LoadProfile(uid, tagsOnly)
-						-- If tagsOnly, just update the tag label and bail
 						if tagsOnly then
-							local tags = GetTags(uid)
-							TagLabel.Text    = tags
-							TagLabel.Visible = tags ~= ""
+							task.spawn(function()
+								local tags = GetTags(uid)
+								TagLabel.Text    = tags
+								TagLabel.Visible = tags ~= ""
+
+								local flagData = GetFlagData(uid)
+								if flagData.flagged then
+									SetBadgeState("flagged", flagData)
+									DetailsFlagLabel.Text     = flagData.reason     or "No reason provided"
+									DetailsReporterLabel.Text = flagData.reportedBy or "Unknown"
+								else
+									SetBadgeState("clean", flagData)
+									DetailsFlagLabel.Text     = "—"
+									DetailsReporterLabel.Text = "—"
+								end
+							end)
 							return
 						end
 
 						task.spawn(function()
-
 							local userInfo      = GetAsync("https://users.roblox.com/v1/users/" .. uid)
 							local friendsData   = GetAsync("https://friends.roblox.com/v1/users/" .. uid .. "/friends/count")
 							local followersData = GetAsync("https://friends.roblox.com/v1/users/" .. uid .. "/followers/count")
 							local followingData = GetAsync("https://friends.roblox.com/v1/users/" .. uid .. "/followings/count")
-							local favPlaces     = GetAsync("https://games.roblox.com/v2/users/" .. uid .. "/favorite/games?accessFilter=Public&sortOrder=Asc&limit=5")
+							-- limit must be 10/25/50/100; cap display to 5 in the loop below
+							local favPlaces     = GetAsync("https://games.roblox.com/v2/users/" .. uid .. "/favorite/games?accessFilter=Public&sortOrder=Asc&limit=10")
+							local flagData      = GetFlagData(uid)
 
-							local username    = userInfo and userInfo.name or tostring(uid)
+							local username    = userInfo and userInfo.name        or tostring(uid)
 							local displayName = userInfo and userInfo.displayName or "Unknown"
-							local created     = userInfo and userInfo.created and userInfo.created:sub(1, 10) or "Unknown"
+							local created     = userInfo and userInfo.created     and userInfo.created:sub(1, 10) or "Unknown"
 							local verified    = userInfo and userInfo.hasVerifiedBadge and " ✔" or ""
-							local description = (userInfo and userInfo.description and #userInfo.description > 0) and userInfo.description or "This is John Binis here to tell you that this dude has NO description"
-							local Retardtext  = (badboylist[uid] and "<font color=\"rgb(150, 0, 0)\">"..badboylist[uid].reason.."\n\nReported By: "..badboylist[uid].by.."</font>" or "<font color=\"rgb(0, 200, 0)\">"..userInfo.displayName.." is not a retard</font>")
-							local connections = friendsData and tostring(friendsData.count) or "?"
-							local followers   = followersData and tostring(followersData.count) or "?"
-							local following   = followingData and tostring(followingData.count) or "?"
+							local description = (userInfo and userInfo.description and #userInfo.description > 0)
+								and userInfo.description
+								or "This is John Binis here to tell you that this dude has NO description"
 
 							AvatarImg.Image       = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. uid .. "&width=420&height=420&format=png"
 							DisplayNameLabel.Text = displayName .. verified
 							UsernameLabel.Text    = "@" .. username
+							ConnectionsVal.Text   = friendsData   and tostring(friendsData.count)  or "?"
+							FollowersVal.Text     = followersData and tostring(followersData.count) or "?"
+							FollowingVal.Text     = followingData and tostring(followingData.count) or "?"
+							BioLabel.Text         = description
+							JoinedLabel.Text      = "Joined  " .. created
 
+							-- Local tags (BinisJ / Retard / Friend) right-aligned in name row
 							local tags = GetTags(uid)
 							TagLabel.Text    = tags
 							TagLabel.Visible = tags ~= ""
 
-							ConnectionsVal.Text = connections
-							FollowersVal.Text   = followers
-							FollowingVal.Text   = following
-							BioLabel.Text       = description
-							RetardLabel.Text    = Retardtext
-							JoinedLabel.Text    = "Joined  " .. created
+							-- Rotector badge on avatar corner
+							if flagData.flagged then
+								SetBadgeState("flagged", flagData)
+								DetailsFlagLabel.Text     = flagData.reason     or "No reason provided"
+								DetailsReporterLabel.Text = flagData.reportedBy or "Unknown"
+							else
+								SetBadgeState("clean", flagData)
+								DetailsFlagLabel.Text     = "—"
+								DetailsReporterLabel.Text = "—"
+							end
 
+							-- Favourite places
 							for _, child in ipairs(FavHolder:GetChildren()) do
-								if not child:IsA("UIListLayout") then
-									child:Destroy()
-								end
+								if not child:IsA("UIListLayout") then child:Destroy() end
 							end
 
 							if favPlaces and favPlaces.data and #favPlaces.data > 0 then
@@ -1086,9 +1163,9 @@ function BJOrion()
 								for i, place in ipairs(favPlaces.data) do
 									if i > 5 then break end
 									AddThemeObject(SetProps(MakeElement("Label", "⭐  " .. place.name, 13), {
-										Size = UDim2.new(1, 0, 0, 16),
-										Font = Enum.Font.GothamSemibold,
-										Parent = FavHolder
+										Size   = UDim2.new(1, 0, 0, 16),
+										Font   = Enum.Font.GothamSemibold,
+										Parent = FavHolder,
 									}), "Text")
 								end
 							else
@@ -1099,54 +1176,142 @@ function BJOrion()
 						RunFriendScan(uid)
 					end
 
-					-- ── Build card ───────────────────────────────────────────────────────────
+					-- ── Build card ────────────────────────────────────────────────────────────
 
 					local ProfileCard = AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(255, 255, 255), 0, 5), {
-						Size = UDim2.new(1, 0, 0, 0),
-						AutomaticSize = Enum.AutomaticSize.Y,
+						Size                   = UDim2.new(1, 0, 0, 0),
+						AutomaticSize          = Enum.AutomaticSize.Y,
 						BackgroundTransparency = 0.7,
-						Parent = ItemParent,
-						ClipsDescendants = false
+						Parent                 = ItemParent,
+						ClipsDescendants       = false,
 					}), {
 						AddThemeObject(MakeElement("Stroke"), "Stroke"),
-						MakeElement("Padding", 10, 12, 12, 10)
+						MakeElement("Padding", 10, 12, 12, 10),
 					}), "Second")
 
 					MakeElement("List", 0, 6).Parent = ProfileCard
 
-					-- Avatar row
+					-- ── Avatar row ────────────────────────────────────────────────────────────
+
 					local AvatarRow = SetProps(MakeElement("TFrame"), {
-						Size = UDim2.new(1, 0, 0, 50),
-						Parent = ProfileCard
+						Size   = UDim2.new(1, 0, 0, 50),
+						Parent = ProfileCard,
 					})
+
+					-- Avatar container: ClipsDescendants=false so the badge can overflow the circle edge
+					local AvatarContainer = SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(40, 40, 40), 1, 0), {
+						Size             = UDim2.new(0, 46, 0, 46),
+						ClipsDescendants = false,
+						Parent           = AvatarRow,
+					}), { MakeElement("Corner", 1) })
 
 					AvatarImg = Create("ImageLabel", {
-						Size = UDim2.new(1, 0, 1, 0),
+						Size                   = UDim2.new(1, 0, 1, 0),
 						BackgroundTransparency = 1,
-						ScaleType = Enum.ScaleType.Fit
+						ScaleType              = Enum.ScaleType.Fit,
+						Parent                 = AvatarContainer,
 					})
 
-					SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(40, 40, 40), 1, 0), {
-						Size = UDim2.new(0, 46, 0, 46),
-						Parent = AvatarRow
-					}), {
-						AvatarImg,
-						MakeElement("Corner", 1)
+					-- ── Badge: overlaid on bottom-right corner of avatar ─────────────────────
+					--
+					--   ┌──────────┐
+					--   │  avatar  │
+					--   │       ╔══╗  ← 18×18 circle badge
+					--   └───────╚══╝
+					--
+					--   Hover → tooltip  |  Click → toggle DetailsPanel
+
+					BadgeBtn = SetProps(MakeElement("TFrame"), {
+						Size     = UDim2.new(0, 14, 0, 14),
+						Position = UDim2.new(1, -12, 1, -12),
+						ZIndex   = 5,
+						Visible  = false,
+						Parent   = AvatarContainer,
+					})
+
+					local BadgeBg = Create("Frame", {
+						Size             = UDim2.new(1, 0, 1, 0),
+						BackgroundColor3 = Color3.fromRGB(20, 20, 24),
+						ZIndex           = 5,
+						Parent           = BadgeBtn,
+					})
+					Create("UICorner", { CornerRadius = UDim.new(1, 0), Parent = BadgeBg })
+					Create("UIStroke", { Color = Color3.fromRGB(255, 255, 255), Thickness = 1, Transparency = 0.6, Parent = BadgeBg })
+
+					BadgeIcon = Create("TextLabel", {
+						Size                   = UDim2.new(1, 0, 1, 0),
+						BackgroundTransparency = 1,
+						Font                   = Enum.Font.GothamBold,
+						TextSize               = 11,
+						TextXAlignment         = Enum.TextXAlignment.Center,
+						TextYAlignment         = Enum.TextYAlignment.Center,
+						Text                   = "?",
+						TextColor3             = Color3.fromRGB(160, 160, 160),
+						ZIndex                 = 6,
+						Parent                 = BadgeBtn,
+					})
+
+					BadgeTooltip = Create("TextLabel", {
+						Size                   = UDim2.new(0, 170, 0, 0),
+						AutomaticSize          = Enum.AutomaticSize.Y,
+						Position               = UDim2.new(1, -170, 1, 4),
+						BackgroundColor3       = Color3.fromRGB(20, 20, 24),
+						BackgroundTransparency = 0,
+						TextColor3             = Color3.fromRGB(220, 220, 220),
+						Font                   = Enum.Font.GothamSemibold,
+						TextSize               = 11,
+						TextWrapped            = true,
+						TextXAlignment         = Enum.TextXAlignment.Left,
+						Text                   = "",
+						Visible                = false,
+						ZIndex                 = 10,
+						Parent                 = BadgeBtn,
+					})
+					Create("UIPadding", {
+						PaddingLeft = UDim.new(0, 6), PaddingRight  = UDim.new(0, 6),
+						PaddingTop  = UDim.new(0, 4), PaddingBottom = UDim.new(0, 4),
+						Parent      = BadgeTooltip,
+					})
+					Create("UICorner", { CornerRadius = UDim.new(0, 4), Parent = BadgeTooltip })
+					Create("UIStroke", { Color = Color3.fromRGB(70, 70, 80), Thickness = 1, Parent = BadgeTooltip })
+
+					BadgeBtn.InputBegan:Connect(function(input)
+						if input.UserInputType == Enum.UserInputType.MouseMovement then
+							BadgeTooltip.Visible = true
+						elseif input.UserInputType == Enum.UserInputType.MouseButton1 then
+							detailsOpen          = not detailsOpen
+							DetailsPanel.Visible = detailsOpen
+							BadgeTooltip.Visible = false
+						end
+					end)
+					BadgeBtn.InputEnded:Connect(function(input)
+						if input.UserInputType == Enum.UserInputType.MouseMovement then
+							BadgeTooltip.Visible = false
+						end
+					end)
+
+					-- ── Name column ───────────────────────────────────────────────────────────
+
+					local NameCol = SetProps(MakeElement("TFrame"), {
+						Size     = UDim2.new(1, -56, 1, 0),
+						Position = UDim2.new(0, 56, 0, 0),
+						Parent   = AvatarRow,
 					})
 
 					DisplayNameLabel = AddThemeObject(SetProps(MakeElement("Label", "", 15), {
-						Size = UDim2.new(1, 0, 0, 18),
+						Size     = UDim2.new(1, 0, 0, 18),
 						Position = UDim2.new(0, 0, 0, 6),
-						Font = Enum.Font.GothamBold,
+						Font     = Enum.Font.GothamBold,
+						Parent   = NameCol,
 					}), "Text")
 
 					UsernameLabel = AddThemeObject(SetProps(MakeElement("Label", "", 13), {
-						Size = UDim2.new(1, 0, 0, 14),
+						Size     = UDim2.new(1, 0, 0, 14),
 						Position = UDim2.new(0, 0, 0, 28),
-						Font = Enum.Font.GothamSemibold,
+						Font     = Enum.Font.GothamSemibold,
+						Parent   = NameCol,
 					}), "TextDark")
 
-					-- Tags sit just below username, hugging left
 					TagLabel = Create("TextLabel", {
 						Size = UDim2.new(1, 0, 0, 18),
 						Position = UDim2.new(0, 0, 0, 6),
@@ -1158,48 +1323,87 @@ function BJOrion()
 						Visible = false
 					})
 
-					SetChildren(SetProps(MakeElement("TFrame"), {
-						Size = UDim2.new(1, -56, 1, 0),
-						Position = UDim2.new(0, 56, 0, 0),
-						Parent = AvatarRow
+					-- ── Inline flag details panel (toggled by badge click, lives in ProfileCard) ──
+
+					DetailsPanel = SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(30, 30, 35), 0, 4), {
+						Size                   = UDim2.new(1, 0, 0, 0),
+						AutomaticSize          = Enum.AutomaticSize.Y,
+						BackgroundTransparency = 0.15,
+						Visible                = false,
+						Parent                 = ProfileCard,
 					}), {
-						DisplayNameLabel,
-						UsernameLabel,
-						TagLabel
+						MakeElement("Padding", 8, 8, 8, 8),
+						Create("UIStroke", { Color = Color3.fromRGB(70, 70, 80), Thickness = 1 }),
 					})
 
-					-- Divider
+					MakeElement("List", 0, 4).Parent = DetailsPanel
+
+					AddThemeObject(SetProps(MakeElement("Label", "Flag Details", 13), {
+						Size   = UDim2.new(1, 0, 0, 14),
+						Font   = Enum.Font.GothamBold,
+						Parent = DetailsPanel,
+					}), "Text")
+
+					local function MakeDetailRow(labelText)
+						local row = SetChildren(SetProps(MakeElement("TFrame"), {
+							Size          = UDim2.new(1, 0, 0, 0),
+							AutomaticSize = Enum.AutomaticSize.Y,
+							Parent        = DetailsPanel,
+						}), { MakeElement("List", 0, 4) })
+						row.UIListLayout.FillDirection = Enum.FillDirection.Horizontal
+
+						AddThemeObject(SetProps(MakeElement("Label", labelText, 12), {
+							Size = UDim2.new(0, 80, 0, 14),
+							Font = Enum.Font.GothamBold,
+						}), "TextDark").Parent = row
+
+						local val = AddThemeObject(SetProps(MakeElement("Label", "—", 12), {
+							Size          = UDim2.new(1, -84, 0, 0),
+							AutomaticSize = Enum.AutomaticSize.Y,
+							Font          = Enum.Font.GothamSemibold,
+							TextWrapped   = true,
+						}), "Text")
+						val.Parent = row
+						return val
+					end
+
+					DetailsFlagLabel     = MakeDetailRow("Reason:")
+					DetailsReporterLabel = MakeDetailRow("Reported by:")
+
+					-- ── Divider ───────────────────────────────────────────────────────────────
+
 					AddThemeObject(SetProps(MakeElement("Frame"), {
-						Size = UDim2.new(1, 0, 0, 1),
-						Parent = ProfileCard
+						Size   = UDim2.new(1, 0, 0, 1),
+						Parent = ProfileCard,
 					}), "Stroke")
 
-					-- Stats row
+					-- ── Stats row ─────────────────────────────────────────────────────────────
+
 					local StatsRow = SetChildren(SetProps(MakeElement("TFrame"), {
-						Size = UDim2.new(1, 0, 0, 36),
-						Parent = ProfileCard
+						Size   = UDim2.new(1, 0, 0, 36),
+						Parent = ProfileCard,
 					}), { MakeElement("List", 0, 0) })
 					StatsRow.UIListLayout.FillDirection = Enum.FillDirection.Horizontal
 
 					local function MakeStat(label)
 						local valLabel = AddThemeObject(SetProps(MakeElement("Label", "?", 14), {
-							Size = UDim2.new(1, 0, 0, 16),
-							Position = UDim2.new(0, 0, 0, 4),
-							Font = Enum.Font.GothamBold,
-							TextXAlignment = Enum.TextXAlignment.Center
+							Size           = UDim2.new(1, 0, 0, 16),
+							Position       = UDim2.new(0, 0, 0, 4),
+							Font           = Enum.Font.GothamBold,
+							TextXAlignment = Enum.TextXAlignment.Center,
 						}), "Text")
 
 						SetChildren(SetProps(MakeElement("TFrame"), {
-							Size = UDim2.new(0.333, 0, 1, 0),
-							Parent = StatsRow
+							Size   = UDim2.new(0.333, 0, 1, 0),
+							Parent = StatsRow,
 						}), {
 							valLabel,
 							AddThemeObject(SetProps(MakeElement("Label", label, 12), {
-								Size = UDim2.new(1, 0, 0, 12),
-								Position = UDim2.new(0, 0, 0, 21),
-								Font = Enum.Font.GothamBold,
-								TextXAlignment = Enum.TextXAlignment.Center
-							}), "TextDark")
+								Size           = UDim2.new(1, 0, 0, 12),
+								Position       = UDim2.new(0, 0, 0, 21),
+								Font           = Enum.Font.GothamBold,
+								TextXAlignment = Enum.TextXAlignment.Center,
+							}), "TextDark"),
 						})
 
 						return valLabel
@@ -1209,125 +1413,120 @@ function BJOrion()
 					FollowersVal   = MakeStat("Followers")
 					FollowingVal   = MakeStat("Following")
 
-					-- Divider
+					-- ── Divider ───────────────────────────────────────────────────────────────
+
 					AddThemeObject(SetProps(MakeElement("Frame"), {
-						Size = UDim2.new(1, 0, 0, 1),
-						Parent = ProfileCard
+						Size   = UDim2.new(1, 0, 0, 1),
+						Parent = ProfileCard,
 					}), "Stroke")
 
-					-- Badboy shit
-					AddThemeObject(SetProps(MakeElement("Label", "Retard?", 18), {
-						Size = UDim2.new(1, 0, 0, 14),
-						Font = Enum.Font.GothamBold,
-						Parent = ProfileCard
-					}), "TextDark")
+					-- ── About ─────────────────────────────────────────────────────────────────
 
-					RetardLabel = AddThemeObject(SetProps(MakeElement("Label", "", 13), {
-						Size = UDim2.new(1, 0, 0, 0),
-						AutomaticSize = Enum.AutomaticSize.Y,
-						Font = Enum.Font.GothamSemibold,
-						TextWrapped = true,
-						Parent = ProfileCard
-					}), "Text")
-
-					-- About
 					AddThemeObject(SetProps(MakeElement("Label", "About", 18), {
-						Size = UDim2.new(1, 0, 0, 14),
-						Font = Enum.Font.GothamBold,
-						Parent = ProfileCard
+						Size   = UDim2.new(1, 0, 0, 14),
+						Font   = Enum.Font.GothamBold,
+						Parent = ProfileCard,
 					}), "TextDark")
 
 					BioLabel = AddThemeObject(SetProps(MakeElement("Label", "", 13), {
-						Size = UDim2.new(1, 0, 0, 0),
+						Size          = UDim2.new(1, 0, 0, 0),
 						AutomaticSize = Enum.AutomaticSize.Y,
-						Font = Enum.Font.GothamSemibold,
-						TextWrapped = true,
-						Parent = ProfileCard
+						Font          = Enum.Font.GothamSemibold,
+						TextWrapped   = true,
+						Parent        = ProfileCard,
 					}), "Text")
 
-					-- Divider
+					-- ── Divider ───────────────────────────────────────────────────────────────
+
 					AddThemeObject(SetProps(MakeElement("Frame"), {
-						Size = UDim2.new(1, 0, 0, 1),
-						Parent = ProfileCard
+						Size   = UDim2.new(1, 0, 0, 1),
+						Parent = ProfileCard,
 					}), "Stroke")
 
-					-- Friends
+					-- ── Friends ───────────────────────────────────────────────────────────────
+
 					FriendsHeader = AddThemeObject(SetProps(MakeElement("Label", "Friends", 18), {
-						Size = UDim2.new(1, 0, 0, 14),
-						Font = Enum.Font.GothamBold,
-						Parent = ProfileCard
+						Size   = UDim2.new(1, 0, 0, 14),
+						Font   = Enum.Font.GothamBold,
+						Parent = ProfileCard,
 					}), "Text")
 
 					FriendsList = Create("TextLabel", {
-						Size = UDim2.new(1, 0, 0, 0),
-						AutomaticSize = Enum.AutomaticSize.Y,
+						Size                   = UDim2.new(1, 0, 0, 0),
+						AutomaticSize          = Enum.AutomaticSize.Y,
 						BackgroundTransparency = 1,
-						Font = Enum.Font.GothamBold,
-						TextSize = 12,
-						TextWrapped = true,
-						TextXAlignment = Enum.TextXAlignment.Left,
-						RichText = true,
-						Text = "",
-						Parent = ProfileCard
+						Font                   = Enum.Font.GothamBold,
+						TextSize               = 12,
+						TextWrapped            = true,
+						TextXAlignment         = Enum.TextXAlignment.Left,
+						RichText               = true,
+						Text                   = "",
+						Parent                 = ProfileCard,
 					})
 					AddThemeObject(FriendsList, "TextDark")
 
-					-- Divider
+					-- ── Divider ───────────────────────────────────────────────────────────────
+
 					AddThemeObject(SetProps(MakeElement("Frame"), {
-						Size = UDim2.new(1, 0, 0, 1),
-						Parent = ProfileCard
+						Size   = UDim2.new(1, 0, 0, 1),
+						Parent = ProfileCard,
 					}), "Stroke")
 
-					-- Joined
+					-- ── Joined ────────────────────────────────────────────────────────────────
+
 					JoinedLabel = AddThemeObject(SetProps(MakeElement("Label", "", 15), {
-						Size = UDim2.new(1, 0, 0, 14),
-						Font = Enum.Font.GothamBold,
-						Parent = ProfileCard
+						Size   = UDim2.new(1, 0, 0, 14),
+						Font   = Enum.Font.GothamBold,
+						Parent = ProfileCard,
 					}), "TextDark")
 
-					-- Fav places
+					-- ── Favourite places ──────────────────────────────────────────────────────
+
 					FavSection = SetProps(MakeElement("TFrame"), {
-						Size = UDim2.new(1, 0, 0, 0),
+						Size          = UDim2.new(1, 0, 0, 0),
 						AutomaticSize = Enum.AutomaticSize.Y,
-						Visible = false,
-						Parent = ProfileCard
+						Visible       = false,
+						Parent        = ProfileCard,
 					})
 
 					AddThemeObject(SetProps(MakeElement("Frame"), {
-						Size = UDim2.new(1, 0, 0, 1),
-						Parent = FavSection
+						Size   = UDim2.new(1, 0, 0, 1),
+						Parent = FavSection,
 					}), "Stroke")
 
 					AddThemeObject(SetProps(MakeElement("Label", "Favourite Places", 13), {
-						Size = UDim2.new(1, 0, 0, 14),
-						Font = Enum.Font.GothamBold,
-						Parent = FavSection
+						Size   = UDim2.new(1, 0, 0, 14),
+						Font   = Enum.Font.GothamBold,
+						Parent = FavSection,
 					}), "TextDark")
 
 					FavHolder = SetChildren(SetProps(MakeElement("TFrame"), {
-						Size = UDim2.new(1, 0, 0, 0),
+						Size          = UDim2.new(1, 0, 0, 0),
 						AutomaticSize = Enum.AutomaticSize.Y,
-						Parent = FavSection
+						Parent        = FavSection,
 					}), { MakeElement("List", 0, 4) })
 
-					-- ── Return table with Refresh method (mirrors Dropdown:Refresh pattern) ──
+					-- ── Initial load ──────────────────────────────────────────────────────────
+
+					LoadProfile(UserId, false)
+
+					-- ── Return object ─────────────────────────────────────────────────────────
 
 					local ProfileObject = {}
 
 					function ProfileObject:Refresh(newUid)
 						task.spawn(function()
 							if newUid and newUid ~= currentUserId then
-								-- Different user — full reload
-								currentUserId = newUid
+								currentUserId        = newUid
+								detailsOpen          = false
+								DetailsPanel.Visible = false
 								LoadProfile(currentUserId, false)
 							else
-								-- Same user — only recheck tags, do not rescan friends
+								-- Same user: re-check local tags + Rotector badge only
 								LoadProfile(currentUserId, true)
 							end
 						end)
 					end
-
-					LoadProfile(UserId, false)
 
 					return ProfileObject
 				end
@@ -2819,6 +3018,7 @@ else
 	}
 	partwhitelist.FilterType = Enum.RaycastFilterType.Exclude
 	PCLDlist = {}
+	yaplist = {}
 	pusslist = {}
 	BuildItemsList = {}
 	NakedList = {}
@@ -2843,7 +3043,6 @@ else
 	BKAWL = true
 	BKLAWL = true
 	BBAWL = true
-	acno = true
 	LBA = false
 	BAR = 10
 
@@ -2916,9 +3115,6 @@ else
 			)
 		else
 			game.ContextActionService:UnbindAction("freezeMovement")
-			if csubject then
-				camera.CameraSubject = csubject
-			end
 		end
 	end
 
@@ -2954,6 +3150,9 @@ else
 		freecamEnabled = false
 		UserInputService.MouseBehavior = Enum.MouseBehavior.Default
 		local character = player.Character
+		if csubject then
+			camera.CameraSubject = csubject
+		end
 		if character and character:FindFirstChild("HumanoidRootPart") then
 			local root = character.HumanoidRootPart
 			local stime = tick()
@@ -3822,30 +4021,28 @@ else
 
 	function checkgrab(itm,safe)
 		safe = safe or false
-		if itm:FindFirstAncestor("Plots") or itm:FindFirstAncestor("Slots") or itm:FindFirstAncestor("Map") then return end
-		local prt = itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("Main") or itm:FindFirstChild("Balloon")
-		if itm:FindFirstChild("Humanoid") then
-			if not itm.Humanoid.SeatPart then
-				if prt and prt.ReceiveAge ~= 0 then
-					return false
-				end
-			elseif itm.Humanoid.SeatPart.Parent then
-				return checkgrab(itm.Humanoid.SeatPart.Parent)
-			end
-		elseif prt and prt.ReceiveAge ~= 0 then
-			return false
-		end
 		if safe then
 			local gotgrab = false
 			for _,prt in pairs(itm:GetChildren()) do
 				if prt:FindFirstChild("PartOwner") and prt.PartOwner.Value == game.Players.LocalPlayer.Name then
-					gotgrab = true
+					return true
 				end
 			end
-			if gotgrab then
-				return true
-			end
+			return false
 		else
+			if itm:FindFirstAncestor("Plots") or itm:FindFirstAncestor("Slots") or itm:FindFirstAncestor("Map") then return end
+			local prt = itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("Main") or itm:FindFirstChild("Balloon")
+			if itm:FindFirstChild("Humanoid") then
+				if not itm.Humanoid.SeatPart then
+					if prt and prt.ReceiveAge ~= 0 then
+						return false
+					end
+				elseif itm.Humanoid.SeatPart.Parent then
+					return checkgrab(itm.Humanoid.SeatPart.Parent)
+				end
+			elseif prt and prt.ReceiveAge ~= 0 then
+				return false
+			end
 			return true
 		end
 	end
@@ -3867,6 +4064,28 @@ else
 			if plr.Name:lower():find(query) or plr.DisplayName:lower():find(query) then
 				return plr
 			end
+		end
+	end
+
+	autoexec = true
+
+	function JoinServer(JobId)
+		if autoexec then
+			queue_on_teleport(`print(loadstring(game:HttpGet("https://raw.githubusercontent.com/brizzyjizzy67/that-one-under-there/refs/heads/NOT-main/no%20bro"))())`)
+		end
+		OrionLib:MakeNotification({
+			Name = "Attempting to rejoin...",
+			Content = "Rejoin",
+			Image = "rbxassetid://4483362458",
+			Time = 5
+		})
+		PlaceId = game.PlaceId
+		if #game.Players:GetPlayers() <= 1 then
+			game.Players.LocalPlayer:Kick("\nRejoining bris")
+			task.wait()
+			game:GetService("TeleportService"):Teleport(PlaceId, game.Players.LocalPlayer)
+		else
+			game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceId, JobId, game.Players.LocalPlayer)
 		end
 	end
 
@@ -3925,6 +4144,8 @@ else
 						BlobBringList[player.UserId] = "crip"
 					end
 				end
+			elseif (args[1] == "?rejoin" or args[1] == "?rj") then
+				JoinServer(game.JobId)
 			end
 		elseif MasterPlayer == game.Players.LocalPlayer and (cmdlist[plr.UserId] or fagcommands) and not BJList[plr.UserId] then
 			local args = msg:lower():split(" ")
@@ -4142,38 +4363,52 @@ else
 			end
 			if arg1[2] == "LoadAsset" then
 				print(arg1[4],arg1[3])
-				if not AssetList[arg1[4]] then
+				if AssetList[arg1[4]] ~= arg1[3] then
 					AssetList[arg1[4]] = arg1[3]
 					local asset = game:GetObjects(arg1[3])[1]
+					local model = Instance.new("Model",objectfold)
+					local pp = Instance.new("Part",model)
+					model.PrimaryPart = pp
+					pp.CanCollide, pp.CanQuery, pp.Transparency = false, false, 1
 					arg1[4]:GetPropertyChangedSignal("Parent"):Connect(function()
 						if not arg1[4] or not arg1[4].Parent then
-							asset:Destroy()
+							model:Destroy()
 						end
 					end)
-					asset.Parent = objectfold
 					local base = arg1[4]:FindFirstChild("SoundPart") or arg1[4]:FindFirstChild("HumanoidRootPart") or arg1[4]:FindFirstChild("Main") or arg1[4]:FindFirstChild("Balloon")
 					base.CustomPhysicalProperties = PhysicalProperties.new(100, 0.3, 0.5)
 					local avgpos = Vector3.zero
 					local parts = 0
+					local list = {}
 					for _, prt in pairs(asset:GetDescendants()) do
 						if prt:IsA("BasePart") then
+							table.insert(list,prt)
+							prt.Parent = model
 							avgpos += prt.CFrame.Position
 							parts += 1
+						elseif prt:IsA("Script") then
+							local diddle = prt:FindFirstAncestorOfClass("BasePart")
+							if diddle then
+								diddle:Destroy()
+							else
+								prt:Destroy()
+							end
 						end
 					end
-					local targetCFrame = base.CFrame
-					local offset = Vector3.new(avgpos / parts)
-					for _, prt in pairs(asset:GetDescendants()) do
-						if prt:IsA("BasePart") then
-							prt.CFrame = (prt.CFrame * targetCFrame) - offset
-							prt.Anchored = false
-							prt.Massless = true
-							local wc = Instance.new("WeldConstraint")
-							wc.Parent = prt
-							wc.Part0 = prt
-							wc.Part1 = base
-						end
+					local offset = avgpos / parts
+					model:SetPrimaryPartCFrame(base.CFrame)
+					for _, prt in pairs(list) do
+						prt.CFrame -= offset
+						prt.Anchored = true
+						prt.Transparency = 0
+						prt.Massless = true
+						local wc = Instance.new("WeldConstraint")
+						wc.Parent = prt
+						wc.Part0 = prt
+						wc.Part1 = base
 					end
+					pp:Destroy()
+					asset:Destroy()
 					for _, prt in pairs(arg1[4]:GetChildren()) do
 						if prt:IsA("BasePart") then
 							prt.Transparency = 1
@@ -5984,6 +6219,11 @@ else
 
 	for _,plr in pairs(game.Players:GetChildren()) do
 		plr.Chatted:Connect(function(msg)
+			local count = 0
+			for _ in msg:gmatch("%S+") do
+				count = count + 1
+			end
+			yaplist[plr.UserId] = (yaplist[plr.UserId] or 0) + count
 			game.ReplicatedStorage.GrabEvents.ExtendGrabLine:FireServer({"BinisJ","msgreq",plr,msg})
 			commandfunction(msg,plr)
 		end)
@@ -7267,129 +7507,130 @@ else
 	local GUE = false
 	local GUTYPE = "CreatureBlobman"
 
-	local heebyjeeby
-
+	local inexistance = {}
+	local itm
+	local sp
+	local sv
+	local humconnection
+	local hum = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
+	local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+	function diddle()
+		print(sp)
+		print(sv)
+		if itm then
+			for _,prt in pairs(itm:GetChildren()) do
+				if prt:IsA("BasePart") then
+					prt.CanCollide = false
+				end
+			end
+		end
+		hrp.CFrame = sp
+		hrp.AssemblyLinearVelocity = sv
+		hum:GetPropertyChangedSignal("SeatPart"):Once(diddle)
+	end
 	function gucciblob()
-		local plott = workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]
-		if plot then
-			plott = workspace.PlotItems[plot]
-		end
-		local itm
-		local niggerspart
-		if GUTYPE == "CreatureBlobman" then
-			niggerspart = "HumanoidRootPart"
-		elseif GUTYPE == "Train" then
-			niggerspart = "BallOctagon"
-		else
-			niggerspart = "SoundPart"
-		end
-		if GUTYPE == "Train" then
-			local plr = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
-			local hrp = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
-			local j = hrp.AssemblyLinearVelocity
-			local c = hrp.CFrame
-			guccion = false
-			local doit = true
-			while doit do
-				local seat = workspace.Map.AlwaysHereTweenedObjects.Train.Object.ObjectModel:FindFirstChild("Seat")
-				while game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and not game.Players.LocalPlayer.Character.Humanoid.SeatPart and not guccion do
-					task.wait()
-					seat:Sit(game.Players.LocalPlayer.Character.Humanoid)
-					game.ReplicatedStorage.CharacterEvents.RagdollRemote:FireServer(game.Players.LocalPlayer.Character.HumanoidRootPart,0.01)
-				end
-				if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and game.Players.LocalPlayer.Character.Humanoid.SeatPart == seat then
-					guccion = true
-					doit = false
-				end
-				task.wait()
-			end
-			task.wait()
-			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				hrp.AssemblyLinearVelocity = j
-				hrp.CFrame = c
-			end
-		else
-			local itm
-			local diddly = false
-			local mainprt
-			if workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild("Gucci"..GUTYPE) or plott:FindFirstChild("Gucci"..GUTYPE) then
-				itm = workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild("Gucci"..GUTYPE) or plott:FindFirstChild("Gucci"..GUTYPE)
-				mainprt = itm:WaitForChild("HumanoidRootPart",.1) or itm:WaitForChild("SoundPart",.1)
-				if itm:WaitForChild("VehicleSeat",.1) and not itm.VehicleSeat.Occupant and mainprt and (not mainprt:FindFirstChild("PartOwner") or mainprt.PartOwner.Value == game.Players.LocalPlayer.Name) then
-					itm = workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild("Gucci"..GUTYPE) or plott:FindFirstChild("Gucci"..GUTYPE)
-					itm.Name = GUTYPE
-					itm.HumanoidRootPart.CFrame = CFrame.new(0,-10000,0)
-				else
+		local guccion = false
+		local tickyticky = tick()
+		while GUE do
+			if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+				local dt = tick() - tickyticky
+				tickyticky = tick()
+				if itm and itm.Parent and not ((itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("SoundPart")) and itm:FindFirstChild("VehicleSeat") and (not itm.VehicleSeat.Occupant or itm.VehicleSeat.Occupant ~= hum) or inexistance[itm] < 1) then
 					task.spawn(function()
-						game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild("Gucci"..GUTYPE) or plott:FindFirstChild("Gucci"..GUTYPE))
+						game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(itm)
 					end)
+				else
+					itm = workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild(GUTYPE)
+				end
+				hum = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
+				hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+				if not sp or not hum.SeatPart then
+					sp = hrp.CFrame
+					sv = hrp.AssemblyLinearVelocity
+				end
+				if humconnection ~= hum then
+					humconnection = hum
+					hum:GetPropertyChangedSignal("SeatPart"):Once(diddle,hum,hrp)
+				end
+				local wait = true
+				if itm then
+					inexistance[itm] = (inexistance[itm] or 0) + dt
+					if (itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("SoundPart")) and itm:FindFirstChild("VehicleSeat") and (not itm.VehicleSeat.Occupant or itm.VehicleSeat.Occupant == hum) then
+						if not guccion then
+							(itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("SoundPart")).AssemblyLinearVelocity = Vector3.new(0,0,0)
+						end
+						local diddy = itm.VehicleSeat
+						diddy.Parent = nil
+						diddy.Parent = itm
+						if not checkgrab(itm, true) and (hrp.CFrame.Position - (itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("SoundPart")).CFrame.Position).Magnitude < 28 then
+							for _,prt in pairs(itm:GetChildren()) do
+								if prt:IsA("BasePart") and prt.CanQuery then
+									game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(prt,CFrame.lookAt(hrp.CFrame.Position,prt.CFrame.Position))
+								end
+							end
+						end
+						if not hum.SeatPart then
+							hum.Sit = false
+						else
+							wait = false
+							task.wait()
+						end
+						if hum.Ragdolled.Value or hum.Sit then
+							guccion = false
+						end
+						if itm.VehicleSeat.Occupant == hum then
+							guccion = true
+						elseif not guccion then
+							task.wait()
+							wait = false
+							if (itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("SoundPart")) and itm:FindFirstChild("VehicleSeat") and (not itm.VehicleSeat.Occupant or itm.VehicleSeat.Occupant == hum) and not hum.Ragdolled.Value then
+								itm.VehicleSeat:Sit(hum)
+								game.ReplicatedStorage.CharacterEvents.RagdollRemote:FireServer(hrp,1/60)
+							end
+						end
+						if guccion then
+							(itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("SoundPart")).AssemblyLinearVelocity = Vector3.new(0,1e15,0)
+						else
+							if inexistance[itm] >= game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 250 then
+								task.spawn(function()
+									game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(itm)
+								end)
+								hum.Sit = true
+							end
+						end
+					else
+						if guccion then
+							hum.Sit = true
+						end
+						guccion = false
+						if inexistance[itm] >= 1 then
+							task.spawn(function()
+								game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(itm)
+							end)
+							if game.Players.LocalPlayer.CanSpawnToy.Value then
+								task.spawn(function()
+									game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer(GUTYPE,hrp.CFrame * CFrame.new(0,0,10),Vector3.new(0,0,0))
+								end)
+							end
+						end
+					end
+				else
+					if guccion then
+						guccion = false
+						hum.Sit = true
+					end
+					if game.Players.LocalPlayer.CanSpawnToy.Value then
+						task.spawn(function()
+							game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer(GUTYPE,hrp.CFrame * CFrame.new(0,0,10),Vector3.new(0,0,0))
+						end)
+					end
+				end
+				if wait then
+					task.wait()
+					hum.Sit = false
 				end
 			else
-				while not (workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild(GUTYPE) or plott:FindFirstChild(GUTYPE)) do
-					task.spawn(function()
-						game.ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer(GUTYPE,CFrame.new(1e5,1e5,1e5),Vector3.new(0,0,0))
-					end)
-					local diddytime = tick()
-					while tick() - diddytime < 1 and not (workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild(GUTYPE) or plott:FindFirstChild(GUTYPE)) do
-						task.wait()
-					end
-				end 
-			end
-			if not itm then
-				itm = workspace[game.Players.LocalPlayer.Name.."SpawnedInToys"]:FindFirstChild(GUTYPE) or plott:FindFirstChild(GUTYPE)
-			end
-			local hrp = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
-			local j = hrp.AssemblyLinearVelocity
-			local c = hrp.CFrame
-			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = itm:WaitForChild(niggerspart).CFrame
-			guccion = false
-			local doit = true
-			if mainprt then
-				mainprt.CFrame = CFrame.new(1e5,1e3,1e5)
-				mainprt.AssemblyLinearVelocity = Vector3.new(0,0,0)
-			end
-			while doit do
-				if itm then
-					while not itm:FindFirstChild("VehicleSeat") do task.wait() end
-					for _,prt in pairs(itm:GetChildren()) do
-						if prt:IsA("BasePart") then
-							prt.CanCollide = false
-						end
-					end
-					while game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and not game.Players.LocalPlayer.Character.Humanoid.SeatPart and itm.Parent and not guccion do
-						task.wait()
-						itm.VehicleSeat:Sit(game.Players.LocalPlayer.Character.Humanoid)
-						game.ReplicatedStorage.CharacterEvents.RagdollRemote:FireServer(game.Players.LocalPlayer.Character.HumanoidRootPart,0.01)
-					end
-					if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and game.Players.LocalPlayer.Character.Humanoid.SeatPart and game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent and game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent.Name == GUTYPE then
-						guccion = true
-						doit = false
-					end
-				else
-					gucciblob()
-					return
-				end
 				task.wait()
-			end
-			if itm then
-				itm.Name = "Gucci"..GUTYPE
-				while itm and (itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart")) and not checkgrab(itm) do
-					GrabItemsList[itm] = true
-				end
-				if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = c
-					game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = j
-				end
-				GrabItemsList[itm] = nil
-				while itm and (itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("SoundPart")) and (itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("SoundPart")).CFrame.Position.Magnitude < 2000 do
-					for _,prt in pairs(itm:GetChildren()) do
-						if prt:IsA("BasePart") then
-							prt.CanCollide = false
-							prt.AssemblyLinearVelocity = Vector3.new(0,-10^10,0)
-						end
-					end
-					task.wait()
-				end
 			end
 		end
 	end
@@ -7753,13 +7994,7 @@ else
 	function antilag()
 		while not (game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Torso") and game.Players.LocalPlayer.Character.Torso:FindFirstChild("Right Shoulder") and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("RootJoint") and game.Players.LocalPlayer.Character.Torso:FindFirstChild("Neck") and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")) do
 			task.wait()
-			print(game.Players.LocalPlayer.Character)
-			print(game.Players.LocalPlayer.Character:FindFirstChild("Torso"))
-			print(game.Players.LocalPlayer.Character.Torso:FindFirstChild("Right Shoulder"))
-			print(game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart"))
-			print(game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("RootJoint"))
-			print(game.Players.LocalPlayer.Character.Torso:FindFirstChild("Neck"))
-			print(game.Players.LocalPlayer.Character:FindFirstChild("Humanoid"))
+			print("waiting!!!!")
 		end
 		local ReplicatedStorage = game:GetService("ReplicatedStorage")
 		local script = game.Players.LocalPlayer.PlayerScripts.CharacterAndBeamMove
@@ -8770,7 +9005,7 @@ else
 												end
 												if workspace:FindFirstChild(game.Players.LocalPlayer.Name.."SpawnedInToys"):FindFirstChild("CreatureBlobman") or plot and workspace.PlotItems[plot]:FindFirstChild("CreatureBlobman") then
 													blob = workspace:FindFirstChild(game.Players.LocalPlayer.Name.."SpawnedInToys"):FindFirstChild("CreatureBlobman") or workspace.PlotItems[plot]:FindFirstChild("CreatureBlobman")
-													if not (blob:WaitForChild("RightDetector",.5) and blob.RightDetector:WaitForChild("RightWeld",.5)) then
+													if not (blob:WaitForChild("RightDetector",.5) and blob:FindFirstChild("RightDetector") and blob.RightDetector:WaitForChild("RightWeld",.5)) then
 														game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(workspace:FindFirstChild(game.Players.LocalPlayer.Name.."SpawnedInToys"):FindFirstChild("CreatureBlobman") or plot and workspace.PlotItems[plot]:FindFirstChild("CreatureBlobman"))
 													end
 												elseif game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character.Parent ~= workspace and (game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position - SL).Magnitude > 90  then
@@ -9100,7 +9335,7 @@ else
 					end
 				end
 				for itm in GrabItemsList do
-					if not blobbin and itm and itm.Parent and acno then
+					if not blobbin and itm and itm.Parent then
 						local prt = itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("Main") or itm:FindFirstChild("Balloon") or findfirst(itm)
 						if prt and not checkgrab(itm) then
 							game.RunService.Heartbeat:Wait()
@@ -9252,7 +9487,7 @@ else
 				end
 				local deletedone = false
 				for itm in DeleteService do
-					if not blobbin and itm and itm.Parent and acno then
+					if not blobbin and itm and itm.Parent then
 						if itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("Main") or itm:FindFirstChild("Balloon") then
 							local prt = itm:FindFirstChild("SoundPart") or itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("Main") or itm:FindFirstChild("Balloon")
 							local satisfied = false
@@ -11318,14 +11553,6 @@ else
 		end
 	})
 
-	KT:AddToggle({
-		Name = "Auto-claim network ownership",
-		Default = true,
-		Callback = function(Value)
-			acno = Value
-		end
-	})
-
 	KT:AddButton({
 		Name = "Release all frozen",
 		Callback = function()
@@ -11667,25 +11894,23 @@ else
 		end    
 	})
 
+	ST:AddSection({
+		Name = "<b>Rejoin stuff</b>"
+	})
+
 	ST:AddButton({
 		Name = "Rejoin Server",
 		Callback = function()
-			OrionLib:MakeNotification({
-				Name = "Attempting to rejoin...",
-				Content = "Rejoin",
-				Image = "rbxassetid://4483362458",
-				Time = 5
-			})
-			PlaceId = game.PlaceId
-			JobId = game.JobId
-			if #game.Players:GetPlayers() <= 1 then
-				game.Players.LocalPlayer:Kick("\nRejoining bris")
-				task.wait()
-				game:GetService("TeleportService"):Teleport(PlaceId, game.Players.LocalPlayer)
-			else
-				game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceId, JobId, game.Players.LocalPlayer)
-			end
+			JoinServer(game.JobId)
 		end    
+	})
+
+	ST:AddToggle({
+		Name = "Auto execute the BJ",
+		Default = true,
+		Callback = function(Value)
+			autoexec = Value
+		end,
 	})
 
 	ST:AddSection({
