@@ -1,4 +1,6 @@
 --[[
+	still not done!!! this patch should fix a few things though
+
     list of stuff to add to binisj that hasnt been done:
 		add icons
 		build minecraft map for soggy <
@@ -8,7 +10,7 @@
 		save anchored stuff to file and to cloud
 		FIX THE BLOODY GRAB MODS!!!!
 		fix blobman stuff
-		fix ownership antigrab
+		fix ownershipstuff
 		add ownership v2
 		add blobman v2
 		infinite grab length
@@ -73,7 +75,7 @@ function BJOrion()
 	end   
 
 	local Orion = Instance.new("ScreenGui")
-	Orion.Name = "Orion"
+	Orion.Name = "BinisJ"
 	if syn then
 		syn.protect_gui(Orion)
 		Orion.Parent = game.CoreGui
@@ -172,11 +174,6 @@ function BJOrion()
 
 	local function MakeElement(ElementName, ...)
 		local NewElement = OrionLib.Elements[ElementName](...)
-		for _,t in pairs(... and type(...) == "table" or {}) do
-			if game.Players:GetPlayerByUserId(t) then
-				--btnlist[t] = NewElement
-			end
-		end
 		return NewElement
 	end
 
@@ -387,7 +384,8 @@ function BJOrion()
 	CreateElement("ImageButton", function(ImageID)
 		local Image = Create("ImageButton", {
 			Image = ImageID,
-			BackgroundTransparency = 1
+			BackgroundTransparency = 1,
+			ScaleType = Enum.ScaleType.Fit
 		})
 		return Image
 	end)
@@ -801,7 +799,7 @@ function BJOrion()
 				Position = UDim2.new(0, 150, 0, 50),
 				Parent = MainWindow,
 				Visible = false,
-				Name = "ItemContainer"
+				Name = TabConfig.Name
 			}), {
 				MakeElement("List", 0, 6),
 				MakeElement("Padding", 15, 10, 10, 15)
@@ -828,7 +826,7 @@ function BJOrion()
 					end    
 				end
 				for _, ItemContainer in next, MainWindow:GetChildren() do
-					if ItemContainer.Name == "ItemContainer" then
+					if ItemContainer.ClassName == "ScrollingFrame" then
 						ItemContainer.Visible = false
 					end    
 				end  
@@ -861,6 +859,255 @@ function BJOrion()
 					end
 					return LabelFunction
 				end
+
+
+
+
+
+function ElementFunction:AddLimbPicker(PickerConfig)
+    PickerConfig = PickerConfig or {}
+    PickerConfig.Name = PickerConfig.Name or "Limb Picker"
+    PickerConfig.Callback = PickerConfig.Callback or function() end
+    
+    local Picker = {
+        SelectedLimb = nil,
+        Data = {
+            ["Head"] = {enabled = true, position = Vector3.new(0,0,0), rotation = Vector3.new(0,0,0)},
+            ["Torso"] = {enabled = true, position = Vector3.new(0,0,0), rotation = Vector3.new(0,0,0)},
+            ["Left Arm"] = {enabled = true, position = Vector3.new(0,0,0), rotation = Vector3.new(0,0,0)},
+            ["Right Arm"] = {enabled = true, position = Vector3.new(0,0,0), rotation = Vector3.new(0,0,0)},
+            ["Left Leg"] = {enabled = true, position = Vector3.new(0,0,0), rotation = Vector3.new(0,0,0)},
+            ["Right Leg"] = {enabled = true, position = Vector3.new(0,0,0), rotation = Vector3.new(0,0,0)},
+        }
+    }
+
+	local imgthing = {
+		"rbxassetid://84245014752263",
+		"rbxassetid://138315819518277",
+		"rbxassetid://73034844647668",
+		"rbxassetid://128761166997496",
+		"rbxassetid://97550601360541"
+	}
+
+    -- MAIN CONTAINER
+    local PickerFrame = AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(255, 255, 255), 0, 5), {
+        Size = UDim2.new(1, 0, 0, 300),
+        Parent = ItemParent,
+        Active = true
+    }), {
+        SetProps(SetChildren(MakeElement("TFrame"), {
+            AddThemeObject(SetProps(MakeElement("Label", PickerConfig.Name, 15), {
+                Size = UDim2.new(1, -12, 0, 38),
+                Position = UDim2.new(0, 12, 0, 0),
+                Font = Enum.Font.GothamBold
+            }), "Text"),
+        }), {Size = UDim2.new(1, 0, 0, 38)}),
+        AddThemeObject(MakeElement("Stroke"), "Stroke"),
+        MakeElement("Corner")
+    }), "Second")
+
+    -- SIDEBAR (Left)
+    local Sidebar = Instance.new("Frame")
+    Sidebar.Size = UDim2.new(0, 55, 1, -50)
+    Sidebar.Position = UDim2.new(0, 10, 0, 42)
+    Sidebar.BackgroundTransparency = 1
+    Sidebar.Parent = PickerFrame
+
+    local SideLayout = Instance.new("UIListLayout")
+    SideLayout.Padding = UDim.new(0, 6)
+    SideLayout.Parent = Sidebar
+
+    -- SEPARATOR LINE
+    local Separator = AddThemeObject(MakeElement("Frame"), "Stroke")
+    Separator.Size = UDim2.new(0, 1, 1, -50)
+    Separator.Position = UDim2.new(0, 70, 0, 42)
+    Separator.BorderSizePixel = 0
+    Separator.Parent = PickerFrame
+
+    -- VIEWPORT (Right)
+    local Viewport = Instance.new("ViewportFrame")
+    Viewport.Size = UDim2.new(1, -80, 1, -50)
+    Viewport.Position = UDim2.new(0, 75, 0, 42)
+    Viewport.BackgroundTransparency = 1
+    Viewport.Parent = PickerFrame
+
+    local Cam = Instance.new("Camera")
+    Cam.FieldOfView = 50
+    Viewport.CurrentCamera = Cam
+    Cam.Parent = Viewport
+
+    local RaycastWorld = Instance.new("WorldModel")
+    RaycastWorld.Parent = Viewport
+
+    local Decoy = game:GetService("ReplicatedStorage").MenuToys.ViewportFrameToys.YouDecoy:Clone()
+    Decoy.Parent = RaycastWorld
+    Decoy:SetPrimaryPartCFrame(CFrame.new(0, 0, 0))
+
+    local angleX, angleY, distance = 180, -30, 8
+    local rmbDown, lastMousePos = false, Vector2.new(0, 0)
+    local UIS = game:GetService("UserInputService")
+
+    local function updateCamera()
+        local rotation = CFrame.Angles(0, math.rad(angleX), 0) * CFrame.Angles(math.rad(angleY), 0, 0)
+        Cam.CFrame = rotation * CFrame.new(0, 0, distance)
+    end
+    updateCamera()
+
+    -- ORION THEMED BUTTON CREATOR
+	local function CreateMenuButton(text, callback)
+		-- Using "Main" or "Accent" usually works best for Orion buttons
+		local BtnContainer = AddThemeObject(SetProps(MakeElement("RoundFrame", Color3.fromRGB(40, 40, 40), 0, 4), {
+			Size = UDim2.new(0.6, 0, 0, 18),
+			Parent = Sidebar
+		}), "Main") -- Swapped "Third" to "Main"
+
+		local RealBtn = AddThemeObject(SetProps(MakeElement("ImageButton", imgthing[text], 11), {
+			Size = UDim2.new(1, 0, 1, 0),
+			Parent = BtnContainer
+		}), "Text")
+		
+		-- Visual click effect
+		RealBtn.MouseButton1Down:Connect(function()
+			BtnContainer.BackgroundTransparency = 0.2
+		end)
+		RealBtn.MouseButton1Up:Connect(function()
+			BtnContainer.BackgroundTransparency = 0
+		end)
+		
+		RealBtn.MouseButton1Click:Connect(callback)
+	end
+
+	local function RefreshSidebar()
+		Sidebar:ClearAllChildren()
+		local layout = Instance.new("UIListLayout", Sidebar)
+		layout.Padding = UDim.new(0, 6)
+		layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+
+		local limb = Picker.SelectedLimb
+		local data = limb and Picker.Data[limb.Name] or nil
+
+		CreateMenuButton(1, function()
+			PickerConfig.Callback(Picker.Data)
+		end)
+
+		CreateMenuButton(2, function()
+			PickerConfig.Callback(Picker.Data)
+		end)
+
+		CreateMenuButton(3, function()
+			Picker.Data[limb.Name].position = Vector3.new(0,0,0)
+			Picker.Data[limb.Name].rotation = Vector3.new(0,0,0)
+			PickerConfig.Callback(Picker.Data)
+		end)
+
+		if not Picker.SelectedLimb then
+			return
+		end
+
+		-- Toggle Button
+		CreateMenuButton(data.enabled and 4 or 5, function()
+			data.enabled = not data.enabled
+			RefreshSidebar() -- Update text immediately
+			PickerConfig.Callback(Picker.Data)
+		end)
+	end
+    RefreshSidebar()
+
+    -- IMPROVED RAYCAST LOGIC
+    local function CastRay()
+        local vPos, vSize = Viewport.AbsolutePosition, Viewport.AbsoluteSize
+        local mPos = UIS:GetMouseLocation()
+        
+        local relX = (mPos.X - vPos.X) / vSize.X
+        local relY = (mPos.Y - 54 - vPos.Y) / vSize.Y
+        
+        if UIS.MouseBehavior == Enum.MouseBehavior.LockCenter then
+            relX, relY = 0.5, 0.5
+        end
+
+        local fov = math.rad(Cam.FieldOfView)
+        local aspect = vSize.X / vSize.Y
+        local height = math.tan(fov / 2)
+        local width = height * aspect
+
+        local screenX = (relX * 2 - 1) * width
+        local screenY = (1 - relY * 2) * height
+
+        local targetCFrame = Cam.CFrame * CFrame.new(screenX, screenY, -1)
+        local rayDirection = (targetCFrame.Position - Cam.CFrame.Position).Unit
+        local rayOrigin = Cam.CFrame.Position
+
+        local params = RaycastParams.new()
+        params.FilterType = Enum.RaycastFilterType.Include
+        params.FilterDescendantsInstances = {Decoy}
+        
+        local result = RaycastWorld:Raycast(rayOrigin, rayDirection * 100, params)
+        return result and result.Instance or nil
+    end
+
+    -- INPUT HANDLING
+    UIS.InputBegan:Connect(function(input)
+        local vPos, vSize = Viewport.AbsolutePosition, Viewport.AbsoluteSize
+        local mPos = UIS:GetMouseLocation()
+        local inVp = mPos.X >= vPos.X and mPos.X <= vPos.X + vSize.X and (mPos.Y - 54) >= vPos.Y and (mPos.Y - 54) <= vPos.Y + vSize.Y
+
+        if not inVp then return end
+
+        if input.UserInputType == Enum.UserInputType.MouseButton2 then
+            rmbDown = true
+            lastMousePos = Vector2.new(input.Position.X, input.Position.Y)
+        elseif input.UserInputType == Enum.UserInputType.MouseButton1 then
+            local hit = CastRay()
+            if hit then
+                Picker.SelectedLimb = hit
+                RefreshSidebar()
+				local m = 0
+				local time = tick()
+				repeat
+					local dt = tick() - time
+					time = tick()
+					m = (m + dt * 15) % 360
+					hit.Color = Color3.fromRGB(165 + (math.sin(m) * 40),165 + (math.sin(m) * 40),165 + (math.sin(m) * 40))
+					task.wait()
+				until Picker.SelectedLimb ~= hit
+				hit.Color = Color3.fromRGB(163, 162, 165)
+            end
+        end
+    end)
+
+    UIS.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton2 then rmbDown = false end
+    end)
+
+    UIS.InputChanged:Connect(function(input)
+        local vPos, vSize = Viewport.AbsolutePosition, Viewport.AbsoluteSize
+        local mPos = UIS:GetMouseLocation()
+        local inVp = (mPos.X >= vPos.X and mPos.X <= vPos.X + vSize.X and (mPos.Y - 54) >= vPos.Y and (mPos.Y - 54) <= vPos.Y + vSize.Y)
+        local MainScroll = PickerFrame:FindFirstAncestorWhichIsA("ScrollingFrame")
+
+        if inVp or rmbDown then
+            if MainScroll then MainScroll.ScrollingEnabled = false end
+            if input.UserInputType == Enum.UserInputType.MouseWheel then
+                distance = math.clamp(distance - (input.Position.Z * 2), 4, 15)
+                updateCamera()
+            elseif input.UserInputType == Enum.UserInputType.MouseMovement and rmbDown then
+                local delta = (UIS.MouseBehavior == Enum.MouseBehavior.LockCenter) and Vector2.new(input.Delta.X, input.Delta.Y) or (Vector2.new(input.Position.X, input.Position.Y) - lastMousePos)
+                lastMousePos = Vector2.new(input.Position.X, input.Position.Y)
+                angleX, angleY = angleX - delta.X, math.clamp(angleY - (delta.Y * 0.5), -80, 80)
+                updateCamera()
+            end
+        elseif MainScroll then 
+            MainScroll.ScrollingEnabled = true 
+        end
+    end)
+
+    return Picker
+end
+
+
+
+
+
 				function ElementFunction:AddPlayerParagraph(userId)
 					userId = userId or 1
 				
@@ -939,7 +1186,7 @@ function BJOrion()
 					local friendTask    = nil
 
 					-- UI references
-					local FriendsHeader, FriendsList, BioLabel, JoinedLabel
+					local FriendsHeader, FriendsList, BioLabel, JoinedLabel, TardHeader, TardText
 					local AvatarImg, DisplayNameLabel, UsernameLabel, TagLabel
 					local BadgeBtn, BadgeIcon, BadgeTooltip
 					local DetailsPanel, DetailsFlagLabel, DetailsReporterLabel
@@ -976,7 +1223,7 @@ function BJOrion()
 					-- Returns: { flagged = bool, reason = string|nil, reportedBy = string|nil }
 					local function GetFlagData(uid)
 						local data = GetAsync("https://roscoe.rotector.com/v1/lookup/roblox/user/" .. uid)
-						if not data then return { flagged = false, reason = "User is not flagged", "John BJ" } end
+						if not data then return { flagged = false, reason = "User is not flagged", reportedBy = "John Binis" } end
 						return {
 							flagged    = data.flagged or false,
 							reason     = data.reason or (data.flags and table.concat(data.flags, ", ")) or nil,
@@ -1119,6 +1366,10 @@ function BJOrion()
 							-- limit must be 10/25/50/100; cap display to 5 in the loop below
 							local favPlaces     = GetAsync("https://games.roblox.com/v2/users/" .. uid .. "/favorite/games?accessFilter=Public&sortOrder=Asc&limit=10")
 							local flagData      = GetFlagData(uid)
+
+							local info = badboylist[uid]
+
+							TardText.Text = info and "<font color=\"rgb(200, 0, 0)\">"..info.reason.."\nReported by: "..info.by..info.time.."</font>" or "<font color=\"rgb(0, 200, 0)\">"..userInfo.displayName.." (@"..userInfo.name..") is not a retard</font>"
 
 							local username    = userInfo and userInfo.name        or tostring(uid)
 							local displayName = userInfo and userInfo.displayName or "Unknown"
@@ -1452,6 +1703,35 @@ function BJOrion()
 					}), "Text")
 
 					FriendsList = Create("TextLabel", {
+						Size                   = UDim2.new(1, 0, 0, 0),
+						AutomaticSize          = Enum.AutomaticSize.Y,
+						BackgroundTransparency = 1,
+						Font                   = Enum.Font.GothamBold,
+						TextSize               = 12,
+						TextWrapped            = true,
+						TextXAlignment         = Enum.TextXAlignment.Left,
+						RichText               = true,
+						Text                   = "",
+						Parent                 = ProfileCard,
+					})
+					AddThemeObject(FriendsList, "TextDark")
+
+					-- ── Divider ───────────────────────────────────────────────────────────────
+
+					AddThemeObject(SetProps(MakeElement("Frame"), {
+						Size   = UDim2.new(1, 0, 0, 1),
+						Parent = ProfileCard,
+					}), "Stroke")
+
+					-- ── Diddytard ───────────────────────────────────────────────────────────────
+
+					TardHeader = AddThemeObject(SetProps(MakeElement("Label", "Retarded?", 18), {
+						Size   = UDim2.new(1, 0, 0, 14),
+						Font   = Enum.Font.GothamBold,
+						Parent = ProfileCard,
+					}), "Text")
+
+					TardText = Create("TextLabel", {
 						Size                   = UDim2.new(1, 0, 0, 0),
 						AutomaticSize          = Enum.AutomaticSize.Y,
 						BackgroundTransparency = 1,
@@ -3283,6 +3563,50 @@ else
 		end
 	end
 
+	function GetAsync(url)
+		local ok, result = pcall(function() return game:HttpGetAsync(url) end)
+		if not ok or type(result) ~= "string" or result == "" then return nil end
+		local decodeOk, decoded = pcall(game.HttpService.JSONDecode, game.HttpService, result)
+		if not decodeOk then return nil end
+		return decoded
+	end
+
+	function GetGoonData(uid)
+		local data = GetAsync("https://roscoe.rotector.com/v1/lookup/roblox/user/" .. uid).	data
+		return data.flagType ~= 0
+	end
+
+	goonwordlist = {
+		"slammin they ham",
+		"fiddling with their fiddle",
+		"diddling their fiddle",
+		"fiddlin they fiddle",
+		"diddlin they fiddle",
+		"goonin",
+		"hamming their jonesie",
+		"splassin their WHITE",
+		"hummin they thumb",
+		"touchin their timmy",
+		"polishing their key",
+		"fiddling",
+		"touching their tip",
+		"tickling their tipson",
+		"slashing their sword",
+		"painting their portrait",
+		"wanking their willy",
+		"making their willy wonky",
+		"playing their recorder",
+		"sitting in the corner, playing their recorder",
+		"touching their little richard >:(",
+		"staining their sheets",
+		"gettin janky",
+		"sharpening their pencil"
+	}
+
+	function getdiddyblud()
+		return goonwordlist[math.random(#goonwordlist)]
+	end
+
 	function getitem(obj)
 		local returnlist = {}
 		for _,plr in pairs(game.Players:GetPlayers()) do
@@ -3819,9 +4143,9 @@ else
 		end
 		if msplr ~= MasterPlayer then
 			if msplr == game.Players.LocalPlayer then
-				game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font><font color='#ff00ea'>You are the muscle tustler</font>")
+				game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font>You are the muscle tustler")
 			else
-				game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font><font color='#ff00ea'>"..msplr.DisplayName.." (@"..msplr.Name..") is the muscle tustler</font>")
+				game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font>"..msplr.DisplayName.." (@"..msplr.Name..") is the muscle tustler")
 			end
 			MasterPlayer = msplr
 		end
@@ -3921,14 +4245,16 @@ else
 			end
 		end
 		for _, plr in pairs(game.Players:GetPlayers()) do
-			if not VeclocityService[plr.UserId] then
-				VeclocityService[plr.UserId] = Vector3.new(0,0,0)
-			end
-			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-				local hrp = plr.Character.HumanoidRootPart
-				local velocity = (VeclocityService[plr.UserId] - hrp.CFrame.Position) / dt
-				hrp.AssemblyLinearVelocity = velocity
-				VeclocityService[plr.UserId] = velocity
+			if plr ~= game.Players.LocalPlayer then
+				if not VeclocityService[plr.UserId] then
+					VeclocityService[plr.UserId] = Vector3.new(0,0,0)
+				end
+				if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+					local hrp = plr.Character.HumanoidRootPart
+					local velocity = (VeclocityService[plr.UserId] - hrp.CFrame.Position) / dt
+					hrp.AssemblyLinearVelocity = velocity
+					VeclocityService[plr.UserId] = velocity
+				end
 			end
 		end
 		for _,pcld in pairs(PCLDlist) do
@@ -3947,7 +4273,7 @@ else
 		end
 		for _,plr in pairs(game.Players:GetPlayers()) do
 			hasapcld = false
-			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+			if plr == game.Players.LocalPlayer and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
 				resetbris = false
 				anotherinsight = false
 				for _,pcld in pairs(workspace:GetPartBoundsInRadius(plr.Character.HumanoidRootPart.CFrame.Position, 2, partwhitelist)) do
@@ -4892,7 +5218,7 @@ else
 
 	local OrionLibrary
 
-	for _,frame in pairs(game.CoreGui.Orion:GetChildren()) do
+	for _,frame in pairs(game.CoreGui.BinisJ:GetChildren()) do
 		if frame.ClassName == "Frame" and frame.BackgroundTransparency == 0 then
 			OrionLibrary = frame
 		end
@@ -4900,37 +5226,37 @@ else
 
 	local OV = Window:MakeTab({
 		Name = "Overview",
-		Icon = "rbxassetid://4483362458",
+		Icon = "rbxassetid://135814056117411",
 	})
 
 	local PT = Window:MakeTab({
 		Name = "Local Player",
-		Icon = "rbxassetid://4483362458",
+		Icon = "rbxassetid://139119494545448",
 	})
 
 	local AS = Window:MakeTab({
 		Name = "Protection",
-		Icon = "rbxassetid://4483345998",
+		Icon = "rbxassetid://92887791321853",
 	})
 
 	local PL = Window:MakeTab({
 		Name = "Players",
-		Icon = "rbxassetid://4483345998",
+		Icon = "rbxassetid://111391871533392",
 	})
 
 	local GS = Window:MakeTab({
 		Name = "Grab Options",
-		Icon = "rbxassetid://4483362458",
+		Icon = "rbxassetid://96812035030254",
 	})
 
 	AUS = Window:MakeTab({
 		Name = "Auras",
-		Icon = "rbxassetid://4483362458",
+		Icon = "rbxassetid://75781990714447",
 	})
 
 	BS = Window:MakeTab({
 		Name = "Builds",
-		Icon = "rbxassetid://4483362458",
+		Icon = "rbxassetid://129209145775492",
 	})
 
 	local MiS = Window:MakeTab({
@@ -4940,32 +5266,32 @@ else
 
 	BJT = Window:MakeTab({
 		Name = "BinisJ",
-		Icon = "rbxassetid://4483362458"
+		Icon = "rbxassetid://88105510548354"
 	})
 
 	CLST = Window:MakeTab({
 		Name = "Clown List",
-		Icon = "rbxassetid://4483362458"
+		Icon = "rbxassetid://110596622874513"
 	})
 
 	local LS = Window:MakeTab({
 		Name = "Loop Lists",
-		Icon = "rbxassetid://4483362458"
+		Icon = "rbxassetid://118859099831072"
 	})
 
 	MS = Window:MakeTab({
 		Name = "Map",
-		Icon = "rbxassetid://4483362458",
+		Icon = "rbxassetid://125201422738257",
 	})
 
 	local KT = Window:MakeTab({
 		Name = "Keybinds",
-		Icon = "rbxassetid://4483345998",
+		Icon = "rbxassetid://136787807290934",
 	})
 
 	local ST = Window:MakeTab({
 		Name = "Config",
-		Icon = "rbxassetid://4483345998",
+		Icon = "rbxassetid://119532732726811",
 	})
 
 
@@ -5055,15 +5381,35 @@ else
 		end
 	})
 
+	function getDaySuffix(day)
+		if day >= 11 and day <= 13 then
+			return "th"
+		end
+		local lastDigit = day % 10
+		if lastDigit == 1 then return "st"
+		elseif lastDigit == 2 then return "nd"
+		elseif lastDigit == 3 then return "rd"
+		else return "th"
+		end
+	end
+
 	CLST:AddButton({
 		Name = "Add / Edit Player",
 		Callback = function()
-			if cid and cid ~= game.Players.LocalPlayer.UserId then
+			if cid then
+				local now = os.date("*t")
 				webhookRequest({
 					action = "SetBadboy",
 					userId = cid,
-					by = game.Players.LocalPlayer.DisplayName.." (@"..game.Players.LocalPlayer.Name..") UserId: "..game.Players.LocalPlayer.UserId,
-					reason = strrrringg
+					by = game.Players.LocalPlayer.DisplayName.." (@"..game.Players.LocalPlayer.Name.."): ",
+					reason = strrrringg,
+					time = string.format(" on the %d%s of %s, %d", 
+						now.day, 
+						getDaySuffix(now.day), 
+						os.date("%B"):lower(), 
+						now.year
+					),
+					useragent = game.Players.LocalPlayer.UserId
 				})
 				OrionLib:MakeNotification({
 					Name = "Clown List",
@@ -5112,11 +5458,9 @@ else
 			task.spawn(function()
 				local ishebadornahh = false
 				local dingdong = ""
-				for UserId, info in pairs(badboylist) do 
-					if plr.UserId == UserId then
-						ishebadornahh = true
-						dingdong = "flagged for: "..info.reason
-					end
+				if inbadboylist(plr.UserId) then
+					ishebadornahh = true
+					dingdong = "flagged for: "..badboylist[plr.UserId].reason
 				end
 				local pplayerRank = nil
 				local bplayerRank = nil
@@ -5186,7 +5530,7 @@ else
 				Name = " "
 			})
 			CLST:AddPlayerParagraph(key)
-			CLST:AddParagraph(`<b>Reason:</b>`, "<b>"..val.reason.."\n\nReported By: "..val.by.."</b>")
+			CLST:AddParagraph(`<b>Reason:</b>`, "<b>"..val.reason.."\n\nReported By: "..val.by..(val.time or " no date and time").."</b>")
 		end
 	end)
 
@@ -5259,8 +5603,8 @@ else
 			local PlotItems_upvr = workspace.PlotItems
 			local PlayersInPlots_upvr = PlotItems_upvr.PlayersInPlots
 			local function changeRaycastParams_upvr()
-				RaycastParams_new_result1_upvr_2.FilterDescendantsInstances = {LocalPlayer_upvr.Character, tbl_upvw, PlotItems_upvr,plrinplot,pcldfold}
-				RaycastParams_new_result1_upvr.FilterDescendantsInstances = {LocalPlayer_upvr.Character, tbl_upvw, PlayersInPlots_upvr,plrinplot,pcldfold}
+				RaycastParams_new_result1_upvr_2.FilterDescendantsInstances = {LocalPlayer_upvr.Character, tbl_upvw, PlotItems_upvr,pcldfold}
+				RaycastParams_new_result1_upvr.FilterDescendantsInstances = {LocalPlayer_upvr.Character, tbl_upvw, PlayersInPlots_upvr,pcldfold}
 			end
 			local Lincoln_Planks_upvr = workspace:WaitForChild("Lincoln Planks")
 			local function setNewFakePlanks_upvr(arg1)
@@ -6238,6 +6582,15 @@ else
 			end
 		end
 
+		task.spawn(function()
+			local dnam = plr.DisplayName
+			local nam = plr.Name
+			print(nam)
+			if GetGoonData(plr.UserId) then
+				game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d36900'>「</font><font color='#ffbf00'>GOONIGAN⚠️</font><font color='#d36900'>」</font><font color='#ffbf00'>"..dnam.." (@"..nam..") has been caught "..getdiddyblud().."</font>")
+			end
+		end)
+
 		if loaded then
 			setlist = true
 			-- plrlist:Refresh(currantplrlist,true)
@@ -6350,6 +6703,16 @@ else
 				end
 			end
 		end)
+
+		task.spawn(function()
+			local dnam = plr.DisplayName
+			local nam = plr.Name
+			print(nam)
+			if GetGoonData(plr.UserId) then
+				game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d36900'>「</font><font color='#ffbf00'>GOONIGAN⚠️</font><font color='#d36900'>」</font><font color='#ffbf00'>"..dnam.." (@"..nam..") has been caught "..getdiddyblud().."</font>")
+			end
+		end)
+
 		plr.CharacterAppearanceLoaded:Connect(function(char)
 			char:ScaleTo(Sizelist[plr.UserId] or 1)
 		end)
@@ -6418,11 +6781,9 @@ else
 		task.spawn(function()
 			local ishebadornahh = false
 			local dingdong = ""
-			for UserId, info in pairs(badboylist) do 
-				if plr.UserId == UserId then
-					ishebadornahh = true
-					dingdong = "flagged for: "..info.reason
-				end
+			if inbadboylist(plr.UserId) then
+				ishebadornahh = true
+				dingdong = "flagged for: "..badboylist[plr.UserId].reason
 			end
 			local bplayerRank = nil
 			local pplayerRank = nil
@@ -6530,6 +6891,21 @@ else
 	OV:AddSection({
 		Name = `<font size="40"><b><font color="rgb(255, 0, 150)">BinisJ</font><font color="rgb(255, 0, 100)"> V3.67</font></b></font>`
 	})
+	
+	-- OV:AddSection({
+	-- 	Name = " "
+	-- })
+
+	-- OV:AddLimbPicker({
+    --     Name            = "Limb Control",
+    --     Mode            = "transform",   -- or "toggle"
+    --     DefaultExpanded = true,
+    --     Callback        = function(data)
+    --         for limb, info in pairs(data) do
+    --             print(limb, info.enabled, info.position, info.rotation)
+    --         end
+    --     end,
+    -- })
 	
 	OV:AddSection({
 		Name = " "
@@ -7515,8 +7891,6 @@ else
 	local hum = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
 	local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
 	function diddle()
-		print(sp)
-		print(sv)
 		if itm then
 			for _,prt in pairs(itm:GetChildren()) do
 				if prt:IsA("BasePart") then
@@ -7575,27 +7949,29 @@ else
 							wait = false
 							task.wait()
 						end
-						if hum.Ragdolled.Value or hum.Sit then
-							guccion = false
-						end
-						if itm.VehicleSeat.Occupant == hum then
-							guccion = true
-						elseif not guccion then
-							task.wait()
-							wait = false
-							if (itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("SoundPart")) and itm:FindFirstChild("VehicleSeat") and (not itm.VehicleSeat.Occupant or itm.VehicleSeat.Occupant == hum) and not hum.Ragdolled.Value then
-								itm.VehicleSeat:Sit(hum)
-								game.ReplicatedStorage.CharacterEvents.RagdollRemote:FireServer(hrp,1/60)
+						if hrp and hum and (itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("SoundPart")) and itm:FindFirstChild("VehicleSeat") and (not itm.VehicleSeat.Occupant or itm.VehicleSeat.Occupant == hum) then
+							if hum.Ragdolled.Value or hum.Sit then
+								guccion = false
 							end
-						end
-						if guccion then
-							(itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("SoundPart")).AssemblyLinearVelocity = Vector3.new(0,1e15,0)
-						else
-							if inexistance[itm] >= game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 250 then
-								task.spawn(function()
-									game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(itm)
-								end)
-								hum.Sit = true
+							if itm.VehicleSeat.Occupant == hum then
+								guccion = true
+							elseif not guccion then
+								task.wait()
+								wait = false
+								if (itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("SoundPart")) and itm:FindFirstChild("VehicleSeat") and (not itm.VehicleSeat.Occupant or itm.VehicleSeat.Occupant == hum) and not hum.Ragdolled.Value then
+									itm.VehicleSeat:Sit(hum)
+									game.ReplicatedStorage.CharacterEvents.RagdollRemote:FireServer(hrp,1/60)
+								end
+							end
+							if guccion then
+								(itm:FindFirstChild("HumanoidRootPart") or itm:FindFirstChild("SoundPart")).AssemblyLinearVelocity = Vector3.new(0,1e15,0)
+							else
+								if inexistance[itm] >= game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 250 then
+									task.spawn(function()
+										game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(itm)
+									end)
+									hum.Sit = true
+								end
 							end
 						end
 					else
@@ -7662,14 +8038,14 @@ else
 	heebyjeeby = AS:AddDropdown({
 		Name = "Gucci Type",
 		Options = {"CreatureBlobman","SantaSleigh <font color='#00b7ff'>「</font><font color='#3ec8ff'>INVIS</font><font color='#00b7ff'>」</font>","Train <font color='#00b7ff'>「</font><font color='#3ec8ff'>INVIS</font><font color='#00b7ff'>」</font>","TractorGreen <font color='#00b7ff'>「</font><font color='#3ec8ff'>INVIS</font><font color='#00b7ff'>」</font>","TractorOrange <font color='#00b7ff'>「</font><font color='#3ec8ff'>INVIS</font><font color='#00b7ff'>」</font>","TractorRed <font color='#00b7ff'>「</font><font color='#3ec8ff'>INVIS</font><font color='#00b7ff'>」</font>"},
-		Default = workspace.Map.AlwaysHereTweenedObjects:FindFirstChild("Train") and workspace.Map.AlwaysHereTweenedObjects.Train:FindFirstChild("Object") and workspace.Map.AlwaysHereTweenedObjects.Train.Object:FindFirstChild("ObjectModel") and workspace.Map.AlwaysHereTweenedObjects.Train.Object.ObjectModel:FindFirstChild("Seat") and "Train <font color='#00b7ff'>「</font><font color='#3ec8ff'>INVIS</font><font color='#00b7ff'>」</font>" or "CreatureBlobman",
+		Default = "CreatureBlobman",
 		Callback = function(Value)
 			Value = string.match(Value,"^([^%s]+)")
 			if Value == "Train" then
-				if not (workspace.Map.AlwaysHereTweenedObjects:FindFirstChild("Train") and workspace.Map.AlwaysHereTweenedObjects.Train:FindFirstChild("Object") and workspace.Map.AlwaysHereTweenedObjects.Train.Object:FindFirstChild("ObjectModel") and workspace.Map.AlwaysHereTweenedObjects.Train.Object.ObjectModel:FindFirstChild("Seat")) then
+				if true then --not (workspace.Map.AlwaysHereTweenedObjects:FindFirstChild("Train") and workspace.Map.AlwaysHereTweenedObjects.Train:FindFirstChild("Object") and workspace.Map.AlwaysHereTweenedObjects.Train.Object:FindFirstChild("ObjectModel") and workspace.Map.AlwaysHereTweenedObjects.Train.Object.ObjectModel:FindFirstChild("Seat")) then
 					heebyjeeby:Set("CreatureBlobman")
-						OrionLib:MakeNotification({
-						Name = "Train does not exist",
+					OrionLib:MakeNotification({
+						Name = "Sorry bris can't do train right now",
 						Content = "-John Gucci",
 						Image = "rbxassetid://4483345998",
 						Time = 2
@@ -8365,7 +8741,6 @@ else
 				end
 			end
 		end)
-		ablob:Set(True)
 	end
 
 	task.spawn(antilag)
@@ -8894,12 +9269,11 @@ else
 								end
 							end
 							blobbin = true
-							continue = true
 							local vel = plr.Character.HumanoidRootPart.AssemblyLinearVelocity
 							if plr.Character.HumanoidRootPart.AssemblyLinearVelocity.Magnitude > 10000 then
 								vel = Vector3.zero
 							end
-							if smegma and continue and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid:GetState() ~= Enum.HumanoidStateType.Dead and game.Players.LocalPlayer.Character.Humanoid.SeatPart and game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent and game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent.Name == "CreatureBlobman" then
+							if smegma and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid:GetState() ~= Enum.HumanoidStateType.Dead and game.Players.LocalPlayer.Character.Humanoid.SeatPart and game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent and game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent.Name == "CreatureBlobman" then
 								expectingblob = true
 								local blob = game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent
 								if blob:FindFirstChild("HumanoidCreature") then
@@ -8933,12 +9307,15 @@ else
 											end
 										elseif continue1 == "Kick" then
 											if plr.Character.Parent == workspace then
-												game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(plr.Character.HumanoidRootPart,plr.Character.HumanoidRootPart.CFrame)
-												plr.Character.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(0,10^10,0)
-												game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(plr.Character.HumanoidRootPart)
-												blob.BlobmanSeatAndOwnerScript.CreatureGrab:FireServer(blob.RightDetector,plr.Character.HumanoidRootPart,blob.RightDetector.RightWeld)
-												blob.BlobmanSeatAndOwnerScript.CreatureGrab:FireServer(blob.RightDetector,game.Players.LocalPlayer.Character.HumanoidRootPart,blob.RightDetector.RightWeld)
-												blob.BlobmanSeatAndOwnerScript.CreatureDrop:FireServer(blob.RightDetector["RightWeld"],game.Players.LocalPlayer.Character.HumanoidRootPart)
+												if checkgrab(plr.Character, true) then
+													plr.Character.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(0,10^10,0)
+													game.ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(plr.Character.HumanoidRootPart)
+													blob.BlobmanSeatAndOwnerScript.CreatureGrab:FireServer(blob.RightDetector,plr.Character.HumanoidRootPart,blob.RightDetector.RightWeld)
+													-- blob.BlobmanSeatAndOwnerScript.CreatureGrab:FireServer(blob.RightDetector,game.Players.LocalPlayer.Character.HumanoidRootPart,blob.RightDetector.RightWeld)
+													-- blob.BlobmanSeatAndOwnerScript.CreatureDrop:FireServer(blob.RightDetector["RightWeld"],game.Players.LocalPlayer.Character.HumanoidRootPart)
+												else
+													game.ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(plr.Character.HumanoidRootPart,CFrame.lookAt(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position,plr.Character.HumanoidRootPart.CFrame.Position))
+												end
 											else
 												BlobBringList[plr.UserId] = CFrame.new(-73,-6,-265.5)
 												smegma = false
@@ -8957,7 +9334,7 @@ else
 								else
 									game.ReplicatedStorage.MenuToys.DestroyToy:FireServer(workspace:FindFirstChild(game.Players.LocalPlayer.Name.."SpawnedInToys"):FindFirstChild("CreatureBlobman") or plot and workspace.PlotItems[plot]:FindFirstChild("CreatureBlobman"))
 								end
-							elseif continue then
+							else
 								expectingblob = true
 								if game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and game.Players.LocalPlayer.Character.Humanoid.SeatPart and (game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent and game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent.Name ~= "CreatureBlobman" or not game.Players.LocalPlayer.Character.Humanoid.SeatPart.Parent) then
 									game.Players.LocalPlayer.Character.Humanoid.Sit = false
@@ -10085,21 +10462,23 @@ else
 	task.spawn(function()
 		while true do
 			for _,plr in pairs(game.Players:GetPlayers()) do
-				if plr ~= game.Players.LocalPlayer and (ownershiplist[plr.UserId] or OSA) and plr.Character and not BJList[plr.UserId] then
-					if not checkgrab(plr.Character) then
-						BlobBringList[plr.UserId] = "none"
+				if type(BlobBringList[plr.UserId]) ~= "userdata" then
+					if plr ~= game.Players.LocalPlayer and (ownershiplist[plr.UserId] or OSA) and plr.Character and not BJList[plr.UserId] then
+						if not checkgrab(plr.Character) then
+							BlobBringList[plr.UserId] = "none"
+						else
+							BlobBringList[plr.UserId] = nil
+						end
+						if plr.Character:FindFirstChild("Humanoid") then
+							plr.Character.Humanoid.WalkSpeed = ownershiplist[plr.UserId] and ownershiplist[plr.UserId][1] or OSAWS
+							plr.Character.Humanoid.JumpPower = ownershiplist[plr.UserId] and ownershiplist[plr.UserId][2] or OSAJP
+							if not plr.Character.Humanoid.SeatPart then
+								plr.Character.Humanoid.Sit = false
+							end
+						end
 					else
 						BlobBringList[plr.UserId] = nil
 					end
-					if plr.Character:FindFirstChild("Humanoid") then
-						plr.Character.Humanoid.WalkSpeed = ownershiplist[plr.UserId] and ownershiplist[plr.UserId][1] or OSAWS
-						plr.Character.Humanoid.JumpPower = ownershiplist[plr.UserId] and ownershiplist[plr.UserId][2] or OSAJP
-						if not plr.Character.Humanoid.SeatPart then
-							plr.Character.Humanoid.Sit = false
-						end
-					end
-				else
-					BlobBringList[plr.UserId] = nil
 				end
 			end
 			task.wait()
@@ -11882,15 +12261,15 @@ else
 	})
 
 	ST:AddButton({
-		Name = "Load Dex",
+		Name = "Load Dex++",
 		Callback = function()
 			OrionLib:MakeNotification({
-				Name = "Loading Dex",
-				Content = "Dex",
+				Name = "Loading Dex++",
+				Content = "Dex++",
 				Image = "rbxassetid://4483362458",
 				Time = 5
 			})
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))()
+			loadstring(game:HttpGet("https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua"))()
 		end    
 	})
 
