@@ -1,1 +1,129 @@
-game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#590505'>「</font><font color='#db0909'>BinisJ</font><font color='#590505'>」</font><font color='#db0909'> Niggalink OFFLINE (Malformed Client)</font>")
+local ok, decoded = pcall(function()
+    return game.HttpService:JSONDecode(readfile("BinisJ.bj"))
+end)
+local file = (ok and decoded) or {}
+
+local useragent = file.uAgent or tostring(game.Players.LocalPlayer.UserId)
+local thisuser = file[useragent] or {}
+
+function getDaySuffix(day)
+    if day >= 11 and day <= 13 then
+        return "th"
+    end
+    local lastDigit = day % 10
+    if lastDigit == 1 then return "st"
+    elseif lastDigit == 2 then return "nd"
+    elseif lastDigit == 3 then return "rd"
+    else return "th"
+    end
+end
+
+local now = os.date("*t")
+local time = string.format("%d%s of %s, %d - %02d:%02d:%02d", 
+    now.day, 
+    getDaySuffix(now.day), 
+    os.date("%B"):lower(), 
+    now.year,
+    now.hour,
+    now.min,
+    now.sec
+)
+
+thisuser.timesInjected = thisuser.timesInjected or 0
+thisuser.timesInjected += 1
+thisuser.uAgent = useragent
+thisuser.timeTotal = thisuser.timeTotal or 0
+thisuser.timeMax = thisuser.timeMax or 0
+thisuser.savedToys = thisuser.savedToys or {}
+thisuser.otherAccs = thisuser.otherAccs or {}
+thisuser.otherAccs[tostring(game.Players.LocalPlayer.UserId)] = true
+thisuser.accHistory = thisuser.accHistory or {}
+thisuser.accHistory[time] = {game.Players.LocalPlayer.DisplayName,game.Players.LocalPlayer.Name}
+thisuser.maxPing = thisuser.maxPing or 0
+thisuser.maxFps = thisuser.maxFps or 1000000
+thisuser.lowPing = thisuser.lowPing or 1000000
+thisuser.mostKicked = thisuser.mostKicked or 0
+thisuser.retardsKicked = thisuser.retardsKicked or 0
+thisuser.totalKicked = thisuser.totalkicked or 0
+thisuser.savedBuilds = thisuser.savedBuilds or {}
+thisuser.savedLogs = thisuser.savedLogs or {}
+file[useragent] = thisuser
+
+file.badboylist = file.badboylist or {}
+
+local function webhookRequest(data)
+    local ok, result = pcall(function()
+        return (syn and syn.request or http and http.request or request)({
+            Url = "https://delicate-wave-29da.brizzyjizzy2.workers.dev",
+            Method = "POST",
+            Headers = { ["Content-Type"] = "application/json" },
+            Body = game.HttpService:JSONEncode(data)
+        })
+    end)
+    if ok and result and result.StatusCode == 200 then
+        local decodeOk, decoded = pcall(game.HttpService.JSONDecode, game.HttpService, result.Body)
+        if decodeOk then return decoded end
+    end
+    game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
+        "<font color='#9a0000'>「</font><font color='#ff0000'>BinisJ</font><font color='#9a0000'>」</font>".."<font color='#ff0000'>"..data.action.." Webhook Attempt Failed</font>"
+    )
+    return {}
+end
+
+local response = webhookRequest({
+    action = "Startthatstuff",
+    syncthat = thisuser
+})
+
+local file2 = (response and response.BJData) or file
+
+local newuser2 = file2[tostring(game.Players.LocalPlayer.UserId)]
+
+thisuser.timeTotal = newuser2.timeTotal > thisuser.timeTotal and newuser2.timeTotal or thisuser.timeTotal
+thisuser.timeMax = newuser2.timeMax > thisuser.timeMax and newuser2.timeMax or thisuser.timeMax
+for i,v in pairs(newuser2.savedToys) do
+    thisuser.savedToys[i] = v
+end
+for i,v in pairs(newuser2.otherAccs) do
+    thisuser.otherAccs[i] = v
+end
+thisuser.maxPing = newuser2.maxPing > thisuser.maxPing and newuser2.maxPing or thisuser.maxPing
+thisuser.maxFps = newuser2.maxFps < thisuser.maxFps and newuser2.maxFps or thisuser.maxFps
+thisuser.lowPing = newuser2.lowPing < thisuser.lowPing and newuser2.lowPing or thisuser.lowPing
+thisuser.mostKicked = newuser2.mostKicked > thisuser.mostKicked and newuser2.mostKicked or thisuser.mostKicked
+thisuser.retardsKicked = newuser2.retardsKicked > thisuser.retardsKicked and newuser2.retardsKicked or thisuser.retardsKicked
+thisuser.totalKicked = newuser2.totalKicked > thisuser.totalKicked and newuser2.totalKicked or thisuser.totalKicked
+thisuser.timesInjected = newuser2.timesInjected
+for i,v in pairs(newuser2.accHistory) do
+    thisuser.accHistory[i] = v
+end
+for i,v in pairs(newuser2.savedBuilds) do
+    if not (thisuser.savedBuilds[i] and thisuser.savedBuilds[i] == v) then
+        print('(figure this out later) updated',i)
+        thisuser.savedBuilds[i] = v
+    end
+end
+
+file2[useragent] = thisuser
+
+for i,v in pairs(file2.badboylist) do
+    if not (file.badboylist[i] ~= nil and file.badboylist[i].time == v.time) then
+        file.badboylist[i] = v
+        game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
+            "<font color='#7b003a'>「</font><font color='#9a0048'>Badboylist</font><font color='#7b003a'>」</font>".."<font color='#9a0048'>"..v.by.." has updated a user at "..v.time.."</font>"
+        )
+    end
+end
+
+for i,v in pairs(file2) do
+    if not file[i] then
+        game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
+            "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font>".."<font color='#b80056'>A new user has used BinisJ since you last used it</font>"
+        )
+    end
+end
+
+_G.BinisJData = file2
+writefile("BinisJ.bj",game.HttpService:JSONEncode(file2))
+
+game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#590505'>「</font><font color='#db0909'>BinisJ</font><font color='#590505'>」</font><font color='#db0909'> Niggalink OFFLINE (Script not included yet wait till like tomorrow maybe)</font>")
