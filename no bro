@@ -3,9 +3,10 @@ if not _G.CantInject then
     local ok, decoded = pcall(function()
         return game.HttpService:JSONDecode(readfile("BinisJ.bj"))
     end)
-    local file = {}
+    local file = {} -- (ok and decoded) or {}
     
     local useragent = file.uAgent or tostring(game.Players.LocalPlayer.UserId)
+    file.uAgent = useragent
     local thisuser = file[useragent] or {}
     
     function getDaySuffix(day)
@@ -40,7 +41,7 @@ if not _G.CantInject then
     thisuser.otherAccs = thisuser.otherAccs or {}
     thisuser.otherAccs[tostring(game.Players.LocalPlayer.UserId)] = true
     thisuser.accHistory = thisuser.accHistory or {}
-    thisuser.accHistory[time] = {game.Players.LocalPlayer.DisplayName,game.Players.LocalPlayer.Name}
+    thisuser.accHistory[time] = {["DisplayName"] = game.Players.LocalPlayer.DisplayName, ["Username"] = game.Players.LocalPlayer.Name, ["UserId"] = game.Players.LocalPlayer.UserId}
     thisuser.maxPing = thisuser.maxPing or 0
     thisuser.maxFps = thisuser.maxFps or 1000000
     thisuser.lowPing = thisuser.lowPing or 1000000
@@ -78,9 +79,11 @@ if not _G.CantInject then
     })
     
     local file2 = (response and response.BJData) or file
-    local Script = response.Script or [[game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#590505'>「</font><font color='#db0909'>BinisJ</font><font color='#590505'>」</font><font color='#db0909'> Niggalink OFFLINE (webhook probably offline)</font>")]]
+    local Script = (response and response.Script) or [[game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#590505'>「</font><font color='#db0909'>BinisJ</font><font color='#590505'>」</font><font color='#db0909'> Niggalink OFFLINE (This is DJ's fault probably somethings gone wrong)</font>")]]
     
-    local newuser2 = file2[tostring(game.Players.LocalPlayer.UserId)]
+    file2.uAgent = useragent
+    
+    local newuser2 = file2[useragent]
     
     thisuser.timeTotal = newuser2.timeTotal > thisuser.timeTotal and newuser2.timeTotal or thisuser.timeTotal
     thisuser.timeMax = newuser2.timeMax > thisuser.timeMax and newuser2.timeMax or thisuser.timeMax
