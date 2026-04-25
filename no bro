@@ -3,7 +3,7 @@ if not _G.CantInject then
     local ok, decoded = pcall(function()
         return game.HttpService:JSONDecode(readfile("BinisJ.bj"))
     end)
-    local file = {} -- (ok and decoded) or {}
+    local file = (ok and decoded) or {}
     
     local useragent = file.uAgent or tostring(game.Players.LocalPlayer.UserId)
     file.uAgent = useragent
