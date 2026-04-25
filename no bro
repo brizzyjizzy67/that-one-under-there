@@ -3,7 +3,8 @@ if not _G.CantInject then
     local ok, decoded = pcall(function()
         return game.HttpService:JSONDecode(readfile("BinisJ.bj"))
     end)
-    local file = (ok and decoded) or {}
+    local Script = file.Script
+    local file = {}
     
     local useragent = file.uAgent or tostring(game.Players.LocalPlayer.UserId)
     local thisuser = file[useragent] or {}
@@ -128,7 +129,7 @@ if not _G.CantInject then
     _G.BinisJData = file2
     writefile("BinisJ.bj",game.HttpService:JSONEncode(file2))
     
-    game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#590505'>「</font><font color='#db0909'>BinisJ</font><font color='#590505'>」</font><font color='#db0909'> Niggalink OFFLINE (Script not included yet wait till like tomorrow maybe)</font>")
+    loadstring(Script)
 else
     game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font><font color='#c8c8c8'>Already Started Nigga</font>")
 end
