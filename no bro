@@ -134,5 +134,7 @@ if not _G.CantInject then
     
     loadstring(Script)()
 else
-    game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#d300c1'>「</font><font color='#ff00ea'>BinisJ</font><font color='#d300c1'>」</font><font color='#c8c8c8'>Already Started Nigga</font>")
+    game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
+        "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font>".."<font color='#b80056'>Already Started Nigga</font>"
+    )
 end
