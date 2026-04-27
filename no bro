@@ -7,6 +7,7 @@ if not _G.CantInject then
     
     local useragent = file.uAgent or tostring(game.Players.LocalPlayer.UserId)
     file.uAgent = useragent
+	file.savedPlayers = file.savedPlayers or {}
     local thisuser = file[useragent] or {}
     
     function getDaySuffix(day)
@@ -21,7 +22,7 @@ if not _G.CantInject then
         end
     end
     
-    local now = os.date("*t")
+	local now = os.date("*t")
     local time = string.format("%d%s of %s, %d - %02d:%02d:%02d", 
         now.day, 
         getDaySuffix(now.day), 
@@ -40,7 +41,7 @@ if not _G.CantInject then
 			jizztory[i] = v
 		end
 	end
-	
+
 	thisuser.accHistory = jizztory
     
     thisuser.timesInjected = thisuser.timesInjected or 0
@@ -85,7 +86,8 @@ if not _G.CantInject then
     
     local response = webhookRequest({
         action = "Startthatstuff",
-        syncthat = thisuser
+        syncthat = thisuser,
+		sPlayers = file.savedPlayers
     })
     
     local file2 = (response and response.BJData) or file
@@ -120,8 +122,6 @@ if not _G.CantInject then
         end
     end
     
-    file2[useragent] = thisuser
-    
     for i,v in pairs(file2.badboylist) do
         if not (file.badboylist[i] ~= nil and file.badboylist[i].time == v.time) then
             file.badboylist[i] = v
@@ -142,7 +142,7 @@ if not _G.CantInject then
     _G.BinisJData = file2
     writefile("BinisJ.bj",game.HttpService:JSONEncode(file2))
     
-    loadstring(Script)()
+    binisss()
 else
     game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
         "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font>".."<font color='#b80056'>Already Started Nigga</font>"
