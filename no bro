@@ -142,7 +142,7 @@ if not _G.CantInject then
     _G.BinisJData = file2
     writefile("BinisJ.bj",game.HttpService:JSONEncode(file2))
     
-    binisss()
+    loadstring(Script)()
 else
     game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
         "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font>".."<font color='#b80056'>Already Started Nigga</font>"
