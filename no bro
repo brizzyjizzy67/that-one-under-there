@@ -5,7 +5,7 @@ if not _G.CantInject then
     end)
     local file = (ok and decoded) or {}
     
-    local useragent = file.uAgent or "diddynigga"
+    local useragent = file.uAgent or tostring(game.Players.LocalPlayer.UserId)
     file.uAgent = useragent
 	file.savedPlayers = file.savedPlayers or {}
     file.badboylist = file.badboylist or {}
