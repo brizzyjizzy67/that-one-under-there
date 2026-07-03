@@ -80,7 +80,7 @@ if not _G.CantInject then
             )
         end
     end
-    
+
     for i,v in pairs(file2) do
         if not file[i] then
             game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
@@ -88,9 +88,10 @@ if not _G.CantInject then
             )
         end
     end
+    makefolder("BinisJ")
+    writefile("BinisJ/SavedData.json", game.HttpService:JSONEncode(file2))
     
     _G.BinisJData = file2
-    writefile("BinisJ.bj", game.HttpService:JSONEncode(file2))
     
     loadstring(Script)()
 else
