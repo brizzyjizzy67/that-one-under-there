@@ -89,12 +89,10 @@ if not _G.CantInject then
         end
     end
 
-    file2.uAgent = uAgent
-
     makefolder("BinisJ")
     writefile("BinisJ/SavedData.json", game.HttpService:JSONEncode(file2))
     
-    _G.BinisJData = file2
+    _G.BJData = file2
     
     loadstring(Script)()
 else
