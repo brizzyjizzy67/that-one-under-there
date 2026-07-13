@@ -90,6 +90,7 @@ if not _G.CantInject then
     end
 
     makefolder("BinisJ")
+    writefile("BinisJ/BinisJ.lua", Script)
     writefile("BinisJ/SavedData.json", game.HttpService:JSONEncode(file2))
     
     _G.BJData = file2
