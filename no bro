@@ -4,6 +4,10 @@ if not _G.CantInject then
         return game.HttpService:JSONDecode(readfile("BinisJ/SavedData.json"))
     end)
     local file = (ok and decoded) or {}
+
+    if game.PlaceId == 6961824067 then
+        game.Players.LocalPlayer.PlayerScripts.CharacterAndBeamMove.Disabled = true
+    end
     
     local useragent = file.uAgent or tostring(game.Players.LocalPlayer.UserId)
     file.uAgent = useragent
