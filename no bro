@@ -96,6 +96,9 @@ if not _G.CantInject then
     makefolder("BinisJ")
     writefile("BinisJ/BinisJ.lua", Script)
     writefile("BinisJ/SavedData.json", game.HttpService:JSONEncode(file2))
+    makefolder("BinisJ/Versions")
+    local bjn = string.match(Script, "^[^\n]*\n([^\n]*)")
+    writefile("BinisJ/Versions/"..bjn..".lua", Script)
     
     _G.BJData = file2
     
