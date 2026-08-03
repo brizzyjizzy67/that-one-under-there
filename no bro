@@ -5,11 +5,13 @@ if not _G.CantInject then
     end)
     local file = (ok and decoded) or {}
 
+    local lplr = game.Players.LocalPlayer
+
     if game.PlaceId == 6961824067 then
-        game.Players.LocalPlayer.PlayerScripts.CharacterAndBeamMove.Disabled = true
+        lplr.PlayerScripts.CharacterAndBeamMove.Disabled = true
     end
     
-    local useragent = file.uAgent or tostring(game.Players.LocalPlayer.UserId)
+    local useragent = file.uAgent or tostring(lplr.UserId)
     file.uAgent = useragent
 	file.savedPlayers = file.savedPlayers or {}
     file.badboylist = file.badboylist or {}
@@ -24,11 +26,13 @@ if not _G.CantInject then
     thisuser.timesInjected = thisuser.timesInjected or 0
     thisuser.timesInjected += 1
     thisuser.uAgent = useragent
+    thisuser.BinisName = thisuser.BinisName or lplr.DisplayName
+    thisuser.BinisColor = thisuser.BinisColor or { R = 255, G = 0, B = 234 }
     thisuser.timeTotal = thisuser.timeTotal or 0
     thisuser.timeMax = thisuser.timeMax or 0
     thisuser.savedToys = thisuser.savedToys or {}
     thisuser.otherAccs = thisuser.otherAccs or {}
-    thisuser.otherAccs[tostring(game.Players.LocalPlayer.UserId)] = true
+    thisuser.otherAccs[tostring(lplr.UserId)] = true
     thisuser.accHistory = thisuser.accHistory or {}
     thisuser.maxPing = thisuser.maxPing or 0
     thisuser.maxFps = thisuser.maxFps or 1000000
@@ -64,9 +68,9 @@ if not _G.CantInject then
         action = "Startthatstuff",
         syncthat = thisuser,
         gameinfo = {
-            DisplayName = game.Players.LocalPlayer.DisplayName,
-            Name = game.Players.LocalPlayer.Name,
-            UserId = game.Players.LocalPlayer.UserId,
+            DisplayName = lplr.DisplayName,
+            Name = lplr.Name,
+            UserId = lplr.UserId,
             PlaceId = game.PlaceId,
             JobId = game.JobId,
             Time = time(),
