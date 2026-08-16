@@ -42,6 +42,7 @@ if not _G.CantInject then
     thisuser.totalKicked = thisuser.totalkicked or 0
     thisuser.savedBuilds = thisuser.savedBuilds or {}
     thisuser.savedConfig = thisuser.savedConfig or {}
+    thisuser.selectedconfig = thisuser.selectedconfig or "None"
     file[useragent] = thisuser
 
     thisuser.rollbackVersion = thisuser.rollbackVersion or 0
