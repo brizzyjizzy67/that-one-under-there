@@ -1,28 +1,36 @@
 if not _G.CantInject then
     _G.CantInject = true
-    local ok, decoded = pcall(function()
-        return game.HttpService:JSONDecode(readfile("BinisJ/SavedData.json"))
-    end)
-    local file = (ok and decoded) or {}
 
-    local lplr = game.Players.LocalPlayer
+    game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
+        "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font>".."<font color='#ff83bd'>Loading the 'Binis</font>"
+    )
 
     if game.PlaceId == 6961824067 then
         lplr.PlayerScripts.CharacterAndBeamMove.Disabled = true
     end
-    
-    local useragent = file.uAgent or tostring(lplr.UserId)
-    file.uAgent = useragent
-	file.savedPlayers = file.savedPlayers or {}
-    file.badboylist = file.badboylist or {}
 
-    local thisuser = file[useragent] or {}
+    local ok, decoded = pcall(function()
+        return game.HttpService:JSONDecode(readfile("BinisJ/SavedData.json"))
+    end)
+    local file = (ok and decoded) or { }
+
+    local lplr = game.Players.LocalPlayer
+    local sid = tostring(lplr.UserId)
+    
+    local useragent = file.uAgent or sid
+    file.uAgent = useragent
+	file.savedPlayers = file.savedPlayers or { }
+    file.badboylist = file.badboylist or { }
+
+    local Mii = file.You or sid
+
+    local thisuser = file[Mii] or { }
 
     local function time()
         return os.time() + (os.clock() % 1)
     end
 
-    thisuser.accHistory = thisuser.accHistory or {}
+    thisuser.accHistory = thisuser.accHistory or { }
     thisuser.timesInjected = thisuser.timesInjected or 0
     thisuser.timesInjected += 1
     thisuser.uAgent = useragent
@@ -30,20 +38,20 @@ if not _G.CantInject then
     thisuser.BinisColor = thisuser.BinisColor or { R = 255, G = 0, B = 234 }
     thisuser.timeTotal = thisuser.timeTotal or 0
     thisuser.timeMax = thisuser.timeMax or 0
-    thisuser.savedToys = thisuser.savedToys or {}
-    thisuser.otherAccs = thisuser.otherAccs or {}
-    thisuser.otherAccs[tostring(lplr.UserId)] = true
-    thisuser.accHistory = thisuser.accHistory or {}
+    thisuser.savedToys = thisuser.savedToys or { }
+    thisuser.otherAccs = thisuser.otherAccs or { }
+    thisuser.otherAccs[sid] = true
+    thisuser.accHistory = thisuser.accHistory or { }
     thisuser.maxPing = thisuser.maxPing or 0
     thisuser.maxFps = thisuser.maxFps or 1000000
     thisuser.lowPing = thisuser.lowPing or 1000000
     thisuser.mostKicked = thisuser.mostKicked or 0
     thisuser.retardsKicked = thisuser.retardsKicked or 0
     thisuser.totalKicked = thisuser.totalkicked or 0
-    thisuser.savedBuilds = thisuser.savedBuilds or {}
-    thisuser.savedConfig = thisuser.savedConfig or {}
+    thisuser.savedBuilds = thisuser.savedBuilds or { }
+    thisuser.savedConfig = thisuser.savedConfig or { }
     thisuser.selectedconfig = thisuser.selectedconfig or "None"
-    file[useragent] = thisuser
+    file[Mii] = thisuser
 
     thisuser.rollbackVersion = thisuser.rollbackVersion or 0
     
@@ -63,7 +71,7 @@ if not _G.CantInject then
         game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
             "<font color='#9a0000'>「</font><font color='#ff0000'>BinisJ</font><font color='#9a0000'>」</font>".."<font color='#ff0000'>"..data.action.." Webhook Attempt Failed</font>"
         )
-        return {}
+        return { }
     end
     
     local response = webhookRequest({
@@ -100,12 +108,14 @@ if not _G.CantInject then
         end
     end
 
-    makefolder("BinisJ")
-    writefile("BinisJ/BinisJ.lua", Script)
-    writefile("BinisJ/SavedData.json", game.HttpService:JSONEncode(file2))
-    makefolder("BinisJ/Versions")
-    local bjn = string.match(Script, "^[^\n]*\n([^\n]*)")
-    writefile("BinisJ/Versions/"..bjn..".lua", Script)
+    task.spawn(function()
+        makefolder("BinisJ")
+        writefile("BinisJ/BinisJ.lua", Script)
+        writefile("BinisJ/SavedData.json", game.HttpService:JSONEncode(file2))
+        makefolder("BinisJ/Versions")
+        local bjn = string.match(Script, "^[^\n]*\n([^\n]*)")
+        writefile("BinisJ/Versions/"..bjn..".lua", Script)
+    end)
     
     _G.BJData = file2
     
