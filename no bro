@@ -2,8 +2,10 @@ if not _G.CantInject then
     _G.CantInject = true
 
     game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
-        "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font>".."<font color='#ff83bd'>Loading the 'Binis</font>"
+        "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font>".."<font color='#ff0077'>Loading the 'Binis</font>"
     )
+
+    local lplr = game.Players.LocalPlayer
 
     if game.PlaceId == 6961824067 then
         lplr.PlayerScripts.CharacterAndBeamMove.Disabled = true
@@ -13,8 +15,6 @@ if not _G.CantInject then
         return game.HttpService:JSONDecode(readfile("BinisJ/SavedData.json"))
     end)
     local file = (ok and decoded) or { }
-
-    local lplr = game.Players.LocalPlayer
     local sid = tostring(lplr.UserId)
     
     local useragent = file.uAgent or sid
