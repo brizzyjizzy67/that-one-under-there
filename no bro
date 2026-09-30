@@ -65,6 +65,7 @@ if not CantInject then
                     Body = game.HttpService:JSONEncode(data)
                 })
             end)
+            print("NIGGER", ok, result)
             for i,v in pairs(result) do print(i,v) end
             if ok and result and result.StatusCode == 200 then
                 local decodeOk, decoded = pcall(game.HttpService.JSONDecode, game.HttpService, result.Body)
