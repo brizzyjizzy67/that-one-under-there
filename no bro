@@ -112,7 +112,7 @@ if not CantInject then
 
         task.spawn(function()
             local bjn = string.match(Script, "^[^\n]*\n([^\n]*)")
-            if not bjn then return end
+            if not bjn then getgenv().CantInject = nil; return end
             makefolder("BinisJ")
             writefile("BinisJ/BinisJ.lua", Script)
             writefile("BinisJ/SavedData.json", game.HttpService:JSONEncode(file2))
