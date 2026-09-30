@@ -3,7 +3,7 @@ if not CantInject then
 
     local Success, Error = pcall(function()
         game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
-            "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font>".."<font color='#ff0077'>Loading the 'Binis</font>"
+            "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font><font color='#ff0077'>Loading the 'Binis</font>"
         )
 
         local lplr = game.Players.LocalPlayer
@@ -72,7 +72,7 @@ if not CantInject then
                 if decodeOk then return decoded end
             end
             game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
-                "<font color='#9a0000'>「</font><font color='#ff0000'>BinisJ</font><font color='#9a0000'>」</font>".."<font color='#ff0000'>"..data.action.." Webhook Attempt Failed</font>"
+                "<font color='#9a0000'>「</font><font color='#ff0000'>BinisJ</font><font color='#9a0000'>」</font><font color='#ff0000'>"..data.action.." Webhook Attempt Failed</font>"
             )
             return { }
         end
@@ -98,7 +98,7 @@ if not CantInject then
             if not (file.badboylist[i] ~= nil and file.badboylist[i].time == v.time) then
                 file.badboylist[i] = v
                 game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
-                    "<font color='#7b003a'>「</font><font color='#9a0048'>Badboylist</font><font color='#7b003a'>」</font>".."<font color='#9a0048'>" .. v.by .. " has updated a user at " .. v.time .. "</font>"
+                    "<font color='#7b003a'>「</font><font color='#9a0048'>Badboylist</font><font color='#7b003a'>」</font><font color='#9a0048'>" .. v.by .. " has updated a user at " .. v.time .. "</font>"
                 )
             end
         end
@@ -106,14 +106,20 @@ if not CantInject then
         for i,v in pairs(file2) do
             if not file[i] then
                 game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
-                    "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font>".."<font color='#b80056'>A new user has used BinisJ since you last used it</font>"
+                    "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font><font color='#b80056'>A new user has used BinisJ since you last used it</font>"
                 )
             end
         end
 
         task.spawn(function()
             local bjn = string.match(Script, "^[^\n]*\n([^\n]*)")
-            if not bjn then getgenv().CantInject = nil; return end
+            if not bjn then
+                game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
+                    "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font><font color='#b80056'>BAD BinisJ version detected nigga that means ur gay nigga</font>"
+                )
+                getgenv().CantInject = nil
+                return
+            end
             makefolder("BinisJ")
             writefile("BinisJ/BinisJ.lua", Script)
             writefile("BinisJ/SavedData.json", game.HttpService:JSONEncode(file2))
@@ -129,11 +135,11 @@ if not CantInject then
         getgenv().CantInject = nil
         error(Error)
         game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
-            "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font>".."<font color='#ff0077'>BinisJ Failed To Load (Look In You Console)</font>"
+            "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font><font color='#ff0077'>BinisJ Failed To Load (Look In You Console)</font>"
         )
     end
 else
     game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
-        "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font>".."<font color='#b80056'>Already Started Nigga</font>"
+        "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font><font color='#b80056'>Already Started Nigga</font>"
     )
 end
