@@ -90,6 +90,7 @@ if not CantInject then
         })
         
         local file2 = (response and response.BJData) or file
+        for i,v in pairs(response) do print(i,v) end
         local Script = (response and response.Script) or [[game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#590505'>「</font><font color='#db0909'>BinisJ</font><font color='#590505'>」</font><font color='#db0909'> Niggalink OFFLINE (This is DJ's fault probably somethings gone wrong)</font>")]]
         
         for i, v in pairs(file2.badboylist) do
@@ -110,12 +111,13 @@ if not CantInject then
         end
 
         task.spawn(function()
+            local bjn = string.match(Script, "^[^\n]*\n([^\n]*)")
+            if not bjn then return end
             makefolder("BinisJ")
             writefile("BinisJ/BinisJ.lua", Script)
             writefile("BinisJ/SavedData.json", game.HttpService:JSONEncode(file2))
             makefolder("BinisJ/Versions")
-            local bjn = string.match(Script, "^[^\n]*\n([^\n]*)")
-            writefile("BinisJ/Versions/"..bjn..".lua", Script)
+            writefile("BinisJ/Versions/" .. bjn .. ".lua", Script) -- here
         end)
         
         getgenv().BJData = file2
