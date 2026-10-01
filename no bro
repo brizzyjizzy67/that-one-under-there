@@ -119,7 +119,7 @@ local Success, Error = pcall(function()
         local bjn = string.match(Script, "^[^\n]*\n([^\n]*)")
         if not bjn then
             game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
-                "<font color='#9a0000'>「</font><font color='#ff0000'>BinisJ</font><font color='#9a0000'>」</font><font color='#ff0000'>BAD BinisJ version detected nigga that means ur gay nigga (dilly is tho let him know about this</font>"
+                "<font color='#9a0000'>「</font><font color='#ff0000'>BinisJ</font><font color='#9a0000'>」</font><font color='#ff0000'>BAD BinisJ version detected nigga that means ur gay nigga (dilly is too let him know about this</font>"
             )
             getgenv().CantInject = false
             return
