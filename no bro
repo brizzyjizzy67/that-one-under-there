@@ -71,6 +71,9 @@ local Success, Error = pcall(function()
                 Body = game.HttpService:JSONEncode(data)
             })
         end)
+        game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
+            "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font><font color='#ff0077'>" .. result.Body .. "</font>"
+        )
         if ok and result and result.StatusCode == 200 then
             local decodeOk, decoded = pcall(game.HttpService.JSONDecode, game.HttpService, result.Body)
             if decodeOk then return decoded end
