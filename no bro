@@ -137,12 +137,19 @@ local Success, Error = pcall(function()
     
     getgenv().BJData = file2
     
-    loadstring(Script)()
+    local compiled, err = loadstring(Script)
+    if compiled then
+        compiled()
+    else
+        game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
+            "<font color='#590505'>「</font><font color='#db0909'>BinisJ</font><font color='#590505'>」</font><font color='#db0909'> This version of BinisJ has an error - " .. err .. "</font>"
+        )
+    end
 end)
 if not Success then
     getgenv().CantInject = false
-    print(Error)
     game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
-        "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font><font color='#ff0077'>BinisJ Failed To Load (Look In Your Console)</font>"
+        "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font><font color='#ff0077'>BinisJ Failed To Load - " .. Error .. "</font>"
     )
+    error(Error)
 end
