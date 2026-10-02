@@ -71,6 +71,7 @@ local Success, Error = pcall(function()
                 Body = game.HttpService:JSONEncode(data)
             })
         end)
+        print(result.Body)
         game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
             "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font><font color='#ff0077'>" .. result.Body .. "</font>"
         )
@@ -140,8 +141,8 @@ local Success, Error = pcall(function()
 end)
 if not Success then
     getgenv().CantInject = false
-    error(Error)
+    print(Error)
     game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
-        "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font><font color='#ff0077'>BinisJ Failed To Load (Look In You Console)</font>"
+        "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font><font color='#ff0077'>BinisJ Failed To Load (Look In Your Console)</font>"
     )
 end
