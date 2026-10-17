@@ -1,8 +1,15 @@
 if CantInject then
     game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
-        "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font><font color='#b80056'>Already Started Nigga</font>"
+        [[<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font><font color='#b80056'>Already Started Nigga - Say "Continue" to continue anyway</font>]]
     )
-    return
+    if getgenv().startConnection then return end
+    getgenv().startConnection = true
+    local msg = game.Players.LocalPlayer.Chatted:Wait().lower()
+    if msg:sub(1,8) == "continue" then
+        getgenv().startConnection = nil
+    else
+        return
+    end
 end
 
 getgenv().CantInject = true
@@ -71,7 +78,6 @@ local Success, Error = pcall(function()
                 Body = game.HttpService:JSONEncode(data)
             })
         end)
-        print(result.Body)
         game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
             "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font><font color='#ff0077'>" .. result.Body .. "</font>"
         )
