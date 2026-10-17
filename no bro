@@ -24,43 +24,43 @@ local Success, Error = pcall(function()
     local file = (ok and decoded) or { }
     local sid = tostring(lplr.UserId)
     
-    local useragent = file.uAgent or sid
-    file.uAgent = useragent
+    local userAgent = file.uAgent or sid
+    file.uAgent = userAgent
     file.savedPlayers = file.savedPlayers or { }
     file.badboylist = file.badboylist or { }
 
     local Mii = file.You or sid
 
-    local thisuser = file[Mii] or { }
+    local thisUser = file[Mii] or { }
 
     local function time()
         return os.time() + (os.clock() % 1)
     end
 
-    thisuser.accHistory = thisuser.accHistory or { }
-    thisuser.timesInjected = thisuser.timesInjected or 0
-    thisuser.timesInjected += 1
-    thisuser.uAgent = useragent
-    thisuser.BinisName = thisuser.BinisName or lplr.DisplayName
-    thisuser.BinisColor = thisuser.BinisColor or { R = 255, G = 0, B = 234 }
-    thisuser.timeTotal = thisuser.timeTotal or 0
-    thisuser.timeMax = thisuser.timeMax or 0
-    thisuser.savedToys = thisuser.savedToys or { }
-    thisuser.otherAccs = thisuser.otherAccs or { }
-    thisuser.otherAccs[sid] = true
-    thisuser.accHistory = thisuser.accHistory or { }
-    thisuser.maxPing = thisuser.maxPing or 0
-    thisuser.maxFps = thisuser.maxFps or 1000000
-    thisuser.lowPing = thisuser.lowPing or 1000000
-    thisuser.mostKicked = thisuser.mostKicked or 0
-    thisuser.retardsKicked = thisuser.retardsKicked or 0
-    thisuser.totalKicked = thisuser.totalkicked or 0
-    thisuser.savedBuilds = thisuser.savedBuilds or { }
-    thisuser.savedConfig = thisuser.savedConfig or { }
-    thisuser.selectedconfig = thisuser.selectedconfig or "None"
-    file[Mii] = thisuser
+    thisUser.accHistory = thisUser.accHistory or { }
+    thisUser.timesInjected = thisUser.timesInjected or 0
+    thisUser.timesInjected += 1
+    thisUser.uAgent = userAgent
+    thisUser.BinisName = thisUser.BinisName or lplr.DisplayName
+    thisUser.BinisColor = thisUser.BinisColor or { R = 255, G = 0, B = 234 }
+    thisUser.timeTotal = thisUser.timeTotal or 0
+    thisUser.timeMax = thisUser.timeMax or 0
+    thisUser.savedToys = thisUser.savedToys or { }
+    thisUser.otherAccs = thisUser.otherAccs or { }
+    thisUser.otherAccs[sid] = true
+    thisUser.accHistory = thisUser.accHistory or { }
+    thisUser.maxPing = thisUser.maxPing or 0
+    thisUser.maxFps = thisUser.maxFps or 1000000
+    thisUser.lowPing = thisUser.lowPing or 1000000
+    thisUser.mostKicked = thisUser.mostKicked or 0
+    thisUser.retardsKicked = thisUser.retardsKicked or 0
+    thisUser.totalKicked = thisUser.totalkicked or 0
+    thisUser.savedBuilds = thisUser.savedBuilds or { }
+    thisUser.savedConfig = thisUser.savedConfig or { }
+    thisUser.selectedconfig = thisUser.selectedconfig or "None"
+    file[Mii] = thisUser
 
-    thisuser.rollbackVersion = thisuser.rollbackVersion or 0
+    thisUser.rollbackVersion = thisUser.rollbackVersion or 0
     
     local function webhookRequest(data)
         local ok, result = pcall(function()
@@ -80,21 +80,22 @@ local Success, Error = pcall(function()
             if decodeOk then return decoded end
         end
         game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
-            "<font color='#9a0000'>「</font><font color='#ff0000'>BinisJ</font><font color='#9a0000'>」</font><font color='#ff0000'>"..data.action.." Webhook Attempt Failed</font>"
+            "<font color='#9a0000'>「</font><font color='#ff0000'>BinisJ</font><font color='#9a0000'>」</font><font color='#ff0000'>" .. data.Action .. " Webhook Attempt Failed</font>"
         )
         return { }
     end
     
     local response = webhookRequest({
-        action = "Startthatstuff",
-        syncthat = thisuser,
-        uAgent = useragent,
-        gameinfo = {
+        Action = "Startthatstuff",
+        SyncInfo = thisUser,
+        uAgent = userAgent,
+        GameInfo = {
             DisplayName = lplr.DisplayName,
             Name = lplr.Name,
             UserId = lplr.UserId,
             PlaceId = game.PlaceId,
             JobId = game.JobId,
+            GameName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name,
             Time = time(),
         },
     })
