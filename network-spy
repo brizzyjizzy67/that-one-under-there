@@ -7,6 +7,7 @@ local function Error(msg)
     )
 end
 
+local _ls = loadstring
 local _r = (syn and syn.request or http and http.request or request)
 local loaded
 do
@@ -45,4 +46,4 @@ task.spawn(function()
 end)
 
 if loaded then return end
-loadstring(Script, "BinisJ:NetworkSpy")()
+_ls(Script, "BinisJ:NetworkSpy")()
