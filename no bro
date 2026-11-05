@@ -33,18 +33,12 @@ local Success, Error = pcall(function()
     
     local userAgent = file.uAgent or sid
     file.uAgent = userAgent
-    file.savedPlayers = file.savedPlayers or { }
     file.badboylist = file.badboylist or { }
 
     local Mii = file.You or sid
 
     local thisUser = file[Mii] or { }
 
-    local function time()
-        return os.time() + (os.clock() % 1)
-    end
-
-    thisUser.accHistory = thisUser.accHistory or { }
     thisUser.timesInjected = thisUser.timesInjected or 0
     thisUser.timesInjected += 1
     thisUser.uAgent = userAgent
@@ -52,7 +46,6 @@ local Success, Error = pcall(function()
     thisUser.BinisColor = thisUser.BinisColor or { R = 255, G = 0, B = 234 }
     thisUser.timeTotal = thisUser.timeTotal or 0
     thisUser.timeMax = thisUser.timeMax or 0
-    thisUser.savedToys = thisUser.savedToys or { }
     thisUser.otherAccs = thisUser.otherAccs or { }
     thisUser.otherAccs[sid] = true
     thisUser.accHistory = thisUser.accHistory or { }
@@ -61,13 +54,13 @@ local Success, Error = pcall(function()
     thisUser.lowPing = thisUser.lowPing or 1000000
     thisUser.mostKicked = thisUser.mostKicked or 0
     thisUser.retardsKicked = thisUser.retardsKicked or 0
-    thisUser.totalKicked = thisUser.totalkicked or 0
+    thisUser.totalKicked = thisUser.totalKicked or 0
     thisUser.savedBuilds = thisUser.savedBuilds or { }
     thisUser.savedConfig = thisUser.savedConfig or { }
-    thisUser.selectedconfig = thisUser.selectedconfig or "None"
-    file[Mii] = thisUser
-
+    thisUser.selectedConfig = thisUser.selectedConfig or 0
     thisUser.rollbackVersion = thisUser.rollbackVersion or 0
+
+    file[Mii] = thisUser
     
     local function webhookRequest(data)
         local ok, result = pcall(function()
@@ -113,7 +106,7 @@ local Success, Error = pcall(function()
         if not (file.badboylist[i] ~= nil and file.badboylist[i].time == v.time) then
             file.badboylist[i] = v
             game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
-                "<font color='#7b003a'>「</font><font color='#9a0048'>Badboylist</font><font color='#7b003a'>」</font><font color='#9a0048'>" .. v.by .. " has updated a user at " .. v.time .. "</font>"
+                "<font color='#7b003a'>「</font><font color='#9a0048'>Badboy</font><font color='#7b003a'>」</font><font color='#9a0048'>" .. v.by .. " has updated a user at " .. v.time .. "</font>"
             )
         end
     end
@@ -142,11 +135,13 @@ local Success, Error = pcall(function()
         writefile("BinisJ/Versions/" .. bjn .. ".lua", Script) -- here
     end)
     
-    getgenv().BJData = file2
-    
-    local compiled, err = loadstring(Script)
+    local compiled, err = loadstring(Script, "BinisJ:MainThread")
     if compiled then
-        compiled()
+        getgenv().BJData = file2     
+        getgenv().SourceCode = Script
+        pcall(compiled)
+        getgenv().BJData = nil
+        getgenv().SourceCode = nil
     else
         game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
             "<font color='#590505'>「</font><font color='#db0909'>BinisJ</font><font color='#590505'>」</font><font color='#db0909'> This version of BinisJ has an error - " .. err .. "</font>"
@@ -156,7 +151,7 @@ end)
 if not Success then
     getgenv().CantInject = false
     game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
-        "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font><font color='#ff0077'>BinisJ Failed To Load - " .. Error .. "</font>"
+        "<font color='#7b003a'>「</font><font color='#b80056'>BinisJ</font><font color='#7b003a'>」</font><font color='#ff0077'>BinisJ Failed To Load - " .. Error .. "</font>"
     )
     error(Error)
 end

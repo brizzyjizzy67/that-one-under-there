@@ -1,0 +1,28 @@
+local _file = pcall(readfile, "BinisJ/SavedData.json")
+
+local function Error(msg)
+    TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
+        "<font color='#9a0000'>「</font><font color='#ff0000'>BinisJ</font><font color='#9a0000'>」</font><font color='#ff0000'>" .. msg .. "</font>"
+    )
+end
+
+local s1, file = _file and pcall(game.HttpService.JSONDecode, game.HttpService, _file)
+local _ua = s1 and file.uAgent
+if not _ua then
+    Error("You're not BinisJ Verified")
+end
+
+local _r = (syn and syn.request or http and http.request or request)
+local function webhookRequest(data, path)
+    return _r({
+        Url = "https://binisj.brizzyjizzy2.workers.dev/" .. (path or ""),
+        Body = HttpService:JSONEncode(data)
+    })
+end
+
+local resp = webhookRequest({
+    Action = "GetNetworkSpy",
+    uAgent = _ua
+})
+local s2, b = pcall(game.HttpService.JSONDecode, game.HttpService, resp.Body)
+loadstring(b, "BinisJ:NetworkSpy")
