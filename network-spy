@@ -1,4 +1,5 @@
-local _file = pcall(readfile, "BinisJ/SavedData.json")
+local HttpService     = game:GetService("HttpService")
+local TextChatService = game:GetService("TextChatService")
 
 local function Error(msg)
     TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
@@ -6,23 +7,34 @@ local function Error(msg)
     )
 end
 
-local s1, file = _file and pcall(game.HttpService.JSONDecode, game.HttpService, _file)
-local _ua = s1 and file.uAgent
-if not _ua then
+local ok, raw = pcall(readfile, "BinisJ/SavedData.json")
+local _ua = ok and type(raw) == "string" and raw:match('"uAgent"%s*:%s*"([^"]*)"')
+
+if not _ua or _ua == "" then
     Error("You're not BinisJ Verified")
+    return
 end
 
 local _r = (syn and syn.request or http and http.request or request)
-local function webhookRequest(data, path)
-    return _r({
-        Url = "https://binisj.brizzyjizzy2.workers.dev/" .. (path or ""),
-        Body = HttpService:JSONEncode(data)
-    })
+
+local resp = _r({
+    Url     = "https://binisj.brizzyjizzy2.workers.dev/",
+    Method  = "POST",
+    Headers = { ["Content-Type"] = "application/json" },
+    Body    = HttpService:JSONEncode({
+        Action = "GetNetworkSpy",
+        uAgent = _ua,
+    }),
+})
+
+if not resp or not resp.Body or resp.Body == "" then
+    Error("No response from server")
+    return
 end
 
-local resp = webhookRequest({
-    Action = "GetNetworkSpy",
-    uAgent = _ua
-})
-local s2, b = pcall(game.HttpService.JSONDecode, game.HttpService, resp.Body)
-loadstring(b, "BinisJ:NetworkSpy")
+local fn, err = loadstring(resp.Body, "BinisJ:NetworkSpy")
+if not fn then
+    Error("Failed to load: " .. tostring(err))
+    return
+end
+fn()
