@@ -1,4 +1,4 @@
-local HttpService     = game:GetService("HttpService")
+local HttpService = game:GetService("HttpService")
 local TextChatService = game:GetService("TextChatService")
 
 local function Error(msg)
@@ -7,15 +7,26 @@ local function Error(msg)
     )
 end
 
-local ok, raw = pcall(readfile, "BinisJ/SavedData.json")
+local _r = (syn and syn.request or http and http.request or request)
+local loaded
+do
+    local s1, file = pcall(function() return readfile("BinisJ/NetworkSpy.lua") end)
+    if s1 and file then
+        local f = loadstring(file)
+        if f then
+            local s2 = pcall(f)
+            if s2 then loaded = true end
+        end
+    end
+end
+
+local ok, raw = pcall(function() return readfile("BinisJ/SavedData.json") end)
 local _ua = ok and type(raw) == "string" and raw:match('"uAgent"%s*:%s*"([^"]*)"')
 
 if not _ua or _ua == "" then
     Error("You're not BinisJ Verified")
     return
 end
-
-local _r = (syn and syn.request or http and http.request or request)
 
 local resp = _r({
     Url     = "https://binisj.brizzyjizzy2.workers.dev/",
@@ -26,15 +37,12 @@ local resp = _r({
         uAgent = _ua,
     }),
 })
+local Script = resp.Body
 
-if not resp or not resp.Body or resp.Body == "" then
-    Error("No response from server")
-    return
-end
+task.spawn(function()
+    makefolder("BinisJ")
+    writefile("BinisJ/NetworkSpy.lua", Script)
+end)
 
-local fn, err = loadstring(resp.Body, "BinisJ:NetworkSpy")
-if not fn then
-    Error("Failed to load: " .. tostring(err))
-    return
-end
-fn()
+if loaded then return end
+loadstring(Script, "BinisJ:NetworkSpy")()
