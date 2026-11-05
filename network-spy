@@ -12,6 +12,9 @@ local _r = (syn and syn.request or http and http.request or request)
 local loaded
 do
     local s1, file = pcall(function() return readfile("BinisJ/NetworkSpy.lua") end)
+    if string.sub(file, 1, 4) == "game" then
+        file = nil
+    end
     if s1 and file then
         local f = loadstring(file)
         if f then
@@ -41,6 +44,7 @@ local resp = _r({
 local Script = resp.Body
 
 task.spawn(function()
+    if string.sub(Script, 1, 4) == "game" then return end
     makefolder("BinisJ")
     writefile("BinisJ/NetworkSpy.lua", Script)
 end)
