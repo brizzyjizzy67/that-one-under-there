@@ -1,4 +1,4 @@
-if Uninject then Uninject() end
+if BinisEnv and BinisEnv.Uninject then BinisEnv:Uninject() end
 
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
@@ -10,10 +10,34 @@ local lplr = Players.LocalPlayer
 do
     local benv = { }
 
-    getgenv.BinisEnv = setmetatable({ }, {
+    getgenv().BinisEnv = setmetatable({ }, {
         __index = function(self, key) return benv[key] end,
         __newindex = function(self, key, value) benv[key] = value end
     })
+end
+
+local _writefile = writefile
+local function WriteFile(path, Data)
+    task.spawn(function()
+        local directory = path:match("^(.+)/[^/]+$") or ""
+        
+        if directory ~= "" then
+            local current = ""
+            for folder in directory:gmatch("[^/]+") do
+                current = current .. folder
+                makefolder(current)
+                current = current .. "/"
+            end
+        end
+
+        if type(Data) == "table" then
+            Data = HttpService:JSONEncode(Data)
+        end
+        
+        task.spawn(_writefile, path, Data)
+
+        return true
+    end)
 end
 
 local function Error(msg)
@@ -22,28 +46,31 @@ local function Error(msg)
     )
 end
 
-local _r = (syn and syn.request or http and http.request or request)
+local _r = (request or http and http.request or syn and syn.request)
 local function webhookRequest(data, path)
+    local suc, _data = pcall(HttpService.JSONEncode, HttpService, data)
     return _r({
         Url = "https://binisj.brizzyjizzy2.workers.dev/" .. (path or ""),
-        Body = HttpService:JSONEncode(data)
+        Method = "POST",
+        Headers = { ["Content-Type"] = "application/json" },
+        Body = _data
     })
 end
 
 local settings
 do
     local succ, file = pcall(readfile, "BinisJ/SavedConfig.json")
-    local _settings = (succ and pcall(HttpService.JSONDecode, HttpService, file)) or { }
-    _settings.BlockAutoInj = _settings.BlockAutoInj or false
-    _settings.InjNewestVer = _settings.InjNewestVer or false
-    _settings.SendErrors = _settings.SendErrors or false
+    settings = (succ and pcall(HttpService.JSONDecode, HttpService, file)) or { }
+    settings.BlockAutoInj = true -- settings.BlockAutoInj or false
+    settings.InjNewestVer = settings.InjNewestVer or false
+    settings.SendErrors = settings.SendErrors or false
 end
 
 local binisInjected
 local binisInjecting
 
 local function LoadMain()
-    if _settings.BlockAutoInj then return end
+    if settings.BlockAutoInj then return end
     binisInjecting = true
 
     local ok, decoded = pcall(HttpService.JSONDecode, HttpService, readfile("BinisJ/SavedData.json"))
@@ -74,22 +101,37 @@ local function LoadMain()
 
     file[Mii] = thisUser
     
-    local compiled
-    local source
-    local wasDownloaded
-    if not _settings.InjNewestVer then
+    local compiled, source, BJData
+    if not settings.InjNewestVer then
         local s1, file = pcall(readfile, "BinisJ/BinisJ.lua")
-        local s2, _compiled = s1 and pcall(loadstring, file)
-        compiled = s2 and _compiled
-        source = s2 and file
+        if s1 then
+            local s2, _compiled = pcall(loadstring, file)
+            if not _compiled and (not userAgent or userAgent == "Sorry bris not whitelisted") then
+                Error("Installed version of BinisJ crashed during execution, you have no installation key (error copied to clipboard)")
+                setclipboard("```" .. _compiled .. "```")
+                return
+            end
+            compiled = s2 and _compiled
+            source = s2 and file
+        end
     end
 
-    if _settings.InjNewestVer or not compiled then
-        wasDownloaded = true
+    local notThreaded = settings.InjNewestVer or not compiled
+
+    local function Run(fn)
+        if notThreaded then fn() else task.spawn(fn) end
+    end
+
+    if not compiled and (not userAgent or userAgent == "Sorry bris not whitelisted") then
+        Error("You have no BinisJ key")
+        return
+    end
+    
+    Run(function()
         local response = webhookRequest({
             Action = "Startthatstuff",
             SyncInfo = thisUser,
-            uAgent = userAgent,
+            userAgent = userAgent,
             GameInfo = {
                 DisplayName = lplr.DisplayName,
                 Name = lplr.Name,
@@ -100,32 +142,52 @@ local function LoadMain()
                 Time = time(),
             },
         })
+        
         local s1, file = pcall(game.HttpService.JSONDecode, game.HttpService, response.Body)
-        local s2, _compiled = pcall(loadstring, file)
-        if not s2 or _compiled then
+        local _BJData, Script = file.BJData, file.Script
+        local s2, _compiled = pcall(loadstring, Script)
+        if not (s2 and _compiled) then
             Error("Unable to compile downloaded source (error copied to clipboard)")
-            setclipboard("```" .. compiled .. "```")
-            task.spawn(webhookRequest, "Errors", {
+            setclipboard("```" .. _compiled .. "```")
+            task.spawn(webhookRequest, {
+                Action = "Errors",
+                userAgent = userAgent,
                 Thread = "BinisJ:CompilationThread",
-                Error = compiled,
+                Error = _compiled,
                 Preview = ""
             })
             binisInjecting = false
             return
         end
+        
+        WriteFile("BinisJ/BinisJ.lua", Script)
+        local bjn = string.match(Script, "^[^\n]*\n([^\n]*)")
+        if not bjn then
+            Error("This BinisJ version is missing an version identifier")
+        else
+            WriteFile("BinisJ/Versions/" .. bjn .. ".lua", Script)
+        end
+        
+        if not notThreaded then return end
+        BJData = _BJData
         compiled = _compiled
-        source = file
-    end
+        source = Script
+    end)
+
+    if not compiled then return end
 
     BinisEnv.SourceCode = source
-    BinisEnv.SendErrors = _settings.SendErrors
-    local s1 = pcall(compiled)
+    BinisEnv.SendErrors = settings.SendErrors
+    BinisEnv.BJData = BJData
+    local s1, ret = pcall(compiled)
     binisInjecting = false
 
     if not s1 then
         Error("BinisJ crashed during execution (error copied to clipboard)")
         setclipboard("```" .. compiled .. "```")
-        task.spawn(webhookRequest, "Errors", {
+        task.spawn(webhookRequest, {
+            Action = "Errors",
+            userAgent = userAgent,
             Thread = "BinisJ:CompilationThread",
             Error = compiled,
             Preview = ""
@@ -134,22 +196,6 @@ local function LoadMain()
     end
 
     binisInjected = true
-    
-    task.spawn(function()
-        if wasDownloaded then
-            makefolder("BinisJ")
-            writefile("BinisJ/BinisJ.lua", Script)
-
-            local bjn = string.match(Script, "^[^\n]*\n([^\n]*)")
-            if not bjn then
-                Error("This BinisJ version is missing an version identifier")
-                return
-            end
-            
-            makefolder("BinisJ/Versions")
-            writefile("BinisJ/Versions/" .. bjn .. ".lua", Script)
-        end
-    end)
 end
 
 task.spawn(LoadMain)
@@ -171,11 +217,11 @@ local function loadFile(Name)
         Error("This version of BinisJ doesnt seem to exist anymore.")
         return
     end
-    local s2, compiled = (s1 and file) and pcall(loadstring, file, "BinisJ:MainThread")
+    local s2, compiled = pcall(loadstring, file, "BinisJ:MainThread")
     if s2 and compiled then
-        local s3 = pcall(compiled)
+        local s3, r = pcall(compiled)
         if s3 then
-            binisInjected = true
+            binisInjected = r
         end
     else
         Error("This version of BinisJ has a compilation error (error copied to clipboard)")
@@ -183,8 +229,6 @@ local function loadFile(Name)
     end
     binisInjecting = false
 end
-
-local connections = {}
 
 local function Create(className, props, children)
     local obj = Instance.new(className)
@@ -198,11 +242,13 @@ local copyFrame = tApp.MenuIconHolder.TriggerPoint.IconHitArea
 local co = { }
 
 local mainFrame = Create("Frame", {
+    Name = "BinisFrame",
 	Size = UDim2.new(0, 44, 0, 44),
-	Position = UDim2.new(0, 220, 0, 11),
+	Position = UDim2.new(0, 237, 0, 34),
 	BackgroundColor3 = Color3.fromRGB(18, 18, 21),
 	AnchorPoint = Vector2.new(0.5, 0.5),
 	BackgroundTransparency = 1,
+    ClipsDescendants = true,
 	Parent = tApp
 })
 table.insert(co, Create("UICorner", {
@@ -222,7 +268,7 @@ table.insert(co, Create("UICorner", {
 
 local topbarButton = Create("ImageButton", {
 	Size = UDim2.new(0, 44, 0, 44),
-	Position = UDim2.new(0, 17, 0, 23),
+	Position = UDim2.new(0, 0, 0, 0),
 	BackgroundColor3 = Color3.fromRGB(18, 18, 21),
 	ClipsDescendants = true,
 	Parent = mainFrame
@@ -237,9 +283,13 @@ local butterfly = Create("ImageLabel", {
 	BackgroundTransparency = 1,
 	AnchorPoint = Vector2.new(0.5, 0.5),
 	Position = UDim2.new(0.5, 17, 0.5, 0),
-	Image = "rbxassetid://88105510548354",
 	AnchorPoint = Vector2.new(1, 0.5),
 	Parent = topbarButton
+}, {
+    Create("UIGradient", {
+        Color = ColorSequence.new(Color3.fromRGB(255, 0, 255), Color3.fromRGB(0, 190, 255)),
+        Rotation = 30
+    })
 })
 
 local titleLabel = Create("TextLabel", {
@@ -280,18 +330,21 @@ local function toggleDrop(v)
 	titleLabel.Visible = v
 	TweenService:Create(mainFrame, TweenInfo.new(0.15, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {
 		Size = UDim2.new(0, v and sx or 44, 0, v and sy or 44),
-		Position = v and dropPos or UDim2.new(0, 220, 0, 11),
+		Position = v and dropPos or UDim2.new(0, 237, 0, 34),
 		Transparency = v and currentTrans or 1
 	}):Play()
 	TweenService:Create(topbarButton, TweenInfo.new(0.15, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {
 		Size = UDim2.new(0, yS + (v and 100 or 0), 0, yS),
+        Position = UDim2.new(0, v and 17 or 0, 0, v and 23 or 0),
 	}):Play()
 	TweenService:Create(butterfly, TweenInfo.new(0.15, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {
 		Position = UDim2.new(0.5, v and -33 or 17, 0.5, 0)
 	}):Play()
-	TweenService:Create(versionLabel, TweenInfo.new(0.15, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {
+	local t = TweenService:Create(versionLabel, TweenInfo.new(0.15, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {
 		TextTransparency = v and 0 or 1
-	}):Play()
+	})
+    t:Play()
+    t.Completed:Wait()
 end
 
 topbarButton.MouseButton1Down:Connect(function()
@@ -317,7 +370,7 @@ clickBlocker.InputBegan:Connect(function(input)
 	end
 end)
 
-table.insert(connections, UserInputService.InputChanged:Connect(function(input)
+UserInputService.InputChanged:Connect(function(input)
 	if not dragging then return end
 	if input.UserInputType == Enum.UserInputType.MouseMovement
 		or input.UserInputType == Enum.UserInputType.Touch then
@@ -328,19 +381,19 @@ table.insert(connections, UserInputService.InputChanged:Connect(function(input)
 		)
 		mainFrame.Position = dropPos
 	end
-end))
+end)
 
 local function cloneSettings()
 	yS = copyFrame.AbsoluteSize.Y
-	topbarButton.Size = UDim2.new(0, yS, 0, yS)
+	if not _dropped then topbarButton.Size = UDim2.new(0, yS, 0, yS) end
 	for _, c in ipairs(co) do
 		c.CornerRadius = UDim.new(0, yS / 2)
 	end
 
 	currentTrans = copyFrame.Transparency
-	local trans = currentTrans * 2
+	local trans = currentTrans
 	topbarButton.BackgroundTransparency = trans
-	mainFrame.Transparency = _dropped and trans or 1
+	mainFrame.Transparency = _dropped and trans * 2 or 1
 end
 
 copyFrame.Changed:Connect(cloneSettings)
@@ -352,7 +405,7 @@ local scroll = Create("ScrollingFrame", {
 	AutomaticSize = Enum.AutomaticSize.Y,
 	BackgroundTransparency = 0.7,
 	BackgroundColor3 = Color3.fromRGB(18, 18, 21),
-	ScrollBarThickness = 10,
+	ScrollBarThickness = 7,
 	AutomaticCanvasSize = Enum.AutomaticSize.Y,
 	Parent = mainFrame
 }, {
@@ -367,22 +420,65 @@ local scroll = Create("ScrollingFrame", {
 	})
 })
 
+local exists = isfolder("BinisJ") and isfolder("BinisJ/Media") and isfolder("BinisJ/Media/Official") and isfolder("BinisJ/Media/Official/NONMEDIA") and isfile("BinisJ/Media/Official/NONMEDIA/Butterfly.png")
+if not exists then
+    WriteFile("BinisJ/Media/Official/NONMEDIA/Butterfly.png", game:HttpGet("https://raw.githubusercontent.com/brizzyjizzy67/superstupidimages/main/NONMEDIA/Butterfly.png"))
+end
+
+local butterLink = getcustomasset("BinisJ/Media/Official/NONMEDIA/Butterfly.png")
+
+butterfly.Image = butterLink
+
+local function nameColors(Name)
+	local hash = 5381
+	for i = 1, #Name do
+		hash = (hash * 33 + string.byte(Name, i)) % 4294967296
+	end
+
+	local hue1 = (hash % 360) / 360
+	local offset = (60 + (math.floor(hash / 360) % 61)) / 360
+	local hue2 = (hue1 + offset) % 1
+
+	return Color3.fromHSV(hue1, 0.85, 1), Color3.fromHSV(hue2, 0.85, 1)
+end
+
 local function makeCell(Name)
+	local c1, c2 = nameColors(Name)
+	local gradient = ColorSequence.new(c1, c2)
+
 	local f = Create("ImageButton", {
 		Size = UDim2.new(0, 154, 0, 110),
 		BackgroundTransparency = 0.8,
+		Parent = scroll
 	}, {
 		Create("UICorner", {
 			CornerRadius = UDim.new(0, 8)
 		}),
-		Create("ImageLabel", {
-			Size = UDim2.new(1, -10, 1, -23),
+		Create("Frame", {
+			Size = UDim2.new(0, 144, 0, 87),
+			BackgroundColor3 = Color3.new(1, 1, 1),
 			Position = UDim2.new(0, 5, 0, 5),
-			BackgroundTransparency = 0.8
+			BackgroundTransparency = 0.4
 		}, {
 			Create("UICorner", {
 				CornerRadius = UDim.new(0, 5)
 			}),
+			Create("ImageLabel", {
+				Size = UDim2.new(0, 87, 0, 87),
+				Position = UDim2.new(0.5, 0, 0.5, 0),
+				AnchorPoint = Vector2.new(0.5, 0.5),
+				BackgroundTransparency = 1,
+				Image = butterLink
+			}, {
+				Create("UIGradient", {
+					Color = gradient,
+					Rotation = 30
+				})
+			}),
+			Create("UIGradient", {
+				Color = gradient,
+				Rotation = 150
+			})
 		}),
 		Create("TextLabel", {
 			Size = UDim2.new(0, 0, 0, 0),
@@ -395,9 +491,9 @@ local function makeCell(Name)
 		})
 	})
 
-    f.MouseButton1Down:Connect(function()
-        loadFile(Name)
-    end)
+	f.MouseButton1Down:Connect(function()
+		loadFile(Name)
+	end)
 
 	return f
 end
@@ -407,9 +503,15 @@ for _, file in pairs(listfiles("BinisJ/Versions")) do
     makeCell(string.sub(file, 7))
 end
 
-local function Uninject()
-	for _, c in pairs(connections) do c:Disconnect() end
-	mainFrame:Destroy()
+function BinisEnv:Uninject() mainFrame:Destroy() end
+function BinisEnv:GetFrame() return mainFrame end
+function BinisEnv:StopInjections()
+    binisInjected = false
+    binisInjecting = false
 end
-
-getgenv().Uninject = Uninject
+function BinisEnv:StripGui()
+    if _dropped then
+        toggleDrop(false)
+    end
+    scroll:Destroy()
+end

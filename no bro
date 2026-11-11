@@ -103,10 +103,10 @@ local Success, Error = pcall(function()
     local Script = (response and response.Script) or [[game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage("<font color='#590505'>「</font><font color='#db0909'>BinisJ</font><font color='#590505'>」</font><font color='#db0909'> Niggalink OFFLINE (This is DJ's fault probably somethings gone wrong)</font>")]]
     
     for i, v in pairs(file2.badboylist) do
-        if not (file.badboylist[i] ~= nil and file.badboylist[i].time == v.time) then
+        if not (file.badboylist[i] ~= nil and file.badboylist[i].Time == v.Time) then
             file.badboylist[i] = v
             game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
-                "<font color='#7b003a'>「</font><font color='#9a0048'>Badboy</font><font color='#7b003a'>」</font><font color='#9a0048'>" .. v.by .. " has updated a user at " .. v.time .. "</font>"
+                "<font color='#7b003a'>「</font><font color='#9a0048'>Badboy</font><font color='#7b003a'>」</font><font color='#9a0048'>" .. v.ReporterName .. " has updated a user at " .. v.Time .. "</font>"
             )
         end
     end
