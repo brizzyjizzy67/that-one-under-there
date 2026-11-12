@@ -7,13 +7,19 @@ local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local lplr = Players.LocalPlayer
 
-do
+local function time()
+    return os.time() + (os.clock() % 1)
+end
+
+local BinisEnv = getgenv().BinisEnv
+if not BinisEnv then
     local benv = { }
 
-    getgenv().BinisEnv = setmetatable({ }, {
+    BinisEnv = setmetatable({ }, {
         __index = function(self, key) return benv[key] end,
         __newindex = function(self, key, value) benv[key] = value end
     })
+    getgenv().BinisEnv = BinisEnv
 end
 
 local _writefile = writefile
@@ -63,7 +69,6 @@ do
     settings = (succ and pcall(HttpService.JSONDecode, HttpService, file)) or { }
     settings.BlockAutoInj = true -- settings.BlockAutoInj or false
     settings.InjNewestVer = settings.InjNewestVer or false
-    settings.SendErrors = settings.SendErrors or false
 end
 
 local binisInjected
@@ -177,7 +182,6 @@ local function LoadMain()
     if not compiled then return end
 
     BinisEnv.SourceCode = source
-    BinisEnv.SendErrors = settings.SendErrors
     BinisEnv.BJData = BJData
     local s1, ret = pcall(compiled)
     binisInjecting = false

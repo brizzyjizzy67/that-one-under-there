@@ -14,6 +14,10 @@ end
 
 getgenv().CantInject = true
 
+local function time()
+    return os.time() + (os.clock() % 1)
+end
+
 local Success, Error = pcall(function()
     game.TextChatService.TextChannels.RBXSystem:DisplaySystemMessage(
         "<font color='#7b003a'>「</font><font color='#b80056'>Niggalink</font><font color='#7b003a'>」</font><font color='#ff0077'>Loading the 'Binis</font>"
